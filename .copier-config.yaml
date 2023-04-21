@@ -1,0 +1,25 @@
+# Changes here will be overwritten by Copier; do NOT edit manually
+_commit: v0.2.10
+_src_path: gh:entelecheia/hyperfast-python-template
+author: Young Joon Lee
+code_template_answers_file: .copier-hyfi-config.yaml
+code_template_source: gh:entelecheia/hyfi-template
+copyright_year: 2023
+documentaion_tool: jupyter-book
+documentation_url: https://lexikanon.entelecheia.ai
+email: entelecheia@hotmail.com
+friendly_name: Lexikanon
+github_repo_name: lexikanon
+github_username: entelecheia
+package_name: lexikanon
+project_description: Lexikanon is a robust and efficient Python library designed for
+    creating, training, and deploying tokenizers, an essential component in natural
+    language processing (NLP) and artificial intelligence (AI) applications. The name
+    Lexikanon originates from the Greek words λέξη (word) and κάνων (maker), reflecting
+    the library's purpose in enabling users to build powerful tokenizers for various
+    languages and tasks.
+project_license: MIT
+project_name: lexikanon
+project_short_description: A Python Library for Tokenizers
+use_source_code_skeleton: true
+
