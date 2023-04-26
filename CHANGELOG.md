@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.1.3 (2023-04-26)
+### Fix
+* Apply updated template ([`37a9567`](https://github.com/entelecheia/lexikanon/commit/37a956785ae2f2daca3168c9fba6a27abeb010b4))
+
 ## v0.1.2 (2023-04-21)
 ### Fix
 * **version:** Disable scm-version ([`c929957`](https://github.com/entelecheia/lexikanon/commit/c9299570acf5ca49c365a2d24338560a8b667fa8))
