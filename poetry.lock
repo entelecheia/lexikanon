@@ -101,18 +101,18 @@ css = ["tinycss2 (>=1.1.0,<1.2)"]
 
 [[package]]
 name = "boto3"
-version = "1.26.117"
+version = "1.26.120"
 description = "The AWS SDK for Python"
 category = "main"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "boto3-1.26.117-py3-none-any.whl", hash = "sha256:84cc8947560d89581ef693895cb36d8c8c70d567900d86c8f7cc612d037fdd17"},
-    {file = "boto3-1.26.117.tar.gz", hash = "sha256:1e9128b7d8a1b8af789ea6a04a46e641d82446e1e15c022c0fef697d3c9aab97"},
+    {file = "boto3-1.26.120-py3-none-any.whl", hash = "sha256:0f8eeeb259befd6e8c464a05c69b66ba7b1e0c978300b446fc0823020acaf380"},
+    {file = "boto3-1.26.120.tar.gz", hash = "sha256:17b93fdff147577ef506adbcada0ac81dd4be3b8d8b3c7831f9ee9f7ac9615e5"},
 ]
 
 [package.dependencies]
-botocore = ">=1.29.117,<1.30.0"
+botocore = ">=1.29.120,<1.30.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.6.0,<0.7.0"
 
@@ -121,14 +121,14 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.29.117"
+version = "1.29.120"
 description = "Low-level, data-driven core of boto 3."
 category = "main"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "botocore-1.29.117-py3-none-any.whl", hash = "sha256:2e6f6c9be770ed5737de093cfe8d592be15f8763f7bf2906afba90f19836d72d"},
-    {file = "botocore-1.29.117.tar.gz", hash = "sha256:1fc4469e80daab657d1254518ee44a82e284320c8b24cbfbaaa60570afc33743"},
+    {file = "botocore-1.29.120-py3-none-any.whl", hash = "sha256:0010b2a654973ab7f8697a9bb69cc0bd92450a7d77dd65c858a717edfe2e40f6"},
+    {file = "botocore-1.29.120.tar.gz", hash = "sha256:82de714c06fcefbcf2f3854b81c51bf0c529ec902c6e927156ff47988aaeeb7a"},
 ]
 
 [package.dependencies]
@@ -265,14 +265,14 @@ pycparser = "*"
 
 [[package]]
 name = "chardet"
-version = "4.0.0"
-description = "Universal encoding detector for Python 2 and 3"
+version = "5.1.0"
+description = "Universal encoding detector for Python 3"
 category = "main"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+python-versions = ">=3.7"
 files = [
-    {file = "chardet-4.0.0-py2.py3-none-any.whl", hash = "sha256:f864054d66fd9118f2e67044ac8981a54775ec5b67aed0441892edb553d21da5"},
-    {file = "chardet-4.0.0.tar.gz", hash = "sha256:0d6f53a15db4120f2b08c94f11e7d93d2c911ee118b6b30a04ec3ee8310179fa"},
+    {file = "chardet-5.1.0-py3-none-any.whl", hash = "sha256:362777fb014af596ad31334fde1e8c327dfdb076e1960d1694662d46a6917ab9"},
+    {file = "chardet-5.1.0.tar.gz", hash = "sha256:0d62712b956bc154f85fb0a266e2a3c5913c2967e00348701b32411d6def31e5"},
 ]
 
 [[package]]
@@ -953,14 +953,14 @@ testing = ["pytest"]
 
 [[package]]
 name = "google-resumable-media"
-version = "2.4.1"
+version = "2.5.0"
 description = "Utilities for Google Media Downloads and Resumable Uploads"
 category = "main"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "google-resumable-media-2.4.1.tar.gz", hash = "sha256:15b8a2e75df42dc6502d1306db0bce2647ba6013f9cd03b6e17368c0886ee90a"},
-    {file = "google_resumable_media-2.4.1-py2.py3-none-any.whl", hash = "sha256:831e86fd78d302c1a034730a0c6e5369dd11d37bad73fa69ca8998460d5bae8d"},
+    {file = "google-resumable-media-2.5.0.tar.gz", hash = "sha256:218931e8e2b2a73a58eb354a288e03a0fd5fb1c4583261ac6e4c078666468c93"},
+    {file = "google_resumable_media-2.5.0-py2.py3-none-any.whl", hash = "sha256:da1bd943e2e114a56d85d6848497ebf9be6a14d3db23e9fc57581e7c3e8170ec"},
 ]
 
 [package.dependencies]
@@ -1055,19 +1055,19 @@ packaging = "*"
 
 [[package]]
 name = "hyfi"
-version = "0.2.6"
+version = "0.2.20"
 description = "Hydra Fast Interface (Hydra and Pydantic based interface framework)"
 category = "main"
 optional = false
 python-versions = ">=3.8.1,<3.12"
 files = [
-    {file = "hyfi-0.2.6-py3-none-any.whl", hash = "sha256:2cbfdfb2d77f94876dc6ab270ee7bdd85301bf5d5ccc814cec518ff455bfbb20"},
-    {file = "hyfi-0.2.6.tar.gz", hash = "sha256:a057b9f564f9b5275769a1cfe21cceadc365e47514c629c63b80c547c17660f0"},
+    {file = "hyfi-0.2.20-py3-none-any.whl", hash = "sha256:1a843209d77a6795b757fc59df1800d060aec2582400ad80b764fd09c18c71e7"},
+    {file = "hyfi-0.2.20.tar.gz", hash = "sha256:f2f855c2e76ed0cd04d644f1ef19a616b8f9e30f9c00330c9f1ab605b46dccd7"},
 ]
 
 [package.dependencies]
 cached-path = ">=1.3.3,<2.0.0"
-chardet = "<=4.0.0"
+chardet = "<=5.1.0"
 gdown = ">=4.6.6,<5.0.0"
 hydra-colorlog = ">=1.2.0,<2.0.0"
 hydra-core = ">=1.3.2,<2.0.0"
@@ -1081,7 +1081,7 @@ scipy = ">=1.10.1,<2.0.0"
 tqdm = ">=4.64.1,<5.0.0"
 
 [package.extras]
-ipython = ["ipython (<=7.9.0)", "ipython-autotime (>=0.3.1,<0.4.0)", "pygments (<=2.6.1)", "rich (>=11.1)"]
+ipython = ["ipython (<=8.12.0)", "ipython-autotime (>=0.3.1,<0.4.0)", "pygments (<=2.15.1)", "rich (>=11.1)"]
 
 [[package]]
 name = "idna"
@@ -1097,14 +1097,14 @@ files = [
 
 [[package]]
 name = "importlib-metadata"
-version = "6.5.0"
+version = "6.6.0"
 description = "Read metadata from Python packages"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "importlib_metadata-6.5.0-py3-none-any.whl", hash = "sha256:03ba783c3a2c69d751b109fc0c94a62c51f581b3d6acf8ed1331b6d5729321ff"},
-    {file = "importlib_metadata-6.5.0.tar.gz", hash = "sha256:7a8bdf1bc3a726297f5cfbc999e6e7ff6b4fa41b26bba4afc580448624460045"},
+    {file = "importlib_metadata-6.6.0-py3-none-any.whl", hash = "sha256:43dd286a2cd8995d5eaef7fee2066340423b818ed3fd70adf0bad5f1fac53fed"},
+    {file = "importlib_metadata-6.6.0.tar.gz", hash = "sha256:92501cdf9cc66ebd3e612f1b4f0c0765dfa42f0fa38ffb319b6bd84dd675d705"},
 ]
 
 [package.dependencies]
@@ -1733,19 +1733,19 @@ testing = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "platformdirs"
-version = "3.2.0"
+version = "3.3.0"
 description = "A small Python package for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "platformdirs-3.2.0-py3-none-any.whl", hash = "sha256:ebe11c0d7a805086e99506aa331612429a72ca7cd52a1f0d277dc4adc20cb10e"},
-    {file = "platformdirs-3.2.0.tar.gz", hash = "sha256:d5b638ca397f25f979350ff789db335903d7ea010ab28903f57b27e1b16c2b08"},
+    {file = "platformdirs-3.3.0-py3-none-any.whl", hash = "sha256:ea61fd7b85554beecbbd3e9b37fb26689b227ffae38f73353cbcc1cf8bd01878"},
+    {file = "platformdirs-3.3.0.tar.gz", hash = "sha256:64370d47dc3fca65b4879f89bdead8197e93e05d696d6d1816243ebae8595da5"},
 ]
 
 [package.extras]
-docs = ["furo (>=2022.12.7)", "proselint (>=0.13)", "sphinx (>=6.1.3)", "sphinx-autodoc-typehints (>=1.22,!=1.23.4)"]
-test = ["appdirs (==1.4.4)", "covdefaults (>=2.3)", "pytest (>=7.2.2)", "pytest-cov (>=4)", "pytest-mock (>=3.10)"]
+docs = ["furo (>=2023.3.27)", "proselint (>=0.13)", "sphinx (>=6.1.3)", "sphinx-autodoc-typehints (>=1.23,!=1.23.4)"]
+test = ["appdirs (==1.4.4)", "covdefaults (>=2.3)", "pytest (>=7.3.1)", "pytest-cov (>=4)", "pytest-mock (>=3.10)"]
 
 [[package]]
 name = "pluggy"
@@ -2039,14 +2039,14 @@ yaml = ["PyYaml (>=5.2)"]
 
 [[package]]
 name = "python-semantic-release"
-version = "7.33.2"
+version = "7.33.3"
 description = "Automatic Semantic Versioning for Python projects"
 category = "dev"
 optional = false
 python-versions = "*"
 files = [
-    {file = "python-semantic-release-7.33.2.tar.gz", hash = "sha256:c23b4bb746e9ddbe1ba7497c48f7d81403e67a14ceb37928ef667c1fbee5e324"},
-    {file = "python_semantic_release-7.33.2-py3-none-any.whl", hash = "sha256:9e4990cc0a4dc37482ac5ec7fe6f70f71681228f68f0fa39370415701fdcf632"},
+    {file = "python-semantic-release-7.33.3.tar.gz", hash = "sha256:6f1b28e16ac7bcd67722945794a66ae7df7dcaabcc719324f89cce7015fe5c88"},
+    {file = "python_semantic_release-7.33.3-py3-none-any.whl", hash = "sha256:911b9cef443d1eb2d6449a42d3728e9c54c01fe7a35e5a7fb607b5f9c764451d"},
 ]
 
 [package.dependencies]
@@ -2337,45 +2337,6 @@ files = [
 ]
 
 [[package]]
-name = "setuptools"
-version = "67.7.0"
-description = "Easily download, build, install, upgrade, and uninstall Python packages"
-category = "dev"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "setuptools-67.7.0-py3-none-any.whl", hash = "sha256:888be97fde8cc3afd60f7784e678fa29ee13c4e5362daa7104a93bba33646c50"},
-    {file = "setuptools-67.7.0.tar.gz", hash = "sha256:b7e53a01c6c654d26d2999ee033d8c6125e5fa55f03b7b193f937ae7ac999f22"},
-]
-
-[package.extras]
-docs = ["furo", "jaraco.packaging (>=9)", "jaraco.tidelift (>=1.4)", "pygments-github-lexers (==0.0.5)", "rst.linker (>=1.9)", "sphinx (>=3.5)", "sphinx-favicon", "sphinx-hoverxref (<2)", "sphinx-inline-tabs", "sphinx-lint", "sphinx-notfound-page (==0.8.3)", "sphinx-reredirects", "sphinxcontrib-towncrier"]
-testing = ["build[virtualenv]", "filelock (>=3.4.0)", "flake8 (<5)", "flake8-2020", "ini2toml[lite] (>=0.9)", "jaraco.envs (>=2.2)", "jaraco.path (>=3.2.0)", "pip (>=19.1)", "pip-run (>=8.8)", "pytest (>=6)", "pytest-black (>=0.3.7)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=1.3)", "pytest-flake8", "pytest-mypy (>=0.9.1)", "pytest-perf", "pytest-timeout", "pytest-xdist", "tomli-w (>=1.0.0)", "virtualenv (>=13.0.0)", "wheel"]
-testing-integration = ["build[virtualenv]", "filelock (>=3.4.0)", "jaraco.envs (>=2.2)", "jaraco.path (>=3.2.0)", "pytest", "pytest-enabler", "pytest-xdist", "tomli", "virtualenv (>=13.0.0)", "wheel"]
-
-[[package]]
-name = "setuptools-scm"
-version = "7.1.0"
-description = "the blessed package to manage your versions by scm tags"
-category = "dev"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "setuptools_scm-7.1.0-py3-none-any.whl", hash = "sha256:73988b6d848709e2af142aa48c986ea29592bbcfca5375678064708205253d8e"},
-    {file = "setuptools_scm-7.1.0.tar.gz", hash = "sha256:6c508345a771aad7d56ebff0e70628bf2b0ec7573762be9960214730de278f27"},
-]
-
-[package.dependencies]
-packaging = ">=20.0"
-setuptools = "*"
-tomli = {version = ">=1.0.0", markers = "python_version < \"3.11\""}
-typing-extensions = "*"
-
-[package.extras]
-test = ["pytest (>=6.2)", "virtualenv (>20)"]
-toml = ["setuptools (>=42)"]
-
-[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -2409,18 +2370,6 @@ python-versions = ">=3.7"
 files = [
     {file = "soupsieve-2.4.1-py3-none-any.whl", hash = "sha256:1c1bfee6819544a3447586c889157365a27e10d88cde3ad3da0cf0ddf646feb8"},
     {file = "soupsieve-2.4.1.tar.gz", hash = "sha256:89d12b2d5dfcd2c9e8c22326da9d9aa9cb3dfab0a83a024f05704076ee8d35ea"},
-]
-
-[[package]]
-name = "toml"
-version = "0.10.2"
-description = "Python Library for Tom's Obvious, Minimal Language"
-category = "main"
-optional = false
-python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
-files = [
-    {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},
-    {file = "toml-0.10.2.tar.gz", hash = "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"},
 ]
 
 [[package]]
@@ -2567,4 +2516,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8.1,<3.12"
-content-hash = "45ab728fcda59133aec9c3cff0a294808a73e19805b021b61708261d25521d6f"
+content-hash = "734dd7f3494dfc0b17f3f9e4fcac6bc6ccbfdbb0a84850529aa476da1719b246"
