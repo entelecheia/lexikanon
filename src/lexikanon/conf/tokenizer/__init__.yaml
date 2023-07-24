@@ -1,0 +1,38 @@
+defaults:
+  - /normalizer: __init__
+  - /stopwords: __init__
+
+_target_: corprep.tokenizer.SimpleTokenizer
+lowercase: false
+strip_pos: false
+postag_delim: /
+postag_length:
+include_whitespace_token: true
+tokenize_each_word: false
+sentence_separator: '\n'
+userdic_path:
+wordpieces_prefix: "##"
+postags:
+noun_postags:
+  - NNG
+  - NNP
+  - XSN
+  - SL
+  - XR
+  - NNB
+  - NR
+punct_postags:
+  - SF
+  - SP
+  - SSO
+  - SSC
+  - SY
+stop_postags:
+  - SP
+  - SF
+  - SE
+  - SSO
+  - SSC
+  - SC
+  - SY
+  - SH
