@@ -1,0 +1,5 @@
+name: "Lexikanon"
+authors: "Young Joon Lee <entelecheia@hotmail.com>"
+description: "A Python Library for Tokenizers"
+homepage: "https://lexikanon.entelecheia.ai"
+license: "MIT"
