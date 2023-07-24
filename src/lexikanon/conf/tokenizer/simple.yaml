@@ -1,5 +1,5 @@
 defaults:
   - __init__
 
-_target_: corprep.tokenizer.SimpleTokenizer
+_target_: lexikanon.tokenizers.SimpleTokenizer
 strip_pos: true
