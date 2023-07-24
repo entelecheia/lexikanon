@@ -1,0 +1,12 @@
+defaults:
+  - __init__
+  - tagger: nltk
+
+_target_: corprep.tokenizer.NLTKTokenizer
+noun_postags:
+  - NN
+  - NNP
+  - NNS
+  - NNPS
+stop_postags:
+  - "."

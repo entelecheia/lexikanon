@@ -1,0 +1,6 @@
+lemmatize: false
+stem: true
+lemmatizer:
+  _target_: nltk.stem.WordNetLemmatizer
+stemmer:
+  _target_: nltk.stem.PorterStemmer
