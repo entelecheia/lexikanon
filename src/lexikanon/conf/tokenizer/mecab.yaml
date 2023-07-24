@@ -1,0 +1,23 @@
+defaults:
+  - __init__
+  - tagger: mecab
+
+_target_: corprep.tokenizer.MecabTokenizer
+flatten: true
+noun_postags:
+  - NNG
+  - NNP
+  - XSN
+  - SL
+  - XR
+  - NNB
+  - NR
+stop_postags:
+  - SP
+  - SF
+  - SE
+  - SSO
+  - SSC
+  - SC
+  - SY
+  - SH
