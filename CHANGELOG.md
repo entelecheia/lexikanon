@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.1.4 (2023-07-24)
+### Fix
+* **pyproject.toml:** Update package version and dependency versions ([`0f40b84`](https://github.com/entelecheia/lexikanon/commit/0f40b84db260930f8c862b44fbce9fc68b5c5f1a))
+
 ## v0.1.3 (2023-04-26)
 ### Fix
 * Apply updated template ([`37a9567`](https://github.com/entelecheia/lexikanon/commit/37a956785ae2f2daca3168c9fba6a27abeb010b4))
