@@ -1,4 +1,4 @@
-_target_: corprep.tokenizer.stopwords.Stopwords
+_target_: lexikanon.stopwords.Stopwords
 name: stopwords
 lowercase: true
 stopwords:
