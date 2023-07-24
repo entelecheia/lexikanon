@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.2.1 (2023-07-24)
+### Fix
+* **dependencies:** Upgrade hyfi to 1.9.0 ([`e91bf8d`](https://github.com/entelecheia/lexikanon/commit/e91bf8d67b5fa8a621ce2edb4dddf156cb93b13f))
+
 ## v0.2.0 (2023-07-24)
 ### Feature
 * **tests:** Add stopwords test in lexikanon module ([`32be6ae`](https://github.com/entelecheia/lexikanon/commit/32be6ae7c37b5eaefb605c03f729cd1f0e098991))
