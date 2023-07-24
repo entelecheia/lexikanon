@@ -1,5 +1,32 @@
 <!--next-version-placeholder-->
 
+## v0.2.0 (2023-07-24)
+### Feature
+* **tests:** Add stopwords test in lexikanon module ([`32be6ae`](https://github.com/entelecheia/lexikanon/commit/32be6ae7c37b5eaefb605c03f729cd1f0e098991))
+* **tests:** Add new test cases in test_tokenizer.py ([`f4f6eb8`](https://github.com/entelecheia/lexikanon/commit/f4f6eb8762fd690ac7b5b63835d856483ca6d567))
+* **tests:** Add normalizer test case in lexikanon ([`ef1d8c9`](https://github.com/entelecheia/lexikanon/commit/ef1d8c950644ba321e793bc23421e50b3785a4fc))
+* **lexikanon/utils/hanja:** Add table loading functionality ([`e3f14ee`](https://github.com/entelecheia/lexikanon/commit/e3f14ee7ec89cd5bf5b5fea66b0b974b8cb0e5e5))
+* **lexikanon:** Add hanja translation support ([`36df26b`](https://github.com/entelecheia/lexikanon/commit/36df26bdc20ed06d8390eaa63729a047acf4d178))
+* **hangul:** Add support for Hangul character operations ([`130c699`](https://github.com/entelecheia/lexikanon/commit/130c69945a0b55304c480783121a44bdd7109092))
+* **lexikanon/utils/hanja:** Add new translation functionality ([`d35534b`](https://github.com/entelecheia/lexikanon/commit/d35534b0bac6f692d8527d8962978466f0102281))
+* **lexikanon/utils:** Add hangle utilities to handle korean language ([`dba4474`](https://github.com/entelecheia/lexikanon/commit/dba44740d86693c0082ae7e8cf5d5ddaefe9dfb1))
+* **lexikanon/utils:** Add new util file with various text processing functions ([`6fd05ec`](https://github.com/entelecheia/lexikanon/commit/6fd05ec13eb4395994f30a8ded08b68a6f5fd775))
+* **tokenizers:** Add SimpleTokenizer, MecabTokenizer, NLTKTokenizer ([`6154fa0`](https://github.com/entelecheia/lexikanon/commit/6154fa0dfb8108bd9ce8bf93ea333a9fae6111d6))
+* **tokenizers:** Add NLTKTokenizer and NLTKTagger classes ([`44aacd0`](https://github.com/entelecheia/lexikanon/commit/44aacd02f57e1d7666af081d4a47325f0dbacf95))
+* **tokenizers:** Add MecabTokenizer and MecabTagger classes ([`23dec65`](https://github.com/entelecheia/lexikanon/commit/23dec65492a5cc72b1309b56fbfab305067c8116))
+* **lexikanon/tokenizers:** Add base tokenizer methods ([`dc826d1`](https://github.com/entelecheia/lexikanon/commit/dc826d1a6de95b806e4d39c22fa0a0d9c2686170))
+* **stopwords:** Add Stopwords class ([`3ae64af`](https://github.com/entelecheia/lexikanon/commit/3ae64af937b0196fce8f392a3d884b81b6fe32ad))
+* **lexikanon/resources/dictionaries/mecab:** Add new ekon_v1 dictionary file ([`5a0cb8a`](https://github.com/entelecheia/lexikanon/commit/5a0cb8a4847bf6365958c6c0688768092996c24b))
+* **lexikanon/normalizers:** Add new file normalizer.py with Normalizer class and associated configurations ([`94fda7f`](https://github.com/entelecheia/lexikanon/commit/94fda7fcc236ce591da6138af08cdd7fc9b25284))
+* **lexikanon/normalizers:** Add Normalizer ([`342b781`](https://github.com/entelecheia/lexikanon/commit/342b781c5e896ec047d345bc8bd12d15f3533b8d))
+* **lexikanon:** Add new tokenizer configuration ([`2c3ce80`](https://github.com/entelecheia/lexikanon/commit/2c3ce80147e88095dd8e44339d6332d3858ef216))
+* **tokenizer:** Add nltk configuration files for tokenization and tagging ([`e700d9b`](https://github.com/entelecheia/lexikanon/commit/e700d9bb76f66bf90b43f3b80b512c9ec384541c))
+* **tokenizer:** Add configuration for mecab tokenizer ([`05caee4`](https://github.com/entelecheia/lexikanon/commit/05caee47a9e8e82baeb92ee8738366d229286446))
+* **tokenizer:** Add new tokenizer configuration file ([`ad9c0c2`](https://github.com/entelecheia/lexikanon/commit/ad9c0c2b150f1a895d947bf49fb93b07cb2306b8))
+* **stopwords:** Add new stopwords configuration file ([`d403295`](https://github.com/entelecheia/lexikanon/commit/d403295b2810f0413d203a44db49001dcf056e3f))
+* **normalizer:** Add new files for various character settings ([`2568cdd`](https://github.com/entelecheia/lexikanon/commit/2568cdda9cc17643f9ce1157192d44006fa93d9c))
+* **dependencies:** Add ftfy, nltk and ekonlpy ([`6b68952`](https://github.com/entelecheia/lexikanon/commit/6b68952e7cd83f15735350518a84285c80466d87))
+
 ## v0.1.4 (2023-07-24)
 ### Fix
 * **pyproject.toml:** Update package version and dependency versions ([`0f40b84`](https://github.com/entelecheia/lexikanon/commit/0f40b84db260930f8c862b44fbce9fc68b5c5f1a))
