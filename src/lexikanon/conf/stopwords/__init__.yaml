@@ -1,0 +1,7 @@
+_target_: corprep.tokenizer.stopwords.Stopwords
+name: stopwords
+lowercase: true
+stopwords:
+stopwords_path:
+nltk_stopwords_lang:
+verbose: False
