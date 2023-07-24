@@ -1,0 +1,5 @@
+defaults:
+  - formal_ko
+
+special_characters:
+  fix_emoticons: true

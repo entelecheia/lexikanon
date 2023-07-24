@@ -1,0 +1,8 @@
+defaults:
+  - ftfy: __init__
+  - spaces: __init__
+  - special_characters: __init__
+
+_target_: corprep.tokenizer.normalizer.Normalizer
+hanja2hangle: false
+num_repeats: 2

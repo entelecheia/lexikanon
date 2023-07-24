@@ -1,0 +1,4 @@
+defaults:
+  - __init__
+
+hanja2hangle: true

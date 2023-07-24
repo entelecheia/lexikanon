@@ -1,0 +1,5 @@
+defaults:
+  - __init__
+
+ftfy:
+  unescape_html: "auto"

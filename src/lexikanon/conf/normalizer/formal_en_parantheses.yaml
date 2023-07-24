@@ -1,0 +1,5 @@
+defaults:
+  - __init__
+
+special_characters:
+  regular_parentheses_only: true
