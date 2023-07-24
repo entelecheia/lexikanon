@@ -8,7 +8,7 @@
 [![jupyter-book-image]][docs-url]
 
 <!-- Links: -->
-[codecov-image]: https://codecov.io/gh/entelecheia/lexikanon/branch/main/graph/badge.svg?token=[REPLACE_ME]
+[codecov-image]: https://codecov.io/gh/entelecheia/lexikanon/branch/main/graph/badge.svg?token=KGST5XVW3F
 [codecov-url]: https://codecov.io/gh/entelecheia/lexikanon
 [pypi-image]: https://img.shields.io/pypi/v/lexikanon
 [license-image]: https://img.shields.io/github/license/entelecheia/lexikanon
