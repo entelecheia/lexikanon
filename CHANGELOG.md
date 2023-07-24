@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.2.2 (2023-07-24)
+### Fix
+* **tokenizer:** Change SimpleTokenizer path in config ([`13d4ea0`](https://github.com/entelecheia/lexikanon/commit/13d4ea0ec4aba20801d5b9687de14dda78a36a91))
+* **tokenizer:** Change MecabTokenizer import path ([`edc6e8d`](https://github.com/entelecheia/lexikanon/commit/edc6e8d0ac6f53c26c88e56401d5b4515ac0d7ac))
+* **stopwords:** Update target path ([`da93a48`](https://github.com/entelecheia/lexikanon/commit/da93a48e8e9112fc2c10f1a9636b8a298c1f99fb))
+* **normalizer:** Update target to lexikanon.normalizers.Normalizer ([`c33e060`](https://github.com/entelecheia/lexikanon/commit/c33e0605b992afdbc3558d1e6f9eeac535a5fd7e))
+
 ## v0.2.1 (2023-07-24)
 ### Fix
 * **dependencies:** Upgrade hyfi to 1.9.0 ([`e91bf8d`](https://github.com/entelecheia/lexikanon/commit/e91bf8d67b5fa8a621ce2edb4dddf156cb93b13f))
