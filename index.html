@@ -7,7 +7,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
     <title>Lexikanon &#8212; Lexikanon</title>
   
@@ -78,9 +78,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <script>window.MathJax = {"tex": {"macros": {"N": "\\mathbb{N}", "floor": ["\\lfloor#1\\rfloor", 1], "bmat": ["\\left[\\begin{array}"], "emat": ["\\end{array}\\right]"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
-    <script>mermaid.initialize({startOnLoad:true});</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
+    <link rel="shortcut icon" href="https://assets.entelecheia.ai/favicon.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Usage" href="usage.html" />
@@ -170,7 +169,13 @@ const thebe_selector_output = ".output, .cell_output"
         </ul>
         <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="_autosummary/lexikanon.html">lexikanon</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/lexikanon.conf.html">lexikanon.conf</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 </ul>
 
@@ -237,6 +242,23 @@ const thebe_selector_output = ".output, .cell_output"
   <i class="fab fa-github"></i>
   </span>
 <span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/entelecheia/lexikanon/edit/main/book/index.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
 </a>
 </li>
       
@@ -383,10 +405,11 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="lexikanon">
 <h1>Lexikanon<a class="headerlink" href="#lexikanon" title="Permalink to this heading">#</a></h1>
 <p><a class="reference external" href="https://pypi.org/project/lexikanon"><img alt="pypi-image" src="https://img.shields.io/pypi/v/lexikanon" /></a>
-<a class="reference external" href="https://github.com/entelecheia/lexikanon/blob/main/LICENSE"><img alt="license-image" src="https://img.shields.io/github/license/entelecheia/lexikanon" /></a>
 <a class="reference external" href="https://github.com/entelecheia/lexikanon/releases"><img alt="version-image" src="https://img.shields.io/github/v/release/entelecheia/lexikanon?sort=semver" /></a>
 <a class="reference external" href="https://github.com/entelecheia/lexikanon/releases"><img alt="release-date-image" src="https://img.shields.io/github/release-date/entelecheia/lexikanon" /></a>
-<a class="reference external" href="https://lexikanon.entelecheia.ai"><img alt="jupyter-book-image" src="https://jupyterbook.org/en/stable/_images/badge.svg" /></a></p>
+<a class="reference external" href="https://github.com/entelecheia/lexikanon/blob/main/LICENSE"><img alt="license-image" src="https://img.shields.io/github/license/entelecheia/lexikanon" /></a>
+<a class="reference external" href="https://lexikanon.entelecheia.ai"><img alt="jupyter-book-image" src="https://jupyterbook.org/en/stable/_images/badge.svg" /></a>
+<a class="reference external" href="https://codecov.io/gh/entelecheia/lexikanon"><img alt="codecov" src="https://codecov.io/gh/entelecheia/lexikanon/branch/main/graph/badge.svg?token=KGST5XVW3F" /></a></p>
 <!-- Links: -->
 <!-- Links: -->
 <p>A Python Library for Tokenizers</p>
@@ -413,7 +436,13 @@ document.write(`
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/lexikanon.html">lexikanon</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/lexikanon.conf.html">lexikanon.conf</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 </ul>
 </div>
