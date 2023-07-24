@@ -4,7 +4,6 @@ from typing import Callable, List, Optional, Tuple, Union
 from pydantic import BaseModel
 
 from lexikanon import HyFI
-
 from lexikanon.normalizers import Normalizer
 from lexikanon.stopwords import Stopwords
 

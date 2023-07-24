@@ -6,7 +6,6 @@ from hyfi.composer.base import BaseConfig
 from pydantic import BaseModel
 
 from lexikanon import HyFI
-
 from lexikanon.utils import (
     ACCENTS,
     APOSTROPHES,
