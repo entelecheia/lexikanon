@@ -1,5 +1,14 @@
 <!--next-version-placeholder-->
 
+## v0.2.4 (2023-07-25)
+
+### Fix
+
+* **stopwords:** Add special methods for Stopwords ([`e1b8871`](https://github.com/entelecheia/lexikanon/commit/e1b88711a5764cd638f52f8110dcb1411795fcc0))
+* **stopwords:** Separate stopwords function and list, enhance logging control ([`fe2cf32`](https://github.com/entelecheia/lexikanon/commit/fe2cf323e514fce0f25068a1aaa25d58d2f90a8a))
+* **stopwords:** Rename configuration variables ([`084f679`](https://github.com/entelecheia/lexikanon/commit/084f679737d38b625051fb6e081bf28ddda101c5))
+* **dependencies:** Upgrade hyfi to 1.9.4 ([`7a0bc54`](https://github.com/entelecheia/lexikanon/commit/7a0bc5445d80fb8ec71c1c12dc7d3f2a8972786d))
+
 ## v0.2.3 (2023-07-25)
 ### Fix
 * **lexikanon:** Change __package_name__ to __package_path__ in HyFI.initialize_global_hyfi args ([`0b93f1a`](https://github.com/entelecheia/lexikanon/commit/0b93f1a426d8ac29ca9248bff10fd06a7864fa65))
