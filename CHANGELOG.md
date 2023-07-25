@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.2.3 (2023-07-25)
+### Fix
+* **lexikanon:** Change __package_name__ to __package_path__ in HyFI.initialize_global_hyfi args ([`0b93f1a`](https://github.com/entelecheia/lexikanon/commit/0b93f1a426d8ac29ca9248bff10fd06a7864fa65))
+* **dependencies:** Upgrade hyfi to 1.9.3 ([`beb09bb`](https://github.com/entelecheia/lexikanon/commit/beb09bb185d09e2213605ffd4ad0113ae074be11))
+* **dependencies:** Upgrade ekonlpy to 2.0.2 ([`4215068`](https://github.com/entelecheia/lexikanon/commit/4215068b4ec5e46d7ac32249e30a4326e4c0f34e))
+
 ## v0.2.2 (2023-07-24)
 ### Fix
 * **tokenizer:** Change SimpleTokenizer path in config ([`13d4ea0`](https://github.com/entelecheia/lexikanon/commit/13d4ea0ec4aba20801d5b9687de14dda78a36a91))
