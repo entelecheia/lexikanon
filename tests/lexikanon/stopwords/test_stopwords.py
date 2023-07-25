@@ -7,8 +7,9 @@ def test_stopwords():
     cfg = HyFI.compose_as_dict("stopwords")
     cfg["nltk_stopwords_lang"] = "english"
     stop = Stopwords(**cfg)
-    print(stop.stopwords_list)
-    assert len(stop.stopwords_list) == 179
+    print(stop)
+    print(list(stop))
+    assert len(stop) == 179
 
 
 if __name__ == "__main__":
