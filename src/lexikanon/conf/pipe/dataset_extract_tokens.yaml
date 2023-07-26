@@ -1,0 +1,22 @@
+defaults:
+  - __general_external_funcs__
+
+run: lexikanon.pipe.tokenize.extract_tokens
+run_with:
+  tokenizer_config_name: simple
+  num_workers: 1
+  batched: true
+  batch_size: 1000
+  token_col: tokenizedText
+  extracted_col: extractedTokens
+  nouns_only: false
+  postags:
+  stop_postags:
+  strip_pos: true
+  postag_delim:
+  postag_length:
+  remove_columns:
+  load_from_cache_file: true
+  verbose: ${..verbose}
+use_pipe_obj: true
+return_pipe_obj: false
