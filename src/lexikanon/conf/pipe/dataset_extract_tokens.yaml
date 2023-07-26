@@ -17,6 +17,8 @@ run_with:
   postag_length:
   remove_columns:
   load_from_cache_file: true
+  num_heads: 3
+  num_tails: 3
   verbose: ${..verbose}
 use_pipe_obj: true
 return_pipe_obj: false
