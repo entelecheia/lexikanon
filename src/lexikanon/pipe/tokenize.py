@@ -38,7 +38,7 @@ def tokenize_dataset(
         remove_columns=remove_columns,
         load_from_cache_file=load_from_cache_file,
     )
-    logger.info("POS tagging done.")
+    logger.info("POS tagging done. See column '%s'.", token_col)
     if verbose:
         print(data[0][token_col])
     return data
@@ -87,8 +87,8 @@ def extract_tokens(
         remove_columns=remove_columns,
         load_from_cache_file=load_from_cache_file,
     )
-    logger.info("POS tagging done.")
+    logger.info("Extracting tokens done, see column '%s'.", extracted_col)
     if verbose:
         num_samples = min(5, len(data))
-        print(data[:num_samples][token_col])
+        print(data[:num_samples][extracted_col])
     return data
