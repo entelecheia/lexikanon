@@ -5,6 +5,7 @@ from lexikanon.stopwords import Stopwords
 def test_stopwords():
     print(HyFI.get_caller_module_name())
     cfg = HyFI.compose_as_dict("stopwords")
+    print(cfg)
     cfg["nltk_stopwords_lang"] = "english"
     stop = Stopwords(**cfg)
     print(stop)
