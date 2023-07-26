@@ -17,6 +17,8 @@ def tokenize_dataset(
     token_col: str = "tokenizedText",
     remove_columns: Optional[Union[List[str], str]] = None,
     load_from_cache_file: bool = True,
+    num_heads: Optional[int] = 1,
+    num_tails: Optional[int] = 1,
     verbose: bool = False,
 ) -> Dataset:
     def pos_tagging(batch):
@@ -40,7 +42,12 @@ def tokenize_dataset(
     )
     logger.info("POS tagging done. See column '%s'.", token_col)
     if verbose:
-        print(data[0][token_col])
+        if num_heads:
+            num_heads = min(num_heads, len(data))
+            print(data[:num_heads][token_col])
+        if num_tails:
+            num_tails = min(num_tails, len(data))
+            print(data[-num_tails:][token_col])
     return data
 
 
@@ -60,6 +67,8 @@ def extract_tokens(
     postag_length: Optional[int] = None,
     remove_columns: Optional[Union[List[str], str]] = None,
     load_from_cache_file: bool = True,
+    num_heads: Optional[int] = 1,
+    num_tails: Optional[int] = 1,
     verbose: bool = False,
 ) -> Dataset:
     def pos_tagging(batch):
@@ -89,6 +98,10 @@ def extract_tokens(
     )
     logger.info("Extracting tokens done, see column '%s'.", extracted_col)
     if verbose:
-        num_samples = min(5, len(data))
-        print(data[:num_samples][extracted_col])
+        if num_heads:
+            num_heads = min(num_heads, len(data))
+            print(data[:num_heads][extracted_col])
+        if num_tails:
+            num_tails = min(num_tails, len(data))
+            print(data[-num_tails:][extracted_col])
     return data
