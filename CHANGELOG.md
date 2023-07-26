@@ -1,5 +1,13 @@
 <!--next-version-placeholder-->
 
+## v0.3.1 (2023-07-26)
+
+### Fix
+
+* **lexikanon:** Simplify YAML configuration files ([`55def1f`](https://github.com/entelecheia/lexikanon/commit/55def1f4be3da40349017fbccb54464bf0d1ab52))
+* **dependencies:** Upgrade hyfi to ^1.11.0 ([`1ea8090`](https://github.com/entelecheia/lexikanon/commit/1ea80909c640d871c2c5fc616683bc35de65087e))
+* **lexikanon:** Add 'num_heads' and 'num_tails' options in 'dataset_extract_tokens.yaml', 'dataset_tokenize.yaml', 'tokenize.py' and 'extract_tokens' ([`07dec64`](https://github.com/entelecheia/lexikanon/commit/07dec647992eb14616be09c6d2edfb2d74ac2fa7))
+
 ## v0.3.0 (2023-07-26)
 
 ### Feature
