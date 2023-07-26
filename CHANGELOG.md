@@ -1,5 +1,19 @@
 <!--next-version-placeholder-->
 
+## v0.3.0 (2023-07-26)
+
+### Feature
+
+* **lexikanon/pipe:** Add new tokenize module ([`307d2a7`](https://github.com/entelecheia/lexikanon/commit/307d2a7b6aeff3f8935d9173e6602590382b36ae))
+* **lexikanon/pipe:** Add new __init__.py file ([`f824369`](https://github.com/entelecheia/lexikanon/commit/f824369d3ea13c6ecdd6eda86b91a5b53d4049ff))
+* **lexikanon:** Add dataset_extract_nouns configuration ([`e175605`](https://github.com/entelecheia/lexikanon/commit/e1756050c378fbf020be8ae06c8e5b1d8e5e43c6))
+* **lexikanon:** Add dataset_extract_tokens.yaml configuration ([`f024732`](https://github.com/entelecheia/lexikanon/commit/f02473250ef301025ea1cf4eeaaa9b43fd384413))
+* **lexikanon:** Add new tokenizer configuration in the dataset_tokenize.yaml file ([`02f4044`](https://github.com/entelecheia/lexikanon/commit/02f4044a06aa9f20ce71405252e67827657ba74d))
+
+### Fix
+
+* **lexikanon:** Update logging and data display in tokenize functions ([`27b22e7`](https://github.com/entelecheia/lexikanon/commit/27b22e7db54f15987e8100ed21666285b641cab9))
+
 ## v0.2.4 (2023-07-25)
 
 ### Fix
