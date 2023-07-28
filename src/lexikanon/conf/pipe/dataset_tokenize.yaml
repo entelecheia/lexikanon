@@ -1,6 +1,0 @@
-defaults:
-  - __general_external_funcs__
-  - /run: tokenize_dataset
-
-use_pipe_obj: true
-return_pipe_obj: false
