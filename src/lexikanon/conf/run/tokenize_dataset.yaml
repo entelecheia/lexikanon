@@ -1,6 +1,3 @@
-defaults:
-  - __init__
-
 _target_: lexikanon.pipe.tokenize.tokenize_dataset
 tokenizer_config_name: simple
 num_workers: 1
@@ -8,8 +5,8 @@ batched: true
 batch_size: 1000
 text_col: bodyText
 token_col: tokenizedText
-remove_columns:
+remove_columns: null
 load_from_cache_file: true
-num_heads: 3
-num_tails: 3
-verbose: ${oc.select:..verbose, false}
+num_heads: 1
+num_tails: 1
+verbose: false

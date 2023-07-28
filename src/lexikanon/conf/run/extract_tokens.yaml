@@ -1,6 +1,3 @@
-defaults:
-  - __init__
-
 _target_: lexikanon.pipe.tokenize.extract_tokens
 tokenizer_config_name: simple
 num_workers: 1
@@ -9,13 +6,13 @@ batch_size: 1000
 token_col: tokenizedText
 extracted_col: extractedTokens
 nouns_only: false
-postags:
-stop_postags:
-strip_pos: true
-postag_delim:
-postag_length:
-remove_columns:
+postags: null
+stop_postags: null
+strip_pos: null
+postag_delim: null
+postag_length: null
+remove_columns: null
 load_from_cache_file: true
-num_heads: 3
-num_tails: 3
-verbose: ${oc.select:..verbose, false}
+num_heads: 1
+num_tails: 1
+verbose: false
