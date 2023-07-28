@@ -1,5 +1,4 @@
 defaults:
   - extract_tokens
-
 run:
   nouns_only: true
