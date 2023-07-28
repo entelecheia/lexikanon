@@ -1,3 +1,6 @@
+# working directory
+workspace/
+
 # Ignore node_modules directory
 node_modules/
 
