@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.3.2 (2023-07-28)
+
+### Fix
+
+* To force bumping version ([`7c973d7`](https://github.com/entelecheia/lexikanon/commit/7c973d780668ec1a424757ee39a3ba50b4bc5db0))
+
 ## v0.3.1 (2023-07-26)
 
 ### Fix
