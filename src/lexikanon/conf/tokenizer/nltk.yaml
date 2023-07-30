@@ -2,6 +2,7 @@ defaults:
   - __init__
   - tagger: nltk
 
+_config_name_: nltk
 _target_: corprep.tokenizer.NLTKTokenizer
 noun_postags:
   - NN

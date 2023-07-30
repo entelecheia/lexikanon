@@ -1,3 +1,5 @@
+_config_group_: stopwords
+_config_name_: __init__
 _target_: lexikanon.stopwords.Stopwords
 name: stopwords
 lowercase: true

@@ -1,6 +1,6 @@
 from typing import Callable, List, Optional, Union
 
-from pydantic import BaseModel, model_validator
+from hyfi.composer import BaseModel, model_validator
 
 from lexikanon import HyFI
 
@@ -17,6 +17,9 @@ class Stopwords(BaseModel):
     nltk_stopwords_lang:
     verbose: False
     """
+
+    _config_group_: str = "stopwords"
+    _config_name_: str = "__init__"
 
     name: str = "stopwords"
     lowercase: bool = False

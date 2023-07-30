@@ -1,5 +1,6 @@
 defaults:
   - formal_ko
 
+_config_name_: informal_ko
 special_characters:
   fix_emoticons: true

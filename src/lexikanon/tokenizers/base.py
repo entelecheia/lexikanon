@@ -1,7 +1,7 @@
 import codecs
 from typing import Callable, List, Optional, Tuple, Union
 
-from pydantic import BaseModel
+from hyfi.composer import BaseModel
 
 from lexikanon import HyFI
 from lexikanon.normalizers import Normalizer
@@ -11,6 +11,9 @@ logger = HyFI.getLogger(__name__)
 
 
 class Tokenizer(BaseModel):
+    _config_group_: str = "tokenizers"
+    _config_name_: str = "__init__"
+
     stopwords: Stopwords = Stopwords()
     normalizer: Normalizer = Normalizer()
 

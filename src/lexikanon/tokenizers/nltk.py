@@ -1,6 +1,6 @@
 from typing import Any, List, Optional, Tuple
 
-from pydantic import BaseModel, model_validator
+from hyfi.composer import BaseModel, model_validator
 
 from lexikanon import HyFI
 from lexikanon.tokenizers.base import Tokenizer
@@ -17,6 +17,9 @@ class NLTKTagger(BaseModel):
     stemmer:
         _target_: nltk.stem.PorterStemmer
     """
+
+    _config_group_: str = "tokenizers/tagger"
+    _config_name_: str = "nltk"
 
     lemmatize: bool = False
     stem: bool = True

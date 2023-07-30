@@ -2,6 +2,8 @@ defaults:
   - /normalizer: __init__
   - /stopwords: __init__
 
+_config_group_: tokenizer
+_config_name_: __init__
 _target_: corprep.tokenizer.SimpleTokenizer
 lowercase: false
 strip_pos: false
