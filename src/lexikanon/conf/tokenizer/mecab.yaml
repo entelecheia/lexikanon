@@ -2,6 +2,7 @@ defaults:
   - __init__
   - tagger: mecab
 
+_config_name_: mecab
 _target_: lexikanon.tokenizers.MecabTokenizer
 flatten: true
 noun_postags:

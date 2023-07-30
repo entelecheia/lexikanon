@@ -1,5 +1,6 @@
 defaults:
   - __init__
 
+_config_name_: simple
 _target_: lexikanon.tokenizers.SimpleTokenizer
 strip_pos: true
