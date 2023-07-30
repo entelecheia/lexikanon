@@ -1,5 +1,21 @@
 <!--next-version-placeholder-->
 
+## v0.4.0 (2023-07-30)
+
+### Feature
+
+* **nltk:** Add config group and name to NLTKTagger ([`fd5ba82`](https://github.com/entelecheia/lexikanon/commit/fd5ba8297d37e57f148808cd63e2fda3b385aa28))
+* **mecab:** Add _config_group_ and _config_name_ fields in MecabTagger ([`75937aa`](https://github.com/entelecheia/lexikanon/commit/75937aa60cd7190656fa6e528a359626bd1ad2d6))
+* **lexikanon:** Add _config_group_ and _config_name_ to Tokenizer class ([`5ae39cb`](https://github.com/entelecheia/lexikanon/commit/5ae39cb0ed26359960722c5fdcb32fc7bd1c812e))
+* **normalizer:** Add config group and config name attributes to classes ([`f55ea51`](https://github.com/entelecheia/lexikanon/commit/f55ea518a6c0a1fd9679069439b2c6327f373685))
+* **tokenizer/tagger:** Add _config_group_ and _config_name_ in mecab.yaml and nltk.yaml ([`ed1be7c`](https://github.com/entelecheia/lexikanon/commit/ed1be7c987d013ac7dd6144f6d70a68caf56b2a7))
+* **tokenizer:** Add _config_name_ in tokenizer configuration files ([`5a3d79b`](https://github.com/entelecheia/lexikanon/commit/5a3d79bde7bcb98269fe60f0b10c53eeb11a919c))
+* **lexikanon:** Add _config_name_ in normalizer files ([`989d354`](https://github.com/entelecheia/lexikanon/commit/989d35405c368a638e3726f112b01392110bc2c1))
+
+### Fix
+
+* **dependencies:** Upgrade hyfi to 1.12.5 ([`0113560`](https://github.com/entelecheia/lexikanon/commit/01135605c20197ff7c7eb372b24638a7fa445011))
+
 ## v0.3.2 (2023-07-28)
 
 ### Fix
