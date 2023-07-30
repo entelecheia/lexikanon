@@ -1,6 +1,6 @@
 from typing import List, Optional, Tuple
 
-from pydantic import BaseModel
+from hyfi.composer import BaseModel
 
 from lexikanon import HyFI
 from lexikanon.tokenizers.base import Tokenizer
@@ -14,6 +14,9 @@ class MecabTagger(BaseModel):
     backend: ekonlpy
     verbose: false
     """
+
+    _config_group_: str = "tokenizers/tagger"
+    _config_name_: str = "mecab"
 
     userdic_path: Optional[str] = None
     backend: str = "ekonlpy"
