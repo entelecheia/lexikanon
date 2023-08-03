@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.4.1 (2023-08-03)
+
+### Fix
+
+* **lexikanon:** To bump version ([`b929758`](https://github.com/entelecheia/lexikanon/commit/b9297582d5b2e7a210358ec5921966c6bbde5221))
+
 ## v0.4.0 (2023-07-30)
 
 ### Feature
