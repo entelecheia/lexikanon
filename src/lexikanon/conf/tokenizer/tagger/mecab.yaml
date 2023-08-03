@@ -1,4 +1,4 @@
-_config_group_: tokenizer/tagger
+_config_group_: /tokenizer/tagger
 _config_name_: mecab
 userdic_path: ${..userdic_path}
 backend: ekonlpy

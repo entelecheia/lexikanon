@@ -11,7 +11,7 @@ logger = HyFI.getLogger(__name__)
 
 
 class Tokenizer(BaseModel):
-    _config_group_: str = "tokenizers"
+    _config_group_: str = "/tokenizers"
     _config_name_: str = "__init__"
 
     stopwords: Stopwords = Stopwords()

@@ -18,7 +18,7 @@ class NLTKTagger(BaseModel):
         _target_: nltk.stem.PorterStemmer
     """
 
-    _config_group_: str = "tokenizers/tagger"
+    _config_group_: str = "/tokenizers/tagger"
     _config_name_: str = "nltk"
 
     lemmatize: bool = False
