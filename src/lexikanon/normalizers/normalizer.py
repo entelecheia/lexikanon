@@ -2,8 +2,7 @@ import re
 from typing import Optional
 
 from ftfy import TextFixerConfig, fix_text
-from hyfi.composer import BaseModel, BaseConfig
-
+from hyfi.composer import BaseConfig, BaseModel
 
 from lexikanon import HyFI
 from lexikanon.utils import (
