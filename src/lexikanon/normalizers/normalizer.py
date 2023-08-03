@@ -2,8 +2,8 @@ import re
 from typing import Optional
 
 from ftfy import TextFixerConfig, fix_text
-from hyfi.composer import BaseModel
-from hyfi.composer.base import BaseConfig
+from hyfi.composer import BaseModel, BaseConfig
+
 
 from lexikanon import HyFI
 from lexikanon.utils import (
@@ -45,7 +45,7 @@ class FyfyConfig(BaseModel):
     max_decode_length: 1000000
     """
 
-    _config_group_: str = "normalizers/fyfy"
+    _config_group_: str = "/normalizers/fyfy"
     _config_name_: str = "__init__"
 
     unescape_html: bool = True
@@ -74,7 +74,7 @@ class SpacesConfig(BaseModel):
     num_spaces_for_tab: 4
     """
 
-    _config_group_: str = "normalizers/spaces"
+    _config_group_: str = "/normalizers/spaces"
     _config_name_: str = "__init__"
 
     strip: bool = True
@@ -95,7 +95,7 @@ class SpecialCharactersConfig(BaseModel):
     regular_parentheses_only: false
     """
 
-    _config_group_: str = "normalizers/special_characters"
+    _config_group_: str = "/normalizers/special_characters"
     _config_name_: str = "__init__"
 
     fix_hyphens: bool = True
@@ -117,7 +117,7 @@ class Normalizer(BaseConfig):
     on normal forms: http://docs.python.org/2/library/unicodedata.html#unicodedata.normalize
     """
 
-    _config_group_: str = "normalizer"
+    _config_group_: str = "/normalizer"
     _config_name_: str = "__init__"
 
     ftfy: FyfyConfig = FyfyConfig()
