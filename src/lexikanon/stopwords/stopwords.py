@@ -18,7 +18,7 @@ class Stopwords(BaseModel):
     verbose: False
     """
 
-    _config_group_: str = "stopwords"
+    _config_group_: str = "/stopwords"
     _config_name_: str = "__init__"
 
     name: str = "stopwords"

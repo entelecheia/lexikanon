@@ -15,7 +15,7 @@ class MecabTagger(BaseModel):
     verbose: false
     """
 
-    _config_group_: str = "tokenizers/tagger"
+    _config_group_: str = "/tokenizers/tagger"
     _config_name_: str = "mecab"
 
     userdic_path: Optional[str] = None

@@ -3,9 +3,9 @@ from lexikanon import HyFI
 
 
 def test_pipes():
-    name = HyFI.save_hyfi_pipe_config(tokenize_dataset)
+    name = HyFI.generate_config(tokenize_dataset, use_first_arg_as_pipe_obj=True)
     assert name == "tokenize_dataset"
-    name = HyFI.save_hyfi_pipe_config(extract_tokens)
+    name = HyFI.generate_config(extract_tokens, use_first_arg_as_pipe_obj=True)
     assert name == "extract_tokens"
 
 

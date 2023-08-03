@@ -3,7 +3,7 @@ defaults:
   - spaces: __init__
   - special_characters: __init__
 
-_config_group_: normalizer
+_config_group_: /normalizer
 _config_name_: __init__
 _target_: lexikanon.normalizers.Normalizer
 hanja2hangle: false

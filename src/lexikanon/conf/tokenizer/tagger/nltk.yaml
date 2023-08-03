@@ -1,4 +1,4 @@
-_config_group_: tokenizer/tagger
+_config_group_: /tokenizer/tagger
 _config_name_: nltk
 lemmatize: false
 stem: true
