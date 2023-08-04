@@ -1,10 +1,10 @@
-_target_: lexikanon.pipe.tokenize.tokenize_dataset
+_target_: lexikanon.pipes.tokenize.tokenize_dataset
 tokenizer: simple
 num_workers: 1
 batched: true
 batch_size: 1000
-text_col: bodyText
-token_col: tokenizedText
+text_col: text
+token_col: tokens
 remove_columns: null
 load_from_cache_file: true
 num_heads: 1
