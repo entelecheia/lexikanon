@@ -3,7 +3,7 @@ defaults:
   - tagger: nltk
 
 _config_name_: nltk
-_target_: corprep.tokenizer.NLTKTokenizer
+_target_: lexikanon.tokenizers.NLTKTokenizer
 noun_postags:
   - NN
   - NNP
