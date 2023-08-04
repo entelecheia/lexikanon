@@ -1,5 +1,14 @@
 <!--next-version-placeholder-->
 
+## v0.5.0 (2023-08-04)
+
+### Feature
+
+* **lexikanon:** Add find_similar_docs_by_clustering configuration ([`51ddf56`](https://github.com/entelecheia/lexikanon/commit/51ddf5692f05db3a8145b41f3ca18362d1644175))
+* **lexikanon:** Add find_similar_docs_by_clustering configuration ([`e2122cf`](https://github.com/entelecheia/lexikanon/commit/e2122cfa1cf73c270d1657dfc9f01295ca8019a2))
+* **lexikanon:** Add similarity.py for document similarity analysis ([`b1fc21b`](https://github.com/entelecheia/lexikanon/commit/b1fc21b12282211306fde4aab0d9df013cd9826f))
+* **pyproject.toml:** Add scikit-learn dependency ([`7dd0014`](https://github.com/entelecheia/lexikanon/commit/7dd0014a9c80ef4986a943c4409379f4699c25ed))
+
 ## v0.4.3 (2023-08-04)
 
 ### Fix
