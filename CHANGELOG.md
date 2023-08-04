@@ -1,5 +1,13 @@
 <!--next-version-placeholder-->
 
+## v0.4.3 (2023-08-04)
+
+### Fix
+
+* **tokenizers:** Add Tokenizer to lexikanon tokenizers ([`66712af`](https://github.com/entelecheia/lexikanon/commit/66712af95443085185cb3ac56c2e66f04ba38eec))
+* **lexikanon:** Change tokenizer_config_name to tokenizer ([`dc014bc`](https://github.com/entelecheia/lexikanon/commit/dc014bcc2b07163581d57b259eff4a3c8d753ad6))
+* **lexikanon/pipe/tokenize:** Enhance tokenizer function to support string or dict types ([`58e32f9`](https://github.com/entelecheia/lexikanon/commit/58e32f94e1b1da2a1c40254d347939cb74bfec20))
+
 ## v0.4.2 (2023-08-04)
 
 ### Fix
