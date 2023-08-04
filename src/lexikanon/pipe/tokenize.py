@@ -1,4 +1,4 @@
-from typing import List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 from datasets import Dataset
 
@@ -9,7 +9,7 @@ logger = HyFI.getLogger(__name__)
 
 def tokenize_dataset(
     data: Dataset,
-    tokenizer_config_name: str = "simple",
+    tokenizer: Union[str, Dict[str, Any]] = "simple",
     num_workers: int = 1,
     batched: bool = True,
     batch_size: int = 1000,
@@ -22,13 +22,20 @@ def tokenize_dataset(
     verbose: bool = False,
 ) -> Dataset:
     def pos_tagging(batch):
-        tokenizer = HyFI.instantiate_config(f"tokenizer={tokenizer_config_name}")
+        if isinstance(tokenizer, str):
+            _tokenizer_ = HyFI.instantiate_config(
+                f"tokenizer={tokenizer}",
+            )
+        else:
+            _tokenizer_ = HyFI.instantiate(
+                tokenizer,
+            )
         batch_tokens = []
         for text in batch[text_col]:
             sentences = text.split("\n")
             tokens = []
             for sentence in sentences:
-                tokens.extend(tokenizer(sentence))
+                tokens.extend(_tokenizer_(sentence))
             batch_tokens.append(tokens)
         return {token_col: batch_tokens}
 
@@ -53,7 +60,7 @@ def tokenize_dataset(
 
 def extract_tokens(
     data: Dataset,
-    tokenizer_config_name: str = "simple",
+    tokenizer: Union[str, Dict[str, Any]] = "simple",
     num_workers: int = 1,
     batched: bool = True,
     batch_size: int = 1000,
@@ -72,11 +79,18 @@ def extract_tokens(
     verbose: bool = False,
 ) -> Dataset:
     def pos_tagging(batch):
-        tokenizer = HyFI.instantiate_config(f"tokenizer={tokenizer_config_name}")
+        if isinstance(tokenizer, str):
+            _tokenizer_ = HyFI.instantiate_config(
+                f"tokenizer={tokenizer}",
+            )
+        else:
+            _tokenizer_ = HyFI.instantiate(
+                tokenizer,
+            )
         batch_tokens = []
         for tokens in batch[token_col]:
             batch_tokens.append(
-                tokenizer.extract(
+                _tokenizer_.extract(
                     tokens,
                     nouns_only=nouns_only,
                     postags=postags,
