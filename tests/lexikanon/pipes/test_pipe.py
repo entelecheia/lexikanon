@@ -1,4 +1,4 @@
-from lexikanon.pipe.tokenize import tokenize_dataset, extract_tokens
+from lexikanon.pipes.tokenize import tokenize_dataset, extract_tokens
 from lexikanon import HyFI
 
 
