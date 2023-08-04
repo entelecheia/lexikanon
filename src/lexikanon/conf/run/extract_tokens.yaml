@@ -1,10 +1,10 @@
-_target_: lexikanon.pipe.tokenize.extract_tokens
+_target_: lexikanon.pipes.tokenize.extract_tokens
 tokenizer: simple
 num_workers: 1
 batched: true
 batch_size: 1000
-token_col: tokenizedText
-extracted_col: extractedTokens
+token_col: tokens
+extracted_col: extracted_tokens
 nouns_only: false
 postags: null
 stop_postags: null
