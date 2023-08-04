@@ -11,6 +11,11 @@ def test_stopwords():
     print(stop)
     print(list(stop))
     assert len(stop) == 179
+    stop = HyFI.instantiate_config(
+        "stopwords",
+        overrides=["stopwords.nltk_stopwords_lang=english"],
+    )
+    assert len(stop) == 179
 
 
 if __name__ == "__main__":
