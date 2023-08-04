@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.4.2 (2023-08-04)
+
+### Fix
+
+* **tokenizer:** Change target from corprep to lexikanon in nltk.yaml ([`27e6915`](https://github.com/entelecheia/lexikanon/commit/27e691528e0f7ed9e8c57cd644ad82c7b2235e9b))
+* **.envrc:** Add new environment configuration file ([`13eeba2`](https://github.com/entelecheia/lexikanon/commit/13eeba255b13a914b5122dd746ff92c7e9c1e5ca))
+
 ## v0.4.1 (2023-08-03)
 
 ### Fix
