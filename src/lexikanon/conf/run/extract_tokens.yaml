@@ -1,5 +1,5 @@
 _target_: lexikanon.pipe.tokenize.extract_tokens
-tokenizer_config_name: simple
+tokenizer: simple
 num_workers: 1
 batched: true
 batch_size: 1000
