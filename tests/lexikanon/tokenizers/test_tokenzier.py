@@ -1,6 +1,8 @@
 from lexikanon import HyFI
 from lexikanon.tokenizers import MecabTokenizer
 
+HyFI.setLogger("INFO")
+
 
 def test_tokenizer():
     cfg = HyFI.compose_as_dict("tokenizer=mecab")
@@ -15,9 +17,14 @@ def test_tokenizer():
 def test_nltk_tokenizer():
     cfg = HyFI.compose_as_dict("tokenizer=nltk")
     tokenizer = MecabTokenizer(**cfg)
+    tokenizer.strip_pos = True
+    tokenizer.stopwords.nltk_stopwords_lang = "english"
+    tokenizer.stopwords.verbose = True
+    tokenizer.verbose = True
+
     # print(tokenizer)
     text = "Federal Reserve officials concluded their two-day policy meeting Wednesday by holding interest rates steady and signaling they expect to leave them unchanged for the foreseeable future."
-    tokens = tokenizer(text)
+    tokens = tokenizer.nouns(text)
     print(tokens)
     # assert len(stop.stopwords_list) == 179
 
