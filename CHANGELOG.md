@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.5.1 (2023-08-05)
+
+### Fix
+
+* **stopwords:** Simplify loading and accessing stopwords ([`b4628f9`](https://github.com/entelecheia/lexikanon/commit/b4628f99ff24feda4002ece225ac42f7ea8194d7))
+
 ## v0.5.0 (2023-08-04)
 
 ### Feature
