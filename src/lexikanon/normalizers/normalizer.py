@@ -1,3 +1,4 @@
+import logging
 import re
 from typing import Optional
 
@@ -22,7 +23,7 @@ from lexikanon.utils import (
     hanja_to_hangle,
 )
 
-logger = HyFI.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class FyfyConfig(BaseModel):
