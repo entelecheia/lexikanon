@@ -1,5 +1,6 @@
-_config_group_: /tokenizer/tagger
+_target_: lexikanon.tokenizers.mecab.MecabTagger
 _config_name_: mecab
-userdic_path: ${..userdic_path}
+_config_group_: /tokenizer/tagger
+userdic_path: null
 backend: ekonlpy
-verbose: ${oc.select:..verbose, false}
+verbose: false
