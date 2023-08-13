@@ -1,10 +1,11 @@
+import logging
 from typing import Any, Dict, List, Optional, Union
 
 from datasets import Dataset
 
 from lexikanon import HyFI
 
-logger = HyFI.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 def tokenize_dataset(
