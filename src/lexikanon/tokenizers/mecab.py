@@ -1,3 +1,4 @@
+import logging
 from typing import List, Optional, Tuple
 
 from hyfi.composer import BaseModel
@@ -5,7 +6,7 @@ from hyfi.composer import BaseModel
 from lexikanon import HyFI
 from lexikanon.tokenizers.base import Tokenizer
 
-logger = HyFI.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class MecabTagger(BaseModel):
@@ -15,7 +16,7 @@ class MecabTagger(BaseModel):
     verbose: false
     """
 
-    _config_group_: str = "/tokenizers/tagger"
+    _config_group_: str = "/tokenizer/tagger"
     _config_name_: str = "mecab"
 
     userdic_path: Optional[str] = None

@@ -1,0 +1,22 @@
+defaults:
+  - nltk
+  - override tagger: nltk_universal
+
+noun_postags:
+  - NOUN
+postags:
+  - NOUN
+  - VERB
+  - PRT
+  - ADJ
+  - ADV
+punct_postags:
+  - "."
+stop_postags:
+  - PRON
+  - ADP
+  - CONJ
+  - DET
+  - NUM
+  - X
+  - "."

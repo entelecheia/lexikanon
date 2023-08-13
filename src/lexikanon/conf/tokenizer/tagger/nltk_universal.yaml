@@ -1,0 +1,3 @@
+defaults:
+  - nltk
+tagset: universal

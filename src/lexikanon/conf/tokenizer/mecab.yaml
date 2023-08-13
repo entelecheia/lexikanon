@@ -13,6 +13,12 @@ noun_postags:
   - XR
   - NNB
   - NR
+punct_postags:
+  - SF
+  - SP
+  - SSO
+  - SSC
+  - SY
 stop_postags:
   - SP
   - SF

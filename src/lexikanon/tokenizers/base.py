@@ -1,17 +1,17 @@
 import codecs
+import logging
 from typing import Callable, List, Optional, Tuple, Union
 
 from hyfi.composer import BaseModel
 
-from lexikanon import HyFI
 from lexikanon.normalizers import Normalizer
 from lexikanon.stopwords import Stopwords
 
-logger = HyFI.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class Tokenizer(BaseModel):
-    _config_group_: str = "/tokenizers"
+    _config_group_: str = "/tokenizer"
     _config_name_: str = "__init__"
 
     stopwords: Stopwords = Stopwords()
@@ -23,12 +23,11 @@ class Tokenizer(BaseModel):
     postag_length: Optional[int] = None
     include_whitespace_token: bool = True
     tokenize_each_word: bool = False
-    sentence_separator: str = "\n"
-    userdic_path: Optional[str] = None
+    sentence_separator: str = "\\n"
     wordpieces_prefix: Optional[str] = "##"
     postags: Optional[List[str]] = None
     noun_postags: Optional[List[str]] = None
-    punct_postags: List[str] = ["SF", "SP", "SSO", "SSC", "SY"]
+    punct_postags: Optional[List[str]] = None
     stop_postags: Optional[List[str]] = None
     verbose: bool = False
 
@@ -71,6 +70,7 @@ class Tokenizer(BaseModel):
         return term_pos
 
     def tokenize_word(self, word: str) -> List[str]:
+        self.punct_postags = self.punct_postags or []
         tokens = self.parse(word)
         tokenized = []
         for i, token_pos in enumerate(tokens):
@@ -130,9 +130,9 @@ class Tokenizer(BaseModel):
         if strip_pos is None:
             strip_pos = self.strip_pos
         if stop_postags is None:
-            stop_postags = self.stop_postags
+            stop_postags = self.stop_postags or []
         if postags is None:
-            postags = self.noun_postags if nouns_only else self.postags
+            postags = self.noun_postags if nouns_only else self.postags or []
         if postag_delim is None:
             postag_delim = self.postag_delim
         if postag_length is None:

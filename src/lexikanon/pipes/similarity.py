@@ -1,3 +1,4 @@
+import logging
 import multiprocessing as mp
 from functools import partial
 from pathlib import Path
@@ -13,7 +14,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 from lexikanon import HyFI
 
-logger = HyFI.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 def plot_dendrogram(model, **kwargs):
