@@ -22,8 +22,12 @@ class NLTKTagger(BaseModel):
     _config_group_: str = "/tokenizer/tagger"
     _config_name_: str = "nltk"
 
-    tagset: str = Field(
-        "universal", description="the tagset to be used, e.g. universal, wsj, brown"
+    tagset: Optional[str] = Field(
+        None, description="the tagset to be used, e.g. universal, wsj, brown"
+    )
+    language: str = Field(
+        "english",
+        description="the language to be used, e.g. 'english' for English, 'russian' for Russian",
     )
     lemmatize: bool = False
     stem: bool = True
@@ -40,6 +44,7 @@ class NLTKTagger(BaseModel):
 
         NLTK.download("punkt", quiet=True)
         NLTK.download("averaged_perceptron_tagger", quiet=True)
+        NLTK.download("universal_tagset", quiet=True)
         NLTK.download("wordnet", quiet=True)
         NLTK.download("omw-1.4", quiet=True)
 
@@ -57,7 +62,11 @@ class NLTKTagger(BaseModel):
     def _parse(self, text: str) -> List[Tuple[str, str]]:
         import nltk
 
-        tokens: List[tuple] = nltk.pos_tag(nltk.word_tokenize(text))
+        tokens: List[tuple] = nltk.pos_tag(
+            nltk.word_tokenize(text, language=self.language),
+            tagset=self.tagset,
+            lang=self.language[:3],
+        )
         return tokens
 
     def _lemmatize(self, token_pos: Tuple[str, str]) -> Tuple[str, str]:
@@ -76,19 +85,29 @@ class NLTKTagger(BaseModel):
         return (self._stemmer.stem(token_pos[0]), token_pos[1])
 
     @staticmethod
-    def _get_wordnet_pos(tag: str) -> str:
+    def _get_wordnet_pos(
+        tag: str,
+        tagset: Optional[str] = None,
+    ) -> str:
         from nltk.corpus import wordnet
 
         """Map POS tag to first character lemmatize() accepts"""
-        tag = tag[0].upper()
-        tag_dict = {
-            "J": wordnet.ADJ,
-            "N": wordnet.NOUN,
-            "V": wordnet.VERB,
-            "R": wordnet.ADV,
-        }
-
-        return tag_dict.get(tag, wordnet.NOUN)
+        if tagset == "universal":
+            tag_dict = {
+                "ADJ": wordnet.ADJ,
+                "NOUN": wordnet.NOUN,
+                "VERB": wordnet.VERB,
+                "ADV": wordnet.ADV,
+            }
+        else:
+            tag = tag[0].upper()
+            tag_dict = {
+                "J": wordnet.ADJ,
+                "N": wordnet.NOUN,
+                "V": wordnet.VERB,
+                "R": wordnet.ADV,
+            }
+        return tag_dict.get(tag, "")
 
 
 class NLTKTokenizer(Tokenizer):
