@@ -9,6 +9,23 @@ noun_postags:
   - NNP
   - NNS
   - NNPS
+postags:
+  - NN
+  - NNP
+  - NNS
+  - NNPS
+  - JJ
+  - JJR
+  - JJS
+  - RB
+  - RBR
+  - RBS
+  - VB
+  - VBD
+  - VBG
+  - VBN
+  - VBP
+  - VBZ
 punct_postags:
   - "."
 stop_postags:
