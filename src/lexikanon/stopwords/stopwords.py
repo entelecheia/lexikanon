@@ -1,10 +1,11 @@
+import logging
 from typing import Callable, List, Optional, Union
 
-from hyfi.composer import BaseModel, model_validator
+from hyfi.composer import BaseModel
 
 from lexikanon import HyFI
 
-logger = HyFI.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class Stopwords(BaseModel):
