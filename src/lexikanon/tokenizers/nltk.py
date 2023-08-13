@@ -1,11 +1,12 @@
-from typing import Any, List, Optional, Tuple
+import logging
+from typing import Any, Dict, List, Optional, Tuple
 
-from hyfi.composer import BaseModel, model_validator
+from hyfi.composer import BaseModel, Field, model_validator
 
 from lexikanon import HyFI
 from lexikanon.tokenizers.base import Tokenizer
 
-logger = HyFI.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class NLTKTagger(BaseModel):
@@ -18,13 +19,16 @@ class NLTKTagger(BaseModel):
         _target_: nltk.stem.PorterStemmer
     """
 
-    _config_group_: str = "/tokenizers/tagger"
+    _config_group_: str = "/tokenizer/tagger"
     _config_name_: str = "nltk"
 
+    tagset: str = Field(
+        "universal", description="the tagset to be used, e.g. universal, wsj, brown"
+    )
     lemmatize: bool = False
     stem: bool = True
-    lemmatizer: Optional[dict] = None
-    stemmer: Optional[dict] = None
+    lemmatizer: Optional[Dict] = {"_target_": "nltk.stem.WordNetLemmatizer"}
+    stemmer: Optional[Dict] = {"_target_": "nltk.stem.PorterStemmer"}
     verbose: bool = False
 
     _lemmatizer: Any = None
