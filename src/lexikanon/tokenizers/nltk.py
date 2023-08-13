@@ -74,7 +74,7 @@ class NLTKTagger(BaseModel):
             return token_pos
         return (
             self._lemmatizer.lemmatize(
-                token_pos[0], self._get_wordnet_pos(token_pos[1])
+                token_pos[0], self._get_wordnet_pos(token_pos[1], tagset=self.tagset)
             ),
             token_pos[1],
         )
@@ -107,7 +107,7 @@ class NLTKTagger(BaseModel):
                 "V": wordnet.VERB,
                 "R": wordnet.ADV,
             }
-        return tag_dict.get(tag, "")
+        return tag_dict.get(tag, wordnet.NOUN)
 
 
 class NLTKTokenizer(Tokenizer):
