@@ -107,6 +107,7 @@ class NLTKTagger(BaseModel):
                 "V": wordnet.VERB,
                 "R": wordnet.ADV,
             }
+        # if there is no match, default to noun (otherwise lemmatize returns None)
         return tag_dict.get(tag, wordnet.NOUN)
 
 
