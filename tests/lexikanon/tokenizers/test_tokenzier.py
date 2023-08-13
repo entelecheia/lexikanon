@@ -31,7 +31,8 @@ def test_nltk_tokenizer():
     print(tokens)
     tokens = tokenizer.nouns(text)
     print(tokens)
-    # assert len(stop.stopwords_list) == 179
+    tokens = tokenizer.tokens(text)
+    print(tokens)
 
 
 def test_nltk_tokenizer_univ():
@@ -47,6 +48,8 @@ def test_nltk_tokenizer_univ():
     tokens = tokenizer(text)
     print(tokens)
     tokens = tokenizer.nouns(text)
+    print(tokens)
+    tokens = tokenizer.tokens(text)
     print(tokens)
     # assert len(stop.stopwords_list) == 179
 
