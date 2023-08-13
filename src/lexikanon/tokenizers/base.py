@@ -1,13 +1,13 @@
 import codecs
+import logging
 from typing import Callable, List, Optional, Tuple, Union
 
 from hyfi.composer import BaseModel
 
-from lexikanon import HyFI
 from lexikanon.normalizers import Normalizer
 from lexikanon.stopwords import Stopwords
 
-logger = HyFI.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class Tokenizer(BaseModel):
@@ -24,7 +24,6 @@ class Tokenizer(BaseModel):
     include_whitespace_token: bool = True
     tokenize_each_word: bool = False
     sentence_separator: str = "\n"
-    userdic_path: Optional[str] = None
     wordpieces_prefix: Optional[str] = "##"
     postags: Optional[List[str]] = None
     noun_postags: Optional[List[str]] = None
