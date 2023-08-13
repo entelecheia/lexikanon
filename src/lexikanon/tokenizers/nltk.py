@@ -49,10 +49,10 @@ class NLTKTagger(BaseModel):
         NLTK.download("omw-1.4", quiet=True)
 
         if self.lemmatizer and HyFI.is_instantiatable(self.lemmatizer):
-            logger.info("instantiating %s...", self.lemmatizer["_target_"])
+            logger.debug("instantiating %s...", self.lemmatizer["_target_"])
             self._lemmatizer = HyFI.instantiate(self.lemmatizer)
         if self.stemmer and HyFI.is_instantiatable(self.stemmer):
-            logger.info("instantiating %s...", self.stemmer["_target_"])
+            logger.debug("instantiating %s...", self.stemmer["_target_"])
             self._stemmer = HyFI.instantiate(self.stemmer)
         self.lemmatize = self.lemmatize and self._lemmatizer is not None
         self.stem = self.stem and self._stemmer is not None
