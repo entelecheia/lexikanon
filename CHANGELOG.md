@@ -1,5 +1,15 @@
 <!--next-version-placeholder-->
 
+## v0.6.1 (2023-08-13)
+
+### Fix
+
+* **tokenizers:** Add model validator after method ([`cfd8a06`](https://github.com/entelecheia/lexikanon/commit/cfd8a0685a6e0e3bc3f7266da536a3cd78d67446))
+* **normalizer:** Change unescape_html type to Union[bool, str] ([`d7e024f`](https://github.com/entelecheia/lexikanon/commit/d7e024f54d5f0ba213c0536b89323f5550e16fb5))
+* **tokenizer:** Add formal_en normalizer to nltk config ([`b65d01a`](https://github.com/entelecheia/lexikanon/commit/b65d01aa9d779a5c220e64354c9cacf4621efdbc))
+* **stopwords:** Add verbose condition to logging ([`a7f168b`](https://github.com/entelecheia/lexikanon/commit/a7f168b1775df78d73e12ba4f6e2373304c4f9ec))
+* **lexikanon:** Adjust NLTKTagger for tagsets and default tag ([`54ba18f`](https://github.com/entelecheia/lexikanon/commit/54ba18f94aa618ea3f78d85e4259a2358137545b))
+
 ## v0.6.0 (2023-08-13)
 
 ### Feature
