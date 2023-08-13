@@ -2,7 +2,7 @@ import codecs
 import logging
 from typing import Callable, List, Optional, Tuple, Union
 
-from hyfi.composer import BaseModel
+from hyfi.composer import BaseModel, model_validator
 
 from lexikanon.normalizers import Normalizer
 from lexikanon.stopwords import Stopwords
@@ -30,6 +30,16 @@ class Tokenizer(BaseModel):
     punct_postags: Optional[List[str]] = None
     stop_postags: Optional[List[str]] = None
     verbose: bool = False
+
+    @model_validator(mode="after")
+    def _validate_model_after(self):
+        if self.normalizer:
+            if callable(self.normalizer):
+                logger.debug("Callable normalizer found.")
+            else:
+                logger.debug("Normalizer found, but is not callable.")
+        else:
+            logger.debug("No normalizer found.")
 
     @property
     def sentence_separator_unicode(self) -> str:

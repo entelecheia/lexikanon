@@ -1,6 +1,7 @@
 defaults:
   - __init__
   - tagger: nltk
+  - override /normalizer: formal_en
 
 _config_name_: nltk
 _target_: lexikanon.tokenizers.NLTKTokenizer

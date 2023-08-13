@@ -98,7 +98,8 @@ class Stopwords(BaseModel):
 
         nltk.download("stopwords", quiet=True)
         if language in stopwords.fileids():
-            logger.info("Loaded NLTK stopwords for %s", language)
+            if self.verbose:
+                logger.info("Loaded NLTK stopwords for %s", language)
             return stopwords.words(language)
 
         logger.warning("No NLTK stopwords for %s", language)

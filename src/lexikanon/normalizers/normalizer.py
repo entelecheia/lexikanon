@@ -1,6 +1,6 @@
 import logging
 import re
-from typing import Optional
+from typing import Optional, Union
 
 from ftfy import TextFixerConfig, fix_text
 from hyfi.composer import BaseConfig, BaseModel
@@ -48,7 +48,7 @@ class FyfyConfig(BaseModel):
     _config_group_: str = "/normalizers/fyfy"
     _config_name_: str = "__init__"
 
-    unescape_html: bool = True
+    unescape_html: Union[bool, str] = True
     remove_terminal_escapes: bool = True
     fix_encoding: bool = True
     restore_byte_a0: bool = True
