@@ -1,5 +1,23 @@
 <!--next-version-placeholder-->
 
+## v0.6.0 (2023-08-13)
+
+### Feature
+
+* **tokenizer:** Add additional postags ([`fe95c3e`](https://github.com/entelecheia/lexikanon/commit/fe95c3ecbb8be03d2facc95bf9ccdbb2bb227c30))
+* **tokenizer:** Add additional postags to nltk config ([`a35f684`](https://github.com/entelecheia/lexikanon/commit/a35f6849d884716c38f5697210d202b34542ba3c))
+* **tokenizers/nltk:** Add language support, improve tagset flexibility, download universal_tagset ([`82e2514`](https://github.com/entelecheia/lexikanon/commit/82e2514eb91a66eaef838c92a9c9f6d6b2b54667))
+* **lexikanon:** Add new nltk_universal configuration file ([`2c7880f`](https://github.com/entelecheia/lexikanon/commit/2c7880fc5facd1fbf18e58b81a605e8b47bc5481))
+* **tokenizer:** Add nltk_universal configuration ([`e68c5e1`](https://github.com/entelecheia/lexikanon/commit/e68c5e1b2c8361e4bd8e75d5cd16f1687f90f0f7))
+* **tokenizers:** Add MecabTagger and NLTKTagger ([`b766fb3`](https://github.com/entelecheia/lexikanon/commit/b766fb393e499eaf082968a9a96bd31007352fc8))
+* **tokenizer/tagger:** Implement NLTKTagger ([`4f2d945`](https://github.com/entelecheia/lexikanon/commit/4f2d945240afa140063081391734788cdc5d923f))
+
+### Fix
+
+* **tokenizer:** Add punctuation postags to mecab.yaml ([`1624dbd`](https://github.com/entelecheia/lexikanon/commit/1624dbdb8466008eddf1f42fc34e75c0c6a9ada9))
+* **tokenizers:** Adjust tokenizer base configurations ([`c96bfbf`](https://github.com/entelecheia/lexikanon/commit/c96bfbf7e8443f12d8839f96e514b4da6eeaadb9))
+* **MecabTagger:** Correct config_group path ([`9b74064`](https://github.com/entelecheia/lexikanon/commit/9b74064eed4d97192c3b149b219fc11b73c03f83))
+
 ## v0.5.2 (2023-08-06)
 
 ### Fix
