@@ -9,5 +9,24 @@ noun_postags:
   - NNP
   - NNS
   - NNPS
-stop_postags:
+punct_postags:
   - "."
+stop_postags:
+  - CC
+  - CD
+  - DT
+  - EX
+  - IN
+  - LS
+  - MD
+  - PDT
+  - POS
+  - PRP
+  - PRP$
+  - RP
+  - TO
+  - UH
+  - WDT
+  - WP
+  - WP$
+  - WRB
