@@ -1,4 +1,5 @@
 import itertools
+import logging
 import re
 import unicodedata
 from typing import Optional, Set
@@ -8,7 +9,7 @@ from lexikanon import HyFI
 from .hangle import compose, decompose
 from .hanja import translate as hanja2hangle
 
-logger = HyFI.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 doublespace_pattern = re.compile(r"\s+")
