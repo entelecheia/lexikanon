@@ -7,6 +7,9 @@ HyFI.setLogger("INFO")
 def test_tokenizer():
     cfg = HyFI.compose_as_dict("tokenizer=mecab")
     tokenizer = MecabTokenizer(**cfg)
+    print(tokenizer.sentence_separator, tokenizer.sentence_separator_unicode)
+    assert tokenizer.sentence_separator == "\\n"
+    assert tokenizer.sentence_separator_unicode == "\n"
     # print(tokenizer)
     text = "금통위는 따라서 물가안정과 병행, 경기상황에 유의하는 금리정책을 펼쳐나가기로 했다고 밝혔다."
     tokens = tokenizer(text)
