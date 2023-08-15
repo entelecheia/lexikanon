@@ -1,5 +1,15 @@
 <!--next-version-placeholder-->
 
+## v0.6.2 (2023-08-15)
+
+### Fix
+
+* **book:** Update library description, add Zenodo link ([`b55f063`](https://github.com/entelecheia/lexikanon/commit/b55f06350c5a8264c126e3faf6e8a7437364b8bf))
+
+### Documentation
+
+* **readme:** Add Zenodo DOI badge and link, update library description ([`5513505`](https://github.com/entelecheia/lexikanon/commit/55135053650776ab352273201fb568d409ca7ec3))
+
 ## v0.6.1 (2023-08-13)
 
 ### Fix
