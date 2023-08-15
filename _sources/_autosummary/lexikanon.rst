@@ -34,4 +34,9 @@
    :recursive:
 
    lexikanon.conf
+   lexikanon.normalizers
+   lexikanon.pipes
+   lexikanon.stopwords
+   lexikanon.tokenizers
+   lexikanon.utils
 
