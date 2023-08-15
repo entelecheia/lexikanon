@@ -36,8 +36,8 @@ This project is released under the [MIT License][license-url].
 
 <!-- Links: -->
 
-[zenodo-image]: https://zenodo.org/badge/DOI/10.5281/zenodo.8247719.svg
-[zenodo-url]: https://doi.org/10.5281/zenodo.8247719
+[zenodo-image]: https://zenodo.org/badge/DOI/10.5281/zenodo.8248117.svg
+[zenodo-url]: https://doi.org/10.5281/zenodo.8248117
 [codecov-image]: https://codecov.io/gh/entelecheia/lexikanon/branch/main/graph/badge.svg?token=KGST5XVW3F
 [codecov-url]: https://codecov.io/gh/entelecheia/lexikanon
 [pypi-image]: https://img.shields.io/pypi/v/lexikanon
