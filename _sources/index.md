@@ -16,6 +16,31 @@ A HyFI-based library for the creation, training, and utilization of tokenizers.
 
 Lexikanon is a high-performance Python library specifically engineered for the creation, training, and utilization of tokenizers, which are fundamental components in both natural language processing (NLP) and artificial intelligence (AI). Drawing its name from the Greek words λέξη (meaning "word") and κάνων (meaning "maker"), Lexikanon encapsulates its primary purpose of enabling users to develop robust tokenizers tailored for different languages and specific tasks. Built on the [Hydra Fast Interface (HyFI)](https://hyfi.entelecheia.ai) framework, Lexikanon stands as a HyFI-based library. This makes it seamlessly pluggable into any HyFI-oriented project, although it can also function as a standalone library.
 
+## Citation
+
+```tex
+@software{lee_2023_8248118,
+  author       = {Young Joon Lee},
+  title        = {Lexikanon: A HyFI-based library for Tokenizers},
+  month        = aug,
+  year         = 2023,
+  publisher    = {Zenodo},
+  version      = {v0.6.2},
+  doi          = {10.5281/zenodo.8248117},
+  url          = {https://doi.org/10.5281/zenodo.8248117}
+}
+```
+
+```tex
+@software{lee_2023_hyfi,
+  author       = {Young Joon Lee},
+  title        = {Lexikanon: A HyFI-based library for Tokenizers},
+  year         = 2023,
+  publisher    = {GitHub},
+  url          = {https://github.com/entelecheia/lexikanon}
+}
+```
+
 ## Changelog
 
 See the [CHANGELOG] for more information.
