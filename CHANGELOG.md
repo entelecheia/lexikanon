@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.6.3 (2023-08-18)
+
+### Fix
+
+* **dependencies:** Upgrade hyfi to 1.29.8 ([`7747ddb`](https://github.com/entelecheia/lexikanon/commit/7747ddbcf22784d419f5be9e36719147521f9ab3))
+
 ## v0.6.2 (2023-08-15)
 
 ### Fix
