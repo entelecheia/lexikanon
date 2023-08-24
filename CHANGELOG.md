@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.6.4 (2023-08-24)
+
+### Fix
+
+* **tests:** Update HyFI method calls and behavior ([`c55189a`](https://github.com/entelecheia/lexikanon/commit/c55189ab1683fce33a26713c78a807833951371c))
+* **Makefile:** Enable trust flag for copier command ([`1717647`](https://github.com/entelecheia/lexikanon/commit/1717647cad364b68ed19965f0e2833691d56fb89))
+
 ## v0.6.3 (2023-08-18)
 
 ### Fix
