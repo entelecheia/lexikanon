@@ -1,3 +1,8 @@
 .copierignore
 CHANGELOG.md
 .gitignore
+src/lexikanon/__cli__.py
+src/lexikanon/_version.py
+src/lexikanon/__init__.py
+tests/lexikanon/test_cli.py
+pyproject.toml

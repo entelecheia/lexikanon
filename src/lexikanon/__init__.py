@@ -4,7 +4,7 @@ from hyfi import HyFI
 
 from ._version import __version__
 
-# Read the package name from the current directory
+# Read the package path from the current directory
 __package_path__ = os.path.dirname(__file__)
 
 # Initialize the global HyFI object
