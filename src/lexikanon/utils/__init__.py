@@ -22,9 +22,13 @@ alphabet_pattern = re.compile(r"[a-zA-Z]")
 
 hangle_filter = re.compile(r"[^ㄱ-ㅎㅏ-ㅣ가-힣]")
 hangle_number_filter = re.compile(r"[^ㄱ-ㅎㅏ-ㅣ가-힣0-9]")
-text_filter = re.compile(r"[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9,\.\?\!&·\"'\(\)\[\]\{\}+\-\\\/\*×%]")
+text_filter = re.compile(
+    r"[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9,\.\?\!&·\"'\(\)\[\]\{\}+\-\\\/\*×%]"
+)
 # text_filter = re.compile(r'[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9,\.\?\!&·\"\'-()\[\]\{\}]')
-text_filter_for_lrgraph = re.compile(r"[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9,\.\?\!&\"'-()\[\]\{\}]")
+text_filter_for_lrgraph = re.compile(
+    r"[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9,\.\?\!&\"'-()\[\]\{\}]"
+)
 
 
 #: Control characters.

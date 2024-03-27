@@ -1,4 +1,5 @@
 """Command line interface for lexikanon"""
+
 from hyfi import hyfi_main
 
 
