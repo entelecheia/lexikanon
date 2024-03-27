@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "lexikanon"
-version = "0.6.4"
+version = "0.6.5"
 description = "A Python Library for Tokenizers"
 authors = ["Young Joon Lee <entelecheia@hotmail.com>"]
 license = "MIT"

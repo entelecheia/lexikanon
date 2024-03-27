@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.6.5 (2024-03-27)
+
+### Fix
+
+* **dependencies:** Update python and hyfi versions ([`d55c830`](https://github.com/entelecheia/lexikanon/commit/d55c8302f0f33ab6ae25ebd457ee0262af9fa0e2))
+
 ## v0.6.4 (2023-08-24)
 
 ### Fix
