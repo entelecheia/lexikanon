@@ -1115,13 +1115,13 @@ tqdm = ["tqdm"]
 
 [[package]]
 name = "ftfy"
-version = "6.3.0"
+version = "6.3.1"
 description = "Fixes mojibake and other problems with Unicode, after the fact"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "ftfy-6.3.0-py3-none-any.whl", hash = "sha256:17aca296801f44142e3ff2c16f93fbf6a87609ebb3704a9a41dd5d4903396caf"},
-    {file = "ftfy-6.3.0.tar.gz", hash = "sha256:1c7d6418e72b25a7760feb150acf574b86924dbb2e95b32c0b3abbd1ba3d7ad6"},
+    {file = "ftfy-6.3.1-py3-none-any.whl", hash = "sha256:7c70eb532015cd2f9adb53f101fb6c7945988d023a085d127d1573dc49dd0083"},
+    {file = "ftfy-6.3.1.tar.gz", hash = "sha256:9b3c3d90f84fb267fe64d375a07b7f8912d817cf86009ae134aa03e1819506ec"},
 ]
 
 [package.dependencies]
