@@ -1,8 +1,11 @@
+import sys
 from typing import Any
 
 import pandas as pd
+import pytest
 from datasets import Dataset
 
+from lexikanon.normalizers import Normalizer
 from lexikanon.pipes.similarity import find_similar_docs_by_clustering
 from lexikanon.pipes.tokenize import extract_tokens, tokenize_dataset, tokenize_texts
 from lexikanon.tokenizers import MecabTokenizer
@@ -23,60 +26,51 @@ def test_tokenize_and_extract_dataset() -> None:
     assert data["extracted_tokens"][0][:3] == ["금통위", "물가", "안정"]
 
 
-def test_dataset_fingerprint_tracks_settings() -> None:
-    # tokenize_dataset passes its own fingerprint so datasets never dill-hashes the map
-    # function (fails on Python 3.15); different settings must not share a cache entry.
-    data = Dataset.from_dict({"text": [KO]})
-    a = tokenize_dataset(data, tokenizer=MecabTokenizer())
-    b = tokenize_dataset(data, tokenizer=MecabTokenizer(strip_pos=True))
-    c = tokenize_dataset(data, tokenizer=MecabTokenizer())
-    assert a._fingerprint == c._fingerprint != b._fingerprint
-    assert b["tokens"][0][:2] == ["금통위", "는"]
+DILL_HASHING = sys.version_info < (3, 15)
 
 
-def test_dataset_fingerprint_tracks_batched() -> None:
-    # review of #119: batched=True/False produce different shapes, so keys must differ
-    data = Dataset.from_dict({"text": ["a b"]})
-    a = tokenize_dataset(data, batched=True)
-    b = tokenize_dataset(data, batched=False)
-    assert a._fingerprint != b._fingerprint
-    c = extract_tokens(a, batched=True)
-    d = extract_tokens(a, batched=False)
-    assert c._fingerprint != d._fingerprint
+class CaseNormalizer(Normalizer):  # module level, so dill can hash it
+    upper: bool = False
 
 
-def test_fingerprint_never_reuses_settings_it_cannot_describe() -> None:
-    # review of #119: two stemmer modes have the same repr; such settings must not share a key
+@pytest.mark.skipif(not DILL_HASHING, reason="datasets hashes map functions with dill below 3.15")
+def test_dataset_cache_key_tracks_every_setting() -> None:
+    # Review of #119 found four settings a hand-made key missed; datasets' own dill hash of
+    # the map function and its arguments captures them all, including private state.
     from nltk.stem import PorterStemmer
 
-    from lexikanon.pipes.tokenize import _fingerprint
-    from lexikanon.tokenizers import NLTKTagger, NLTKTokenizer
+    from lexikanon.tokenizers import NLTKTagger, NLTKTokenizer, SimpleTokenizer
 
-    data = Dataset.from_dict({"text": ["skies"]})
+    data = Dataset.from_dict({"text": [KO]})
 
-    def tok(mode: str) -> NLTKTokenizer:
-        return NLTKTokenizer(tagger=NLTKTagger(stemmer=PorterStemmer(mode=mode)))
+    def fp(**kw: Any) -> str:
+        return tokenize_dataset(data, **kw)._fingerprint
 
-    original, extended = tok("ORIGINAL_ALGORITHM"), tok("NLTK_EXTENSIONS")
-    assert _fingerprint(data, "t", original) != _fingerprint(data, "t", extended)
-    assert _fingerprint(data, "t", original) != _fingerprint(data, "t", original)  # no reuse
-
-
-def test_fingerprint_sees_subclass_fields_of_nested_models() -> None:
-    # review of #119: a custom Normalizer's own fields must change the cache key
-    from lexikanon.normalizers import Normalizer
-    from lexikanon.pipes.tokenize import _fingerprint
-    from lexikanon.tokenizers import SimpleTokenizer
-
-    class CaseNormalizer(Normalizer):
-        upper: bool = False
-
-    data = Dataset.from_dict({"text": ["Hello"]})
+    mecab = MecabTokenizer()
+    assert fp(tokenizer=mecab) == fp(tokenizer=MecabTokenizer())  # identical settings reuse
+    assert fp(tokenizer=mecab) != fp(tokenizer=MecabTokenizer(strip_pos=True))
+    assert fp(batched=True) != fp(batched=False)
     lower = SimpleTokenizer(normalizer=CaseNormalizer(upper=False))
     upper = SimpleTokenizer(normalizer=CaseNormalizer(upper=True))
-    base = SimpleTokenizer(normalizer=Normalizer())
-    keys = {_fingerprint(data, "t", tok) for tok in (lower, upper, base)}
-    assert len(keys) == 3
+    assert fp(tokenizer=lower) != fp(tokenizer=upper)
+
+    def nltk(mode: str) -> NLTKTokenizer:
+        return NLTKTokenizer(tagger=NLTKTagger(stemmer=PorterStemmer(mode=mode)))
+
+    assert fp(tokenizer=nltk("ORIGINAL_ALGORITHM")) != fp(tokenizer=nltk("NLTK_EXTENSIONS"))
+
+    tokens = tokenize_dataset(data, tokenizer=mecab)
+    a, b = MecabTokenizer(), MecabTokenizer()
+    b.stopwords.stopwords.append("물가")  # same public settings, different loaded list
+    assert extract_tokens(tokens, tokenizer=a)._fingerprint != (
+        extract_tokens(tokens, tokenizer=b)._fingerprint
+    )
+
+
+@pytest.mark.skipif(DILL_HASHING, reason="only Python 3.15+ falls back to random keys")
+def test_dataset_cache_is_not_reused_without_dill() -> None:
+    data = Dataset.from_dict({"text": ["a b"]})
+    assert tokenize_dataset(data)._fingerprint != tokenize_dataset(data)._fingerprint
 
 
 def _docs(ids: list[Any], days: list[str], tokens: list[list[str]]) -> pd.DataFrame:

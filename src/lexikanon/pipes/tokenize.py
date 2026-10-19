@@ -6,15 +6,11 @@ In a workflow, pass the tokenizer as a config with ``_target_`` (or ``${tokenize
 
 from __future__ import annotations
 
-import hashlib
-import json
 import logging
+import sys
 import uuid
 from typing import TYPE_CHECKING, Any
 
-from pydantic import BaseModel
-
-from lexikanon._version import __version__
 from lexikanon.tokenizers import SimpleTokenizer, Tokenizer
 
 if TYPE_CHECKING:
@@ -28,53 +24,16 @@ def _default_tokenizer() -> Tokenizer:
     return SimpleTokenizer(strip_pos=True)
 
 
-class _Unrepresentable(Exception):
-    """A setting the cache key cannot capture exactly."""
+def _fingerprint() -> str | None:
+    """``new_fingerprint`` for ``Dataset.map``.
 
-
-_SCALARS = (str, int, float, bool, type(None))
-
-
-def _describe(value: Any) -> Any:
-    """Exact JSON description of a settings tree: pydantic models (by actual type and fields),
-    containers, and JSON scalars. Anything else raises ``_Unrepresentable``.
-
-    ``model_dump()`` would serialize a nested field by its declared type (dropping subclass
-    fields), and ``repr()`` cannot tell apart objects such as two configured stemmers.
+    ``None`` lets datasets hash the map function and its arguments with dill, which captures
+    every setting including private state (the 0.x behavior). dill 0.4.1 cannot hash on
+    Python 3.15, so there a random key disables cache reuse instead of risking a wrong one.
     """
-    if isinstance(value, BaseModel):
-        cls = type(value)
-        fields = {name: _describe(getattr(value, name)) for name in cls.model_fields}
-        fields.update({str(k): _describe(v) for k, v in (value.model_extra or {}).items()})
-        return {"__type__": f"{cls.__module__}.{cls.__qualname__}", **fields}
-    if isinstance(value, dict):
-        if not all(isinstance(k, _SCALARS) for k in value):
-            raise _Unrepresentable("dict key")
-        return {str(k): _describe(v) for k, v in value.items()}
-    if isinstance(value, list | tuple):
-        return [_describe(v) for v in value]
-    if isinstance(value, set | frozenset):
-        return sorted((_describe(v) for v in value), key=lambda v: json.dumps(v, sort_keys=True))
-    if isinstance(value, _SCALARS):
-        return value
-    raise _Unrepresentable(f"{type(value).__module__}.{type(value).__qualname__}")
-
-
-def _fingerprint(data: Any, step: str, tokenizer: Tokenizer, **params: Any) -> str:
-    """Cache key for ``Dataset.map``: input fingerprint, step, tokenizer settings, parameters.
-
-    Passed as ``new_fingerprint`` so datasets does not hash the map function with dill,
-    which fails on Python 3.15 (dill 0.4.1). The cache is reused only when every setting is
-    captured exactly; otherwise a random key forces recomputation instead of a wrong reuse.
-    """
-    try:
-        key = [getattr(data, "_fingerprint", None), step, __version__, _describe(tokenizer)]
-        key.append(_describe(params))
-        payload = json.dumps(key, sort_keys=True)
-    except _Unrepresentable as e:
-        logger.debug("dataset cache disabled for %s: cannot describe %s", step, e)
-        return uuid.uuid4().hex[:16]
-    return hashlib.sha256(payload.encode()).hexdigest()[:16]
+    if sys.version_info < (3, 15):
+        return None
+    return uuid.uuid4().hex[:16]
 
 
 def _num_proc(num_workers: int) -> int | None:
@@ -119,15 +78,7 @@ def tokenize_dataset(
         batch_size=batch_size,
         remove_columns=remove_columns,
         load_from_cache_file=load_from_cache_file,
-        new_fingerprint=_fingerprint(
-            data,
-            "tokenize_dataset",
-            _tokenizer_,
-            batched=batched,  # changes the result shape, so it must change the key
-            text_col=text_col,
-            token_col=token_col,
-            remove_columns=remove_columns,
-        ),
+        new_fingerprint=_fingerprint(),
     )
     logger.info("POS tagging done. See column '%s'.", token_col)
     if verbose:
@@ -185,21 +136,7 @@ def extract_tokens(
         batch_size=batch_size,
         remove_columns=remove_columns,
         load_from_cache_file=load_from_cache_file,
-        new_fingerprint=_fingerprint(
-            data,
-            "extract_tokens",
-            _tokenizer_,
-            batched=batched,  # changes the result shape, so it must change the key
-            token_col=token_col,
-            extracted_col=extracted_col,
-            nouns_only=nouns_only,
-            postags=postags,
-            stop_postags=stop_postags,
-            strip_pos=strip_pos,
-            postag_delim=postag_delim,
-            postag_length=postag_length,
-            remove_columns=remove_columns,
-        ),
+        new_fingerprint=_fingerprint(),
     )
     logger.info("Extracting tokens done, see column '%s'.", extracted_col)
     if verbose:
