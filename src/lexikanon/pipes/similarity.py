@@ -2,7 +2,6 @@ import logging
 import multiprocessing as mp
 from functools import partial
 from pathlib import Path
-from typing import Optional, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -11,8 +10,6 @@ from scipy.cluster.hierarchy import dendrogram
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-
-from lexikanon import HyFI
 
 logger = logging.getLogger(__name__)
 
@@ -28,14 +25,11 @@ def plot_dendrogram(model, **kwargs):
     n_samples = len(model.labels_)
     for i, merge in enumerate(model.children_):
         current_count = sum(
-            1 if child_idx < n_samples else counts[child_idx - n_samples]
-            for child_idx in merge
+            1 if child_idx < n_samples else counts[child_idx - n_samples] for child_idx in merge
         )
         counts[i] = current_count
 
-    linkage_matrix = np.column_stack(
-        [model.children_, model.distances_, counts]
-    ).astype(float)
+    linkage_matrix = np.column_stack([model.children_, model.distances_, counts]).astype(float)
 
     # Plot the corresponding dendrogram
     plt.title("Hierarchical Clustering Dendrogram")
@@ -47,7 +41,7 @@ def plot_dendrogram(model, **kwargs):
 def plot_similarity_distribution(
     similarity_matrix: np.ndarray,
     percentile: int = 80,
-    distance_threshold: Optional[float] = None,
+    distance_threshold: float | None = None,
     title_name: str = "",
     title_fontsize: int = 10,
     output_dir: str = ".",
@@ -58,9 +52,7 @@ def plot_similarity_distribution(
     Plots the distribution of cosine similarities between pairs of documents.
     """
     # Flatten the matrix to a 1D array
-    similarity_array = similarity_matrix[
-        np.triu_indices(similarity_matrix.shape[0], k=1)
-    ]
+    similarity_array = similarity_matrix[np.triu_indices(similarity_matrix.shape[0], k=1)]
 
     # Compute the number of samples and the average similarity
     num_samples = len(similarity_array)
@@ -109,14 +101,15 @@ def plot_similarity_distribution(
         transform=plt.gca().transAxes,
         fontsize=title_fontsize - 1,
     )
-    num_samples_over_threshold = np.sum(similarity_array > sim_threshold)
-    plt.text(
-        x_pos,
-        y_pos - 0.15,
-        f"Number of samples over threshold: {num_samples_over_threshold}",
-        transform=plt.gca().transAxes,
-        fontsize=title_fontsize - 1,
-    )
+    if distance_threshold:
+        num_samples_over_threshold = np.sum(similarity_array > sim_threshold)
+        plt.text(
+            x_pos,
+            y_pos - 0.15,
+            f"Number of samples over threshold: {num_samples_over_threshold}",
+            transform=plt.gca().transAxes,
+            fontsize=title_fontsize - 1,
+        )
 
     # Save and/or show the figure
     filename = title_name.replace(" ", "_").lower()
@@ -131,10 +124,10 @@ def plot_similarity_distribution(
 
 
 def _process_batch(
-    data: Tuple[str, pd.DataFrame],
+    data: tuple[str, pd.DataFrame],
     min_num_docs: int = 5,
     percentile: int = 80,
-    distance_threshold: Optional[float] = None,
+    distance_threshold: float | None = None,
     linkage: str = "average",
     token_col: str = "tokens",
     id_col: str = "id",
@@ -182,32 +175,31 @@ def _process_batch(
     # Perform Agglomerative Clustering on the similarity matrix
     ac = AgglomerativeClustering(
         n_clusters=None,
-        affinity="precomputed",
+        metric="precomputed",
         linkage=linkage,
         distance_threshold=distance_threshold,
     )
-    ac.fit(
-        1 - similarity_matrix
-    )  # AgglomerativeClustering expects distances, not similarities
+    ac.fit(1 - similarity_matrix)  # AgglomerativeClustering expects distances, not similarities
     # plot_dendrogram(ac)
 
     # Create DataFrame df with cluster labels and Unix timestamp createdDt
     df = pd.DataFrame(
-        {cluster_col: ac.labels_, timestamp_col: batch_data[timestamp_col]},
+        # .to_numpy(): a Series would be aligned on the id index and turn into NaN
+        {cluster_col: ac.labels_, timestamp_col: batch_data[timestamp_col].to_numpy()},
         index=batch_data[id_col],
     )
     batch_data[cluster_col] = batch_data[id_col].map(df[cluster_col])
 
     # create a column with the concatenation of the timestamp and the id
     concat_col = f"{timestamp_col}_{id_col}"
-    df[concat_col] = df[timestamp_col].astype(str) + "|" + df.index
+    df[concat_col] = df[timestamp_col].astype(str) + "|" + df.index.astype(str)
 
     # Find the minimum createdDt_newsId for each cluster
     min_ids = df.groupby(cluster_col)[concat_col].min()
 
     # Extract the index of the earliest document in each cluster
     earliest_doc_indices = min_ids.str.split("|").str[-1]
-    similar_data = batch_data[~batch_data[id_col].isin(earliest_doc_indices)]
+    similar_data = batch_data[~batch_data[id_col].astype(str).isin(earliest_doc_indices)]
     batch_data.loc[similar_data.index, duplicate_col] = True
 
     return batch_data
@@ -218,7 +210,7 @@ def find_similar_docs_by_clustering(
     num_workers: int = 2,
     min_num_docs: int = 5,
     percentile: int = 80,
-    distance_threshold: Optional[float] = None,
+    distance_threshold: float | None = None,
     linkage: str = "average",
     grouping_freq: str = "W",
     grouping_name: str = "Week",
@@ -246,9 +238,7 @@ def find_similar_docs_by_clustering(
     # Group data by week
     batchs = [grp for _, grp in data.groupby(pd.Grouper(freq=grouping_freq))]
     batchs = [
-        (f"{grouping_name} {min(week.index).date()}", week)
-        for week in batchs
-        if len(week) > 0
+        (f"{grouping_name} {min(week.index).date()}", week) for week in batchs if len(week) > 0
     ]
 
     # Prepare partial function for process_batch

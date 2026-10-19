@@ -1,6 +1,3 @@
-# -*- coding: utf8 -*-
-
-
 def separate(ch):
     """한글 자모 분리. 주어진 한글 한 글자의 초성, 중성 초성을 반환함."""
     uindex = ord(ch) - 0xAC00
@@ -52,7 +49,7 @@ def is_hangul(ch):
 def contains_hangul(text):
     if isinstance(text, str):
         # NOTE: Probably not an ideal solution in terms of performance
-        tfs = map(lambda c: is_hangul(c), text)
+        tfs = (is_hangul(c) for c in text)
         for tf in tfs:
             if tf:
                 return True

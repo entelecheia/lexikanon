@@ -1,0 +1,577 @@
+{
+ "tokenizer=simple": {
+  "stopwords": {
+   "_target_": "lexikanon.stopwords.Stopwords",
+   "name": "stopwords",
+   "lowercase": true,
+   "stopwords_fn": null,
+   "stopwords_list": null,
+   "stopwords_path": null,
+   "nltk_stopwords_lang": null,
+   "verbose": false
+  },
+  "normalizer": {
+   "ftfy": {
+    "unescape_html": true,
+    "remove_terminal_escapes": true,
+    "fix_encoding": true,
+    "restore_byte_a0": true,
+    "replace_lossy_sequences": true,
+    "decode_inconsistent_utf8": true,
+    "fix_c1_controls": true,
+    "fix_latin_ligatures": true,
+    "fix_character_width": true,
+    "uncurl_quotes": true,
+    "fix_line_breaks": true,
+    "fix_surrogates": true,
+    "remove_control_chars": true,
+    "normalization": "NFKC",
+    "max_decode_length": 1000000
+   },
+   "spaces": {
+    "strip": true,
+    "fix_whitespaces": true,
+    "collapse_whitespaces": true,
+    "replace_tabs": true,
+    "num_spaces_for_tab": 4
+   },
+   "special_characters": {
+    "fix_hyphens": true,
+    "fix_ellipsis": true,
+    "fix_slashes": true,
+    "fix_tildes": true,
+    "fix_emoticons": false,
+    "single_quotes_only": false,
+    "regular_parentheses_only": false
+   },
+   "_target_": "lexikanon.normalizers.Normalizer",
+   "hanja2hangle": false,
+   "num_repeats": 2
+  },
+  "_target_": "lexikanon.tokenizers.SimpleTokenizer",
+  "lowercase": false,
+  "strip_pos": true,
+  "postag_delim": "/",
+  "postag_length": null,
+  "include_whitespace_token": true,
+  "tokenize_each_word": false,
+  "sentence_separator": "\\n",
+  "wordpieces_prefix": "##",
+  "postags": null,
+  "noun_postags": null,
+  "punct_postags": null,
+  "stop_postags": null,
+  "verbose": false
+ },
+ "tokenizer=mecab": {
+  "stopwords": {
+   "_target_": "lexikanon.stopwords.Stopwords",
+   "name": "stopwords",
+   "lowercase": true,
+   "stopwords_fn": null,
+   "stopwords_list": null,
+   "stopwords_path": null,
+   "nltk_stopwords_lang": null,
+   "verbose": false
+  },
+  "normalizer": {
+   "ftfy": {
+    "unescape_html": true,
+    "remove_terminal_escapes": true,
+    "fix_encoding": true,
+    "restore_byte_a0": true,
+    "replace_lossy_sequences": true,
+    "decode_inconsistent_utf8": true,
+    "fix_c1_controls": true,
+    "fix_latin_ligatures": true,
+    "fix_character_width": true,
+    "uncurl_quotes": true,
+    "fix_line_breaks": true,
+    "fix_surrogates": true,
+    "remove_control_chars": true,
+    "normalization": "NFKC",
+    "max_decode_length": 1000000
+   },
+   "spaces": {
+    "strip": true,
+    "fix_whitespaces": true,
+    "collapse_whitespaces": true,
+    "replace_tabs": true,
+    "num_spaces_for_tab": 4
+   },
+   "special_characters": {
+    "fix_hyphens": true,
+    "fix_ellipsis": true,
+    "fix_slashes": true,
+    "fix_tildes": true,
+    "fix_emoticons": false,
+    "single_quotes_only": false,
+    "regular_parentheses_only": false
+   },
+   "_target_": "lexikanon.normalizers.Normalizer",
+   "hanja2hangle": false,
+   "num_repeats": 2
+  },
+  "_target_": "lexikanon.tokenizers.MecabTokenizer",
+  "lowercase": false,
+  "strip_pos": false,
+  "postag_delim": "/",
+  "postag_length": null,
+  "include_whitespace_token": true,
+  "tokenize_each_word": false,
+  "sentence_separator": "\\n",
+  "wordpieces_prefix": "##",
+  "postags": null,
+  "noun_postags": [
+   "NNG",
+   "NNP",
+   "XSN",
+   "SL",
+   "XR",
+   "NNB",
+   "NR"
+  ],
+  "punct_postags": [
+   "SF",
+   "SP",
+   "SSO",
+   "SSC",
+   "SY"
+  ],
+  "stop_postags": [
+   "SP",
+   "SF",
+   "SE",
+   "SSO",
+   "SSC",
+   "SC",
+   "SY",
+   "SH"
+  ],
+  "verbose": false,
+  "tagger": {
+   "_target_": "lexikanon.tokenizers.mecab.MecabTagger",
+   "userdic_path": null,
+   "backend": "ekonlpy",
+   "verbose": false
+  },
+  "flatten": true
+ },
+ "tokenizer=nltk": {
+  "stopwords": {
+   "_target_": "lexikanon.stopwords.Stopwords",
+   "name": "stopwords",
+   "lowercase": true,
+   "stopwords_fn": null,
+   "stopwords_list": null,
+   "stopwords_path": null,
+   "nltk_stopwords_lang": null,
+   "verbose": false
+  },
+  "normalizer": {
+   "ftfy": {
+    "unescape_html": "auto",
+    "remove_terminal_escapes": true,
+    "fix_encoding": true,
+    "restore_byte_a0": true,
+    "replace_lossy_sequences": true,
+    "decode_inconsistent_utf8": true,
+    "fix_c1_controls": true,
+    "fix_latin_ligatures": true,
+    "fix_character_width": true,
+    "uncurl_quotes": true,
+    "fix_line_breaks": true,
+    "fix_surrogates": true,
+    "remove_control_chars": true,
+    "normalization": "NFKC",
+    "max_decode_length": 1000000
+   },
+   "spaces": {
+    "strip": true,
+    "fix_whitespaces": true,
+    "collapse_whitespaces": true,
+    "replace_tabs": true,
+    "num_spaces_for_tab": 4
+   },
+   "special_characters": {
+    "fix_hyphens": true,
+    "fix_ellipsis": true,
+    "fix_slashes": true,
+    "fix_tildes": true,
+    "fix_emoticons": false,
+    "single_quotes_only": false,
+    "regular_parentheses_only": false
+   },
+   "_target_": "lexikanon.normalizers.Normalizer",
+   "hanja2hangle": false,
+   "num_repeats": 2
+  },
+  "_target_": "lexikanon.tokenizers.NLTKTokenizer",
+  "lowercase": false,
+  "strip_pos": false,
+  "postag_delim": "/",
+  "postag_length": null,
+  "include_whitespace_token": true,
+  "tokenize_each_word": false,
+  "sentence_separator": "\\n",
+  "wordpieces_prefix": "##",
+  "postags": [
+   "NN",
+   "NNP",
+   "NNS",
+   "NNPS",
+   "JJ",
+   "JJR",
+   "JJS",
+   "RB",
+   "RBR",
+   "RBS",
+   "VB",
+   "VBD",
+   "VBG",
+   "VBN",
+   "VBP",
+   "VBZ"
+  ],
+  "noun_postags": [
+   "NN",
+   "NNP",
+   "NNS",
+   "NNPS"
+  ],
+  "punct_postags": [
+   "."
+  ],
+  "stop_postags": [
+   "CC",
+   "CD",
+   "DT",
+   "EX",
+   "IN",
+   "LS",
+   "MD",
+   "PDT",
+   "POS",
+   "PRP",
+   "PRP$",
+   "RP",
+   "TO",
+   "UH",
+   "WDT",
+   "WP",
+   "WP$",
+   "WRB"
+  ],
+  "verbose": false,
+  "tagger": {
+   "_target_": "lexikanon.tokenizers.nltk.NLTKTagger",
+   "tagset": null,
+   "language": "english",
+   "lemmatize": false,
+   "stem": true,
+   "lemmatizer": {
+    "_target_": "nltk.stem.WordNetLemmatizer"
+   },
+   "stemmer": {
+    "_target_": "nltk.stem.PorterStemmer"
+   },
+   "verbose": false
+  }
+ },
+ "tokenizer=nltk_universal": {
+  "stopwords": {
+   "_target_": "lexikanon.stopwords.Stopwords",
+   "name": "stopwords",
+   "lowercase": true,
+   "stopwords_fn": null,
+   "stopwords_list": null,
+   "stopwords_path": null,
+   "nltk_stopwords_lang": null,
+   "verbose": false
+  },
+  "normalizer": {
+   "ftfy": {
+    "unescape_html": "auto",
+    "remove_terminal_escapes": true,
+    "fix_encoding": true,
+    "restore_byte_a0": true,
+    "replace_lossy_sequences": true,
+    "decode_inconsistent_utf8": true,
+    "fix_c1_controls": true,
+    "fix_latin_ligatures": true,
+    "fix_character_width": true,
+    "uncurl_quotes": true,
+    "fix_line_breaks": true,
+    "fix_surrogates": true,
+    "remove_control_chars": true,
+    "normalization": "NFKC",
+    "max_decode_length": 1000000
+   },
+   "spaces": {
+    "strip": true,
+    "fix_whitespaces": true,
+    "collapse_whitespaces": true,
+    "replace_tabs": true,
+    "num_spaces_for_tab": 4
+   },
+   "special_characters": {
+    "fix_hyphens": true,
+    "fix_ellipsis": true,
+    "fix_slashes": true,
+    "fix_tildes": true,
+    "fix_emoticons": false,
+    "single_quotes_only": false,
+    "regular_parentheses_only": false
+   },
+   "_target_": "lexikanon.normalizers.Normalizer",
+   "hanja2hangle": false,
+   "num_repeats": 2
+  },
+  "_target_": "lexikanon.tokenizers.NLTKTokenizer",
+  "lowercase": false,
+  "strip_pos": false,
+  "postag_delim": "/",
+  "postag_length": null,
+  "include_whitespace_token": true,
+  "tokenize_each_word": false,
+  "sentence_separator": "\\n",
+  "wordpieces_prefix": "##",
+  "postags": [
+   "NOUN",
+   "VERB",
+   "PRT",
+   "ADJ",
+   "ADV"
+  ],
+  "noun_postags": [
+   "NOUN"
+  ],
+  "punct_postags": [
+   "."
+  ],
+  "stop_postags": [
+   "PRON",
+   "ADP",
+   "CONJ",
+   "DET",
+   "NUM",
+   "X",
+   "."
+  ],
+  "verbose": false,
+  "tagger": {
+   "_target_": "lexikanon.tokenizers.nltk.NLTKTagger",
+   "tagset": "universal",
+   "language": "english",
+   "lemmatize": false,
+   "stem": true,
+   "lemmatizer": {
+    "_target_": "nltk.stem.WordNetLemmatizer"
+   },
+   "stemmer": {
+    "_target_": "nltk.stem.PorterStemmer"
+   },
+   "verbose": false
+  }
+ },
+ "normalizer=formal_ko": {
+  "ftfy": {
+   "unescape_html": true,
+   "remove_terminal_escapes": true,
+   "fix_encoding": true,
+   "restore_byte_a0": true,
+   "replace_lossy_sequences": true,
+   "decode_inconsistent_utf8": true,
+   "fix_c1_controls": true,
+   "fix_latin_ligatures": true,
+   "fix_character_width": true,
+   "uncurl_quotes": true,
+   "fix_line_breaks": true,
+   "fix_surrogates": true,
+   "remove_control_chars": true,
+   "normalization": "NFKC",
+   "max_decode_length": 1000000
+  },
+  "spaces": {
+   "strip": true,
+   "fix_whitespaces": true,
+   "collapse_whitespaces": true,
+   "replace_tabs": true,
+   "num_spaces_for_tab": 4
+  },
+  "special_characters": {
+   "fix_hyphens": true,
+   "fix_ellipsis": true,
+   "fix_slashes": true,
+   "fix_tildes": true,
+   "fix_emoticons": false,
+   "single_quotes_only": false,
+   "regular_parentheses_only": false
+  },
+  "_target_": "lexikanon.normalizers.Normalizer",
+  "hanja2hangle": true,
+  "num_repeats": 2
+ },
+ "normalizer=informal_ko": {
+  "ftfy": {
+   "unescape_html": true,
+   "remove_terminal_escapes": true,
+   "fix_encoding": true,
+   "restore_byte_a0": true,
+   "replace_lossy_sequences": true,
+   "decode_inconsistent_utf8": true,
+   "fix_c1_controls": true,
+   "fix_latin_ligatures": true,
+   "fix_character_width": true,
+   "uncurl_quotes": true,
+   "fix_line_breaks": true,
+   "fix_surrogates": true,
+   "remove_control_chars": true,
+   "normalization": "NFKC",
+   "max_decode_length": 1000000
+  },
+  "spaces": {
+   "strip": true,
+   "fix_whitespaces": true,
+   "collapse_whitespaces": true,
+   "replace_tabs": true,
+   "num_spaces_for_tab": 4
+  },
+  "special_characters": {
+   "fix_hyphens": true,
+   "fix_ellipsis": true,
+   "fix_slashes": true,
+   "fix_tildes": true,
+   "fix_emoticons": true,
+   "single_quotes_only": false,
+   "regular_parentheses_only": false
+  },
+  "_target_": "lexikanon.normalizers.Normalizer",
+  "hanja2hangle": true,
+  "num_repeats": 2
+ },
+ "normalizer=formal_en": {
+  "ftfy": {
+   "unescape_html": "auto",
+   "remove_terminal_escapes": true,
+   "fix_encoding": true,
+   "restore_byte_a0": true,
+   "replace_lossy_sequences": true,
+   "decode_inconsistent_utf8": true,
+   "fix_c1_controls": true,
+   "fix_latin_ligatures": true,
+   "fix_character_width": true,
+   "uncurl_quotes": true,
+   "fix_line_breaks": true,
+   "fix_surrogates": true,
+   "remove_control_chars": true,
+   "normalization": "NFKC",
+   "max_decode_length": 1000000
+  },
+  "spaces": {
+   "strip": true,
+   "fix_whitespaces": true,
+   "collapse_whitespaces": true,
+   "replace_tabs": true,
+   "num_spaces_for_tab": 4
+  },
+  "special_characters": {
+   "fix_hyphens": true,
+   "fix_ellipsis": true,
+   "fix_slashes": true,
+   "fix_tildes": true,
+   "fix_emoticons": false,
+   "single_quotes_only": false,
+   "regular_parentheses_only": false
+  },
+  "_target_": "lexikanon.normalizers.Normalizer",
+  "hanja2hangle": false,
+  "num_repeats": 2
+ },
+ "normalizer=formal_en_parantheses": {
+  "ftfy": {
+   "unescape_html": true,
+   "remove_terminal_escapes": true,
+   "fix_encoding": true,
+   "restore_byte_a0": true,
+   "replace_lossy_sequences": true,
+   "decode_inconsistent_utf8": true,
+   "fix_c1_controls": true,
+   "fix_latin_ligatures": true,
+   "fix_character_width": true,
+   "uncurl_quotes": true,
+   "fix_line_breaks": true,
+   "fix_surrogates": true,
+   "remove_control_chars": true,
+   "normalization": "NFKC",
+   "max_decode_length": 1000000
+  },
+  "spaces": {
+   "strip": true,
+   "fix_whitespaces": true,
+   "collapse_whitespaces": true,
+   "replace_tabs": true,
+   "num_spaces_for_tab": 4
+  },
+  "special_characters": {
+   "fix_hyphens": true,
+   "fix_ellipsis": true,
+   "fix_slashes": true,
+   "fix_tildes": true,
+   "fix_emoticons": false,
+   "single_quotes_only": false,
+   "regular_parentheses_only": true
+  },
+  "_target_": "lexikanon.normalizers.Normalizer",
+  "hanja2hangle": false,
+  "num_repeats": 2
+ },
+ "normalizer": {
+  "ftfy": {
+   "unescape_html": true,
+   "remove_terminal_escapes": true,
+   "fix_encoding": true,
+   "restore_byte_a0": true,
+   "replace_lossy_sequences": true,
+   "decode_inconsistent_utf8": true,
+   "fix_c1_controls": true,
+   "fix_latin_ligatures": true,
+   "fix_character_width": true,
+   "uncurl_quotes": true,
+   "fix_line_breaks": true,
+   "fix_surrogates": true,
+   "remove_control_chars": true,
+   "normalization": "NFKC",
+   "max_decode_length": 1000000
+  },
+  "spaces": {
+   "strip": true,
+   "fix_whitespaces": true,
+   "collapse_whitespaces": true,
+   "replace_tabs": true,
+   "num_spaces_for_tab": 4
+  },
+  "special_characters": {
+   "fix_hyphens": true,
+   "fix_ellipsis": true,
+   "fix_slashes": true,
+   "fix_tildes": true,
+   "fix_emoticons": false,
+   "single_quotes_only": false,
+   "regular_parentheses_only": false
+  },
+  "_target_": "lexikanon.normalizers.Normalizer",
+  "hanja2hangle": false,
+  "num_repeats": 2
+ },
+ "stopwords": {
+  "_target_": "lexikanon.stopwords.Stopwords",
+  "name": "stopwords",
+  "lowercase": true,
+  "stopwords_fn": null,
+  "stopwords_list": null,
+  "stopwords_path": null,
+  "nltk_stopwords_lang": null,
+  "verbose": false
+ }
+}

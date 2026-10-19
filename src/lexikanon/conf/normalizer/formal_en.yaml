@@ -1,6 +1,6 @@
 defaults:
-  - __init__
+  - default
+  - _self_
 
-_config_name_: formal_en
 ftfy:
   unescape_html: "auto"

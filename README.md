@@ -1,38 +1,70 @@
-# Lexikanon: A HyFI-based library for Tokenizers
+# Lexikanon
 
 [![pypi-image]][pypi-url]
-[![version-image]][release-url]
-[![release-date-image]][release-url]
 [![license-image]][license-url]
-[![DOI][zenodo-image]][zenodo-url]
-[![codecov][codecov-image]][codecov-url]
-[![jupyter-book-image]][docs-url]
 
-A HyFI-based library for the creation, training, and utilization of tokenizers.
+Korean and English tokenizers, text normalizers, and stopword lists. Lexikanon is a plain Python library; it also ships [HyFI 2.0](https://hyfi.entelecheia.ai) config groups, so the same tokenizers can be selected and run from HyFI workflows.
 
-- Documentation: [https://lexikanon.entelecheia.ai][docs-url]
-- GitHub: [https://github.com/entelecheia/lexikanon][repo-url]
-- PyPI: [https://pypi.org/project/lexikanon][pypi-url]
+- [Documentation][docs-url]
+- [Migrating from 0.x](https://lexikanon.entelecheia.ai/migration/)
 
-Lexikanon is a high-performance Python library specifically engineered for the creation, training, and utilization of tokenizers, which are fundamental components in both natural language processing (NLP) and artificial intelligence (AI). Drawing its name from the Greek words λέξη (meaning "word") and κάνων (meaning "maker"), Lexikanon encapsulates its primary purpose of enabling users to develop robust tokenizers tailored for different languages and specific tasks. Built on the [Hydra Fast Interface (HyFI)](https://hyfi.entelecheia.ai) framework, Lexikanon stands as a HyFI-based library. This makes it seamlessly pluggable into any HyFI-oriented project, although it can also function as a standalone library.
+Lexikanon 1.0 drops the HyFI 1.x API. Pin `lexikanon<1` to keep it.
+
+## Install
+
+```bash
+uv add lexikanon          # or: pip install lexikanon
+pip install 'lexikanon[datasets]'     # tokenize_dataset / extract_tokens on datasets.Dataset
+pip install 'lexikanon[similarity]'   # find_similar_docs_by_clustering
+```
+
+Python 3.11 or newer. Korean morphological analysis uses MeCab through [eKoNLPy](https://github.com/entelecheia/eKoNLPy) (fugashi and mecab-ko-dic wheels). On Python 3.15, fugashi builds from source and needs the MeCab library (`apt-get install libmecab-dev` or `brew install mecab`).
+
+## Use it as a library
+
+```python
+from lexikanon.normalizers import Normalizer
+from lexikanon.tokenizers import MecabTokenizer
+
+tokenizer = MecabTokenizer(noun_postags=["NNG", "NNP"])
+tokenizer("금통위는 물가안정과 금리정책을 밝혔다.")
+# ['금통위/NNG', '는/JX', '물가/NNG', '안정/NNG', '과/JC', ...]
+tokenizer.nouns("금통위는 물가안정과 금리정책을 밝혔다.")
+
+Normalizer(hanja2hangle=True)("今年에도 持續하고 있다")
+# '금년에도 지속하고 있다'
+```
+
+Importing lexikanon never imports HyFI.
+
+## Use it from HyFI
+
+Installing lexikanon registers its config groups through the `hyfi.plugins` entry point:
+
+| group | options |
+|---|---|
+| `tokenizer` | `default`, `simple`, `mecab`, `nltk`, `nltk_universal` |
+| `normalizer` | `default`, `formal_ko`, `informal_ko`, `formal_en`, `formal_en_parantheses` |
+| `stopwords` | `default` |
+| `workflow` | `lexikanon_tokenize_text`, `lexikanon_tokenize_dataset`, `lexikanon_find_similar_docs` |
+
+```bash
+hyfi plugins
+hyfi run workflow=lexikanon_tokenize_text tokenizer=mecab
+```
+
+```python
+import hyfi
+
+tokenizer = hyfi.instantiate(hyfi.compose_group("tokenizer", "mecab"))
+```
+
+See [Usage](https://lexikanon.entelecheia.ai/usage/) for workflow steps and presets.
 
 ## Citation
 
 ```tex
-@software{lee_2023_8248118,
-  author       = {Young Joon Lee},
-  title        = {Lexikanon: A HyFI-based library for Tokenizers},
-  month        = aug,
-  year         = 2023,
-  publisher    = {Zenodo},
-  version      = {v0.6.2},
-  doi          = {10.5281/zenodo.8248117},
-  url          = {https://doi.org/10.5281/zenodo.8248117}
-}
-```
-
-```tex
-@software{lee_2023_hyfi,
+@software{lee_2023_lexikanon,
   author       = {Young Joon Lee},
   title        = {Lexikanon: A HyFI-based library for Tokenizers},
   year         = 2023,
@@ -41,35 +73,12 @@ Lexikanon is a high-performance Python library specifically engineered for the c
 }
 ```
 
-## Changelog
-
-See the [CHANGELOG] for more information.
-
-## Contributing
-
-Contributions are welcome! Please see the [contributing guidelines] for more information.
-
 ## License
 
-This project is released under the [MIT License][license-url].
+[MIT][license-url]
 
-<!-- Links: -->
-
-[zenodo-image]: https://zenodo.org/badge/DOI/10.5281/zenodo.8248117.svg
-[zenodo-url]: https://doi.org/10.5281/zenodo.8248117
-[codecov-image]: https://codecov.io/gh/entelecheia/lexikanon/branch/main/graph/badge.svg?token=KGST5XVW3F
-[codecov-url]: https://codecov.io/gh/entelecheia/lexikanon
 [pypi-image]: https://img.shields.io/pypi/v/lexikanon
+[pypi-url]: https://pypi.org/project/lexikanon
 [license-image]: https://img.shields.io/github/license/entelecheia/lexikanon
 [license-url]: https://github.com/entelecheia/lexikanon/blob/main/LICENSE
-[version-image]: https://img.shields.io/github/v/release/entelecheia/lexikanon?sort=semver
-[release-date-image]: https://img.shields.io/github/release-date/entelecheia/lexikanon
-[release-url]: https://github.com/entelecheia/lexikanon/releases
-[jupyter-book-image]: https://jupyterbook.org/en/stable/_images/badge.svg
-[repo-url]: https://github.com/entelecheia/lexikanon
-[pypi-url]: https://pypi.org/project/lexikanon
 [docs-url]: https://lexikanon.entelecheia.ai
-[changelog]: https://github.com/entelecheia/lexikanon/blob/main/CHANGELOG.md
-[contributing guidelines]: https://github.com/entelecheia/lexikanon/blob/main/CONTRIBUTING.md
-
-<!-- Links: -->

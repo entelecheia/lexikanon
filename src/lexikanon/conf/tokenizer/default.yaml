@@ -1,0 +1,19 @@
+defaults:
+  - /stopwords@stopwords: default
+  - /normalizer@normalizer: default
+  - _self_
+
+_target_: lexikanon.tokenizers.Tokenizer
+lowercase: false
+strip_pos: false
+postag_delim: /
+postag_length: null
+include_whitespace_token: true
+tokenize_each_word: false
+sentence_separator: \n
+wordpieces_prefix: "##"
+postags: null
+noun_postags: null
+punct_postags: null
+stop_postags: null
+verbose: false

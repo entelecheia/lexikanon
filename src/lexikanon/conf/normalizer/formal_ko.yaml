@@ -1,5 +1,5 @@
 defaults:
-  - __init__
+  - default
+  - _self_
 
-_config_name_: formal_ko
 hanja2hangle: true

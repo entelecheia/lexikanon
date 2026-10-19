@@ -1,5 +1,3 @@
-# -*- coding:utf-8 -*-
-
 import warnings
 
 from .table import hanja_table
@@ -51,7 +49,8 @@ def is_valid_mode(mode):
     elif mode == "combination":
         warnings.warn(
             "Translation mode 'combination' has been deprecated since 0.13.0. "
-            "Use 'combination-html' instead."
+            "Use 'combination-html' instead.",
+            stacklevel=2,
         )
         return True
     else:
@@ -82,7 +81,7 @@ def translate(text, mode):
         map(
             lambda w, prev: translate_word(w, prev, get_format_string(mode, w)),
             words,
-            [None] + words[:-1],
+            [None, *words[:-1]],
         )
     )
 

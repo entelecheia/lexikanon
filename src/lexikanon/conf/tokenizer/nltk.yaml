@@ -1,9 +1,9 @@
 defaults:
-  - __init__
+  - default
   - tagger: nltk
-  - override /normalizer: formal_en
+  - override /normalizer@normalizer: formal_en
+  - _self_
 
-_config_name_: nltk
 _target_: lexikanon.tokenizers.NLTKTokenizer
 noun_postags:
   - NN

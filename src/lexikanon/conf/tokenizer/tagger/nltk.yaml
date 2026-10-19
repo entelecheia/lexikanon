@@ -1,6 +1,4 @@
 _target_: lexikanon.tokenizers.nltk.NLTKTagger
-_config_name_: nltk
-_config_group_: /tokenizer/tagger
 tagset: null
 language: english
 lemmatize: false

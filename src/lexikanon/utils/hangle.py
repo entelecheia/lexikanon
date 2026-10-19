@@ -1,6 +1,4 @@
-# -*- encoding:utf8 -*-
 import re
-from typing import Dict, List, Tuple, Union
 
 import numpy as np
 
@@ -160,19 +158,15 @@ class ConvolutionHangleEncoder:
         self.jung_begin: int = 19  # len(chosung_list)
         self.jong_begin: int = 40  # self.jung_begin + len(jungsung_list)
         self.number_begin: int = 68  # self.jong_begin + len(jongsung_list)
-        self.space: int = (
-            78  # len(chosung_list) + len(jungsung_list) + len(jongsung_list) + 10
-        )
+        self.space: int = 78  # len(chosung_list) + len(jungsung_list) + len(jongsung_list) + 10
         self.unk: int = 79
         self.dim: int = 80
         num = [str(i) for i in range(10)]
         space = " "
         unk = "<unk>"
-        idx_to_char = (
-            chosung_list + jungsung_list + jongsung_list + num + [space] + [unk]
-        )
-        self.idx_to_char: Dict[int, str] = dict(enumerate(idx_to_char))
-        self.jamo_to_idx: Dict[str, int] = {
+        idx_to_char = chosung_list + jungsung_list + jongsung_list + num + [space] + [unk]
+        self.idx_to_char: dict[int, str] = dict(enumerate(idx_to_char))
+        self.jamo_to_idx: dict[str, int] = {
             "ㄱ": 0,
             "ㄲ": 1,
             "ㄴ": 2,
@@ -236,11 +230,11 @@ class ConvolutionHangleEncoder:
                     x[i, j] = 1
         return x
 
-    def sent_to_onehot(self, sent: str) -> List[Tuple[int, int, int]]:
+    def sent_to_onehot(self, sent: str) -> list[tuple[int, int, int]]:
         chars = self._normalize(sent)
         ords = [ord(c) for c in chars]
         onehot = []
-        for char, idx in zip(chars, ords):
+        for char, idx in zip(chars, ords, strict=False):
             if idx == 32:
                 onehot.append((self.space, -1, -1))
             elif 48 <= idx <= 57:
@@ -249,24 +243,21 @@ class ConvolutionHangleEncoder:
                 onehot.append(self._decompose(char, idx))
         return onehot
 
-    def onehot_to_sent(self, encoded_sent: List[Tuple[int, int, int]]) -> str:
-        def check_cjj(char: Tuple[int, int, int]):
+    def onehot_to_sent(self, encoded_sent: list[tuple[int, int, int]]) -> str:
+        def check_cjj(char: tuple[int, int, int]):
             cho, jung, jong = char
             if not (0 <= cho < self.jung_begin):
-                raise ValueError("Chosung %d is out of index" % cho)
+                raise ValueError(f"Chosung {cho} is out of index")
             if not (self.jung_begin <= jung < self.jong_begin):
-                raise ValueError("Jungsung %d is out of index" % jung)
+                raise ValueError(f"Jungsung {jung} is out of index")
             if not (self.jong_begin <= jong < self.number_begin):
-                raise ValueError("Jongsung %d is out of index" % jong)
+                raise ValueError(f"Jongsung {jong} is out of index")
 
         chars = []
         for char in encoded_sent:
             if char[1] < 0 or char[2] < 0:
                 if not 0 <= char[0] < self.dim:
-                    raise ValueError(
-                        "character index %d is out of index [0, %d]"
-                        % (char[0], self.dim)
-                    )
+                    raise ValueError(f"character index {char[0]} is out of index [0, {self.dim}]")
                 chars.append(self.idx_to_char[char[0]])
             else:
                 check_cjj(char)
@@ -290,7 +281,7 @@ class ConvolutionHangleEncoder:
     ) -> str:
         return chr(kor_begin + chosung_base * cho + jungsung_base * jung + jong)
 
-    def _decompose(self, char: str, i: int) -> Tuple[int, int, int]:
+    def _decompose(self, char: str, i: int) -> tuple[int, int, int]:
         if not kor_begin <= i <= kor_end:
             return (self.jamo_to_idx.get(char, self.unk), -1, -1)
         i -= kor_begin
@@ -309,7 +300,7 @@ def compose(chosung: str, jungsung: str, jongsung: str) -> str:
     )
 
 
-def decompose(char: str) -> Tuple[str, str, str]:
+def decompose(char: str) -> tuple[str, str, str]:
     if not is_korean(char):
         return (char, " ", " ")
     i = to_base(char)
@@ -345,7 +336,7 @@ def is_moum(char: str):
     return moum_begin <= to_base(char) <= moum_end
 
 
-def to_base(char: Union[str, int]):
+def to_base(char: str | int):
     if type(char) in [str, int]:
         return ord(str(char))
     else:
