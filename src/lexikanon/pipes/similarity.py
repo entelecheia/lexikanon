@@ -232,7 +232,9 @@ def find_similar_docs_by_clustering(
     data[dist_fig_col] = None
 
     # Group data by week
-    batchs = [grp for _, grp in data.groupby(pd.Grouper(key=timestamp_col, freq=grouping_freq))]
+    # Only timed rows are batched: pd.Grouper fails when every timestamp is NaT.
+    timed = data[data[timestamp_col].notna()]
+    batchs = [grp for _, grp in timed.groupby(pd.Grouper(key=timestamp_col, freq=grouping_freq))]
     batchs = [
         (f"{grouping_name} {week[timestamp_col].min().date()}", week)
         for week in batchs

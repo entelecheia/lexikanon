@@ -193,3 +193,7 @@ def test_similar_docs_empty_input_and_missing_timestamps(tmp_path: Any) -> None:
     assert result.index.tolist() == list("abcd")
     assert result["duplicate"].tolist() == [False, False, True, False]
     assert result.loc["b", "cluster"] is None
+
+    no_times = data.assign(timestamp=None)
+    result = find_similar_docs_by_clustering(no_times, num_workers=1, output_dir=str(tmp_path))
+    assert result.index.tolist() == list("abcd") and not result["duplicate"].any()

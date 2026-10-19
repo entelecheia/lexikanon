@@ -155,10 +155,12 @@ class Stopwords(Model):
         return self.func is not None or bool(self.stopwords)
 
     def __eq__(self, other):
-        # Same rule: the same stopwords_fn (identity) and the same set of listed words.
+        # Same rule: the same stopwords_fn (identity) and each matches the other's listed words.
         if not isinstance(other, Stopwords):
             return NotImplemented
-        return self.func is other.func and set(self.stopwords) == set(other.stopwords)
+        if self.func is not other.func or self.lowercase != other.lowercase:
+            return False
+        return self <= other and other <= self
 
     def __ne__(self, other):
         if not isinstance(other, Stopwords):
@@ -169,6 +171,8 @@ class Stopwords(Model):
         """Subset: every word ``self`` matches, ``other`` matches too."""
         if not isinstance(other, Stopwords):
             return NotImplemented
+        if self.lowercase != other.lowercase:
+            raise ValueError("cannot compare Stopwords with different lowercase settings")
         if self.func is not None and self.func is not other.func:
             raise TypeError("cannot decide a subset of a Stopwords with a different stopwords_fn")
         # The same function (or none) on the left: only its listed words need checking.
@@ -177,7 +181,8 @@ class Stopwords(Model):
     def __lt__(self, other):
         if not isinstance(other, Stopwords):
             return NotImplemented
-        return self <= other and self != other
+        # Strict: also not the other way round (which needs other's function to be decidable).
+        return self <= other and not other <= self
 
     def __ge__(self, other):
         if not isinstance(other, Stopwords):

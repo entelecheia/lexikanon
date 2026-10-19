@@ -111,11 +111,21 @@ def test_comparisons_include_the_function() -> None:
     assert plain != short
     assert short == Stopwords(stopwords_list=["the"], stopwords_fn=is_short)
     assert Stopwords(stopwords_list=["a", "b"]) == Stopwords(stopwords_list=["b", "a"])
-    assert plain <= short and plain < short and short >= plain
+    assert plain <= short and short >= plain
+    with pytest.raises(TypeError, match="stopwords_fn"):
+        _ = plain < short  # strict also needs short <= plain, undecidable with a function
     assert Stopwords(stopwords_list=["x"]) <= short  # matched by the function
     assert short <= short and not short < short
     with pytest.raises(TypeError, match="stopwords_fn"):
         _ = short <= plain
+    # Review of #131: the same rule must not be a strict subset both ways, or unequal.
+    digits = Stopwords(stopwords_fn=str.isdigit)
+    digits_1 = Stopwords(stopwords_fn=str.isdigit, stopwords_list=["1"])
+    assert digits == digits_1 and not digits < digits_1 and not digits_1 < digits
+    lower, cased = Stopwords(lowercase=True, stopwords_list=["a"]), Stopwords(stopwords_list=["a"])
+    assert lower != cased
+    with pytest.raises(ValueError, match="lowercase"):
+        _ = lower <= cased
 
 
 def test_falsy_callable_is_still_a_function() -> None:
