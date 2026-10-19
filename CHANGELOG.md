@@ -1,5 +1,72 @@
 <!--next-version-placeholder-->
 
+## v1.0.1 (2026-10-19)
+
+### Bug Fixes
+
+- Compare and combine Stopwords through their loaded words
+  ([#125](https://github.com/entelecheia/lexikanon/pull/125),
+  [`f068453`](https://github.com/entelecheia/lexikanon/commit/f0684531b7ffef15da2b5e64e547ae4de73eb094))
+
+- Drop the malformed tail of CONTROL_RE's character class
+  ([#125](https://github.com/entelecheia/lexikanon/pull/125),
+  [`f068453`](https://github.com/entelecheia/lexikanon/commit/f0684531b7ffef15da2b5e64e547ae4de73eb094))
+
+- Keep one token list per row when tokenizing datasets unbatched
+  ([#125](https://github.com/entelecheia/lexikanon/pull/125),
+  [`f068453`](https://github.com/entelecheia/lexikanon/commit/f0684531b7ffef15da2b5e64e547ae4de73eb094))
+
+- Keep stopwords_fn and lowercase through Stopwords set operators
+  ([#125](https://github.com/entelecheia/lexikanon/pull/125),
+  [`f068453`](https://github.com/entelecheia/lexikanon/commit/f0684531b7ffef15da2b5e64e547ae4de73eb094))
+
+- Match similarity clusters to rows by position, not str(id)
+  ([#125](https://github.com/entelecheia/lexikanon/pull/125),
+  [`f068453`](https://github.com/entelecheia/lexikanon/commit/f0684531b7ffef15da2b5e64e547ae4de73eb094))
+
+- Pick the earliest row per cluster without a temporary column
+  ([#125](https://github.com/entelecheia/lexikanon/pull/125),
+  [`f068453`](https://github.com/entelecheia/lexikanon/commit/f0684531b7ffef15da2b5e64e547ae4de73eb094))
+
+- Resolve follow-up issues (#120-#124, #126, #127)
+  ([#125](https://github.com/entelecheia/lexikanon/pull/125),
+  [`f068453`](https://github.com/entelecheia/lexikanon/commit/f0684531b7ffef15da2b5e64e547ae4de73eb094))
+
+- Return find_similar_docs_by_clustering results in the input's shape
+  ([#125](https://github.com/entelecheia/lexikanon/pull/125),
+  [`f068453`](https://github.com/entelecheia/lexikanon/commit/f0684531b7ffef15da2b5e64e547ae4de73eb094))
+
+- Treat a Stopwords with only stopwords_fn as active
+  ([#125](https://github.com/entelecheia/lexikanon/pull/125),
+  [`f068453`](https://github.com/entelecheia/lexikanon/commit/f0684531b7ffef15da2b5e64e547ae4de73eb094))
+
+### Continuous Integration
+
+- Always validate PRs beyond the files API limit (entelecheia/hyfi#479)
+  ([#125](https://github.com/entelecheia/lexikanon/pull/125),
+  [`f068453`](https://github.com/entelecheia/lexikanon/commit/f0684531b7ffef15da2b5e64e547ae4de73eb094))
+
+- Count renamed paths and avoid grep -q in the docs-only check (entelecheia/hyfi#479)
+  ([#125](https://github.com/entelecheia/lexikanon/pull/125),
+  [`f068453`](https://github.com/entelecheia/lexikanon/commit/f0684531b7ffef15da2b5e64e547ae4de73eb094))
+
+- Make releases retryable and keep ci-ok reported for docs-only PRs (entelecheia/hyfi#479)
+  ([#125](https://github.com/entelecheia/lexikanon/pull/125),
+  [`f068453`](https://github.com/entelecheia/lexikanon/commit/f0684531b7ffef15da2b5e64e547ae4de73eb094))
+
+- Run full validation when the PR files API fails (entelecheia/hyfi#479)
+  ([#125](https://github.com/entelecheia/lexikanon/pull/125),
+  [`f068453`](https://github.com/entelecheia/lexikanon/commit/f0684531b7ffef15da2b5e64e547ae4de73eb094))
+
+- State that only tags from this release workflow can be republished (entelecheia/hyfi#479)
+  ([#125](https://github.com/entelecheia/lexikanon/pull/125),
+  [`f068453`](https://github.com/entelecheia/lexikanon/commit/f0684531b7ffef15da2b5e64e547ae4de73eb094))
+
+- Validate the tag before a republish (entelecheia/hyfi#479)
+  ([#125](https://github.com/entelecheia/lexikanon/pull/125),
+  [`f068453`](https://github.com/entelecheia/lexikanon/commit/f0684531b7ffef15da2b5e64e547ae4de73eb094))
+
+
 ## v1.0.0 (2026-10-19)
 
 ### Bug Fixes
