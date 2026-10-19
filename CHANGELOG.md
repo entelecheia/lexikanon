@@ -1,5 +1,18 @@
 <!--next-version-placeholder-->
 
+## v1.0.2 (2026-10-19)
+
+### Bug Fixes
+
+- Make Stopwords strict subset and equality consistent; batch only timed rows
+  ([#131](https://github.com/entelecheia/lexikanon/pull/131),
+  [`6080f85`](https://github.com/entelecheia/lexikanon/commit/6080f85ec1947bae276a6434196b523a07466c65))
+
+- Stopwords comparisons and falsy callables, empty and NaT input to similar docs
+  ([#131](https://github.com/entelecheia/lexikanon/pull/131),
+  [`6080f85`](https://github.com/entelecheia/lexikanon/commit/6080f85ec1947bae276a6434196b523a07466c65))
+
+
 ## v1.0.1 (2026-10-19)
 
 ### Bug Fixes
