@@ -68,7 +68,7 @@ def test_stopwords_operators_use_loaded_words() -> None:
     assert list(ab - bc) == ["a"]
     assert list(ab ^ bc) == ["a", "c"]
     assert list(ab + bc) == ["a", "b", "b", "c"]
-    assert ab <= bc and not ab < bc
+    assert not ab <= bc and ab <= (ab | bc) and ab < (ab | bc) and (ab | bc) > ab
     assert ab != ["a", "b"]
 
 
@@ -99,3 +99,35 @@ def test_stopwords_operators_keep_functions_and_case() -> None:
         short | Stopwords(stopwords_list=["a"])
     with pytest.raises(ValueError, match="stopwords_fn"):
         short & Stopwords(stopwords_fn=str.isdigit, lowercase=True)
+
+
+def test_comparisons_include_the_function() -> None:
+    # #129: ==, < and <= compared only the word lists (and < / <= only their lengths).
+    def is_short(w: str) -> bool:
+        return len(w) == 1
+
+    plain = Stopwords(stopwords_list=["the"])
+    short = Stopwords(stopwords_list=["the"], stopwords_fn=is_short)
+    assert plain != short
+    assert short == Stopwords(stopwords_list=["the"], stopwords_fn=is_short)
+    assert Stopwords(stopwords_list=["a", "b"]) == Stopwords(stopwords_list=["b", "a"])
+    assert plain <= short and plain < short and short >= plain
+    assert Stopwords(stopwords_list=["x"]) <= short  # matched by the function
+    assert short <= short and not short < short
+    with pytest.raises(TypeError, match="stopwords_fn"):
+        _ = short <= plain
+
+
+def test_falsy_callable_is_still_a_function() -> None:
+    # #130: is_stopword used `if self.func`, ignoring a callable whose bool() is False.
+    class Falsy:
+        def __bool__(self) -> bool:
+            return False
+
+        def __call__(self, w: str) -> bool:
+            return w == "a"
+
+    stop = Stopwords(stopwords_fn=Falsy())
+    assert stop and stop.is_stopword("a") and not stop.is_stopword("b")
+    assert (stop | Stopwords(stopwords_list=["b"]))("a")
+    assert (stop - Stopwords(stopwords_list=["b"]))("a")

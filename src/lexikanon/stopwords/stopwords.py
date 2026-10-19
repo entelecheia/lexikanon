@@ -110,7 +110,7 @@ class Stopwords(Model):
         :returns: bool
         """
         _word = word.lower() if self.lowercase else word
-        if self.func:
+        if self.func is not None:
             return self.func(_word) or (_word in self.stopwords)
         else:
             return _word in self.stopwords
@@ -155,26 +155,39 @@ class Stopwords(Model):
         return self.func is not None or bool(self.stopwords)
 
     def __eq__(self, other):
+        # Same rule: the same stopwords_fn (identity) and the same set of listed words.
         if not isinstance(other, Stopwords):
             return NotImplemented
-        return self.stopwords == other.stopwords
+        return self.func is other.func and set(self.stopwords) == set(other.stopwords)
 
     def __ne__(self, other):
         if not isinstance(other, Stopwords):
             return NotImplemented
-        return self.stopwords != other.stopwords
-
-    def __lt__(self, other):
-        return len(self.stopwords) < len(other.stopwords)
+        return not self == other
 
     def __le__(self, other):
-        return len(self.stopwords) <= len(other.stopwords)
+        """Subset: every word ``self`` matches, ``other`` matches too."""
+        if not isinstance(other, Stopwords):
+            return NotImplemented
+        if self.func is not None and self.func is not other.func:
+            raise TypeError("cannot decide a subset of a Stopwords with a different stopwords_fn")
+        # The same function (or none) on the left: only its listed words need checking.
+        return all(other.is_stopword(w) for w in self.stopwords)
 
-    def __gt__(self, other):
-        return len(self.stopwords) > len(other.stopwords)
+    def __lt__(self, other):
+        if not isinstance(other, Stopwords):
+            return NotImplemented
+        return self <= other and self != other
 
     def __ge__(self, other):
-        return len(self.stopwords) >= len(other.stopwords)
+        if not isinstance(other, Stopwords):
+            return NotImplemented
+        return other <= self
+
+    def __gt__(self, other):
+        if not isinstance(other, Stopwords):
+            return NotImplemented
+        return other < self
 
     def _combine(self, other, words, fn=None):
         if self.lowercase != other.lowercase:
@@ -183,20 +196,20 @@ class Stopwords(Model):
 
     def _either_fn(self, other):
         fa, fb = self.func, other.func
-        if fa and fb:
+        if fa is not None and fb is not None:
             return lambda w: fa(w) or fb(w)
-        return fa or fb
+        return fa if fa is not None else fb
 
     def __add__(self, other):
         return self._combine(other, self.stopwords + other.stopwords, self._either_fn(other))
 
     def __sub__(self, other):
         fa = self.func
-        fn = (lambda w: fa(w) and not other.is_stopword(w)) if fa else None
+        fn = (lambda w: fa(w) and not other.is_stopword(w)) if fa is not None else None
         return self._combine(other, [w for w in self.stopwords if not other.is_stopword(w)], fn)
 
     def __and__(self, other):
-        if self.func and other.func:
+        if self.func is not None and other.func is not None:
             raise ValueError("cannot intersect two Stopwords that both have a stopwords_fn")
         # With at most one function, every common stopword is in one of the two lists.
         candidates = self.stopwords + [w for w in other.stopwords if w not in self.stopwords]

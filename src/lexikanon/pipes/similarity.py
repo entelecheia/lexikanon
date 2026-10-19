@@ -258,13 +258,18 @@ def find_similar_docs_by_clustering(
     )
 
     # Apply process_week to each group of data using multiprocessing
-    with mp.Pool(processes=num_workers) as pool:
-        batch_results = pool.map(
-            process_batch_partial,
-            batchs,
-        )
+    batch_results = []
+    if batchs:
+        with mp.Pool(processes=num_workers) as pool:
+            batch_results = pool.map(
+                process_batch_partial,
+                batchs,
+            )
 
-    data = pd.concat(batch_results).sort_index()
+    # Rows without a timestamp belong to no batch: keep them, unclustered and not duplicates.
+    no_time = data[data[timestamp_col].isna()]
+    pieces = batch_results + ([no_time] if len(no_time) else [])
+    data = pd.concat(pieces).sort_index() if pieces else data
     data.index = index[data.index]
     logger.info("Number of documents: %d", len(data))
     if duplicate_col in data.columns:

@@ -173,3 +173,23 @@ def test_similar_docs_column_names_do_not_collide(tmp_path: Any) -> None:
     )
     assert result["keys"].tolist() == [False, True, False, False]
     assert result["order"].iloc[0] == result["order"].iloc[1]
+
+
+def test_similar_docs_empty_input_and_missing_timestamps(tmp_path: Any) -> None:
+    # #128: an empty frame raised in pd.concat, and NaT rows were dropped from the result.
+    cols = ["id", "tokens", "timestamp", "cluster", "duplicate", "dist_fig"]
+    empty = pd.DataFrame({"id": [], "tokens": [], "timestamp": []})
+    result = find_similar_docs_by_clustering(empty, num_workers=1, output_dir=str(tmp_path))
+    assert result.columns.tolist() == cols and len(result) == 0
+
+    days = ["2022-01-03", None, "2022-01-04", "2022-01-05"]
+    tokens = [["rate", "steady"], ["rate", "steady"], ["rate", "steady"], ["apple"]]
+    data = pd.DataFrame(
+        {"id": [1, 2, 3, 4], "tokens": tokens, "timestamp": days}, index=list("abcd")
+    )
+    result = find_similar_docs_by_clustering(
+        data, num_workers=1, min_num_docs=2, output_dir=str(tmp_path)
+    )
+    assert result.index.tolist() == list("abcd")
+    assert result["duplicate"].tolist() == [False, False, True, False]
+    assert result.loc["b", "cluster"] is None
