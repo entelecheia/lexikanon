@@ -21,3 +21,18 @@ Fixed along the way:
 
 - The NLTK tagger downloads `punkt_tab` and `averaged_perceptron_tagger_eng`, which nltk 3.9+ needs; 0.6.5 failed on a clean machine.
 - `find_similar_docs_by_clustering` works on scikit-learn 1.4+ (`metric=` instead of `affinity=`), with the default `distance_threshold=None`, and with ids that are not row positions.
+
+## `stopwords_fn` no longer evaluates strings
+
+0.x passed a string such as `"lambda w: len(w) < 2"` to `eval`, so any config could run arbitrary code, outside HyFI's execution allowlist. 1.0 rejects strings. Pass a callable from Python, or in a HyFI config point at a function and allow it:
+
+```yaml
+stopwords_fn:
+  _target_: mypkg.text.is_short
+  _partial_: true
+```
+
+```bash
+hyfi run workflow=... --allow 'lexikanon.*' --allow mypkg.text.is_short
+```
+

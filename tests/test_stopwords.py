@@ -28,3 +28,32 @@ def test_nltk_stopwords() -> None:
 def test_stopwords_fn() -> None:
     stop = Stopwords(stopwords_fn=lambda w: len(w) < 2)
     assert stop("a") and not stop("ab")
+
+
+def test_stopwords_fn_rejects_source_strings() -> None:
+    # A config string used to be eval'd, bypassing HyFI's execution allowlist.
+    import pytest
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError, match="no longer evaluates"):
+        Stopwords(stopwords_fn="lambda w: len(w) < 2")
+
+
+def is_short(word: str) -> bool:
+    return len(word) < 2
+
+
+def test_stopwords_fn_from_hyfi_target_respects_allowlist() -> None:
+    import pytest
+    from hyfi import instantiate
+    from hyfi.config import TargetNotAllowed
+
+    target = f"{__name__}.is_short"
+    cfg = {
+        "_target_": "lexikanon.stopwords.Stopwords",
+        "stopwords_fn": {"_target_": target, "_partial_": True},
+    }
+    stop = instantiate(cfg, allow=["lexikanon.*", target])
+    assert stop.is_stopword("a") and not stop.is_stopword("bb")
+    with pytest.raises(TargetNotAllowed, match=r"is_short"):
+        instantiate(cfg, allow=["lexikanon.*"])

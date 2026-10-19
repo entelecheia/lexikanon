@@ -2,7 +2,7 @@ import logging
 from collections.abc import Callable
 from pathlib import Path
 
-from pydantic import PrivateAttr
+from pydantic import PrivateAttr, field_validator
 
 from lexikanon._base import Model
 
@@ -37,7 +37,7 @@ class Stopwords(Model):
 
     name: str = "stopwords"
     lowercase: bool = False
-    stopwords_fn: str | Callable[[str], bool] | None = None
+    stopwords_fn: Callable[[str], bool] | None = None
     stopwords_list: list[str] | None = None
     stopwords_path: str | None = None
     nltk_stopwords_lang: str | None = None
@@ -46,14 +46,20 @@ class Stopwords(Model):
     _loaded_: bool = False
     _stopwords_: list[str] = PrivateAttr(default_factory=list)
 
+    @field_validator("stopwords_fn", mode="before")
+    @classmethod
+    def _no_source_strings(cls, value: object) -> object:
+        # 0.x eval'd this string, which let a config run code outside HyFI's allowlist.
+        if isinstance(value, str):
+            raise ValueError(
+                "stopwords_fn no longer evaluates Python source; pass a callable, or in a HyFI "
+                "config use {_target_: mypkg.is_stopword, _partial_: true}"
+            )
+        return value
+
     @property
     def func(self) -> Callable | None:
-        if callable(self.stopwords_fn):
-            return self.stopwords_fn
-        elif isinstance(self.stopwords_fn, str):
-            # 1.x behavior: the string is Python source, e.g. "lambda w: len(w) < 2".
-            return eval(self.stopwords_fn)  # noqa: S307
-        return None
+        return self.stopwords_fn
 
     @property
     def stopwords(self) -> list[str]:
