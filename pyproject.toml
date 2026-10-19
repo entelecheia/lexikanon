@@ -1,6 +1,6 @@
 [project]
 name = "lexikanon"
-version = "0.6.5"
+version = "1.0.0"
 description = "Korean and English tokenizers, normalizers, and stopwords, with HyFI 2.0 config groups"
 authors = [{ name = "Young Joon Lee", email = "entelecheia@hotmail.com" }]
 license = "MIT"

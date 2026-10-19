@@ -1,5 +1,154 @@
 <!--next-version-placeholder-->
 
+## v1.0.0 (2026-10-19)
+
+### Bug Fixes
+
+- Build only nltk.stem targets inside NLTKTagger
+  ([#119](https://github.com/entelecheia/lexikanon/pull/119),
+  [`bd4e936`](https://github.com/entelecheia/lexikanon/commit/bd4e9368a3a44a29f798600847dc56e9e6a871fd))
+
+- Include batched in the dataset cache key
+  ([#119](https://github.com/entelecheia/lexikanon/pull/119),
+  [`bd4e936`](https://github.com/entelecheia/lexikanon/commit/bd4e9368a3a44a29f798600847dc56e9e6a871fd))
+
+- Include subclass fields of nested models in the dataset cache key
+  ([#119](https://github.com/entelecheia/lexikanon/pull/119),
+  [`bd4e936`](https://github.com/entelecheia/lexikanon/commit/bd4e9368a3a44a29f798600847dc56e9e6a871fd))
+
+- Let datasets hash map functions instead of hand-made cache keys
+  ([#119](https://github.com/entelecheia/lexikanon/pull/119),
+  [`bd4e936`](https://github.com/entelecheia/lexikanon/commit/bd4e9368a3a44a29f798600847dc56e9e6a871fd))
+
+- Reuse the dataset cache only when every setting is described exactly
+  ([#119](https://github.com/entelecheia/lexikanon/pull/119),
+  [`bd4e936`](https://github.com/entelecheia/lexikanon/commit/bd4e9368a3a44a29f798600847dc56e9e6a871fd))
+
+- Run the dataset steps on Python 3.15 ([#119](https://github.com/entelecheia/lexikanon/pull/119),
+  [`bd4e936`](https://github.com/entelecheia/lexikanon/commit/bd4e9368a3a44a29f798600847dc56e9e6a871fd))
+
+- Stop evaluating stopwords_fn strings ([#119](https://github.com/entelecheia/lexikanon/pull/119),
+  [`bd4e936`](https://github.com/entelecheia/lexikanon/commit/bd4e9368a3a44a29f798600847dc56e9e6a871fd))
+
+### Build System
+
+- Make the semantic-release build command fail fast
+  ([#119](https://github.com/entelecheia/lexikanon/pull/119),
+  [`bd4e936`](https://github.com/entelecheia/lexikanon/commit/bd4e9368a3a44a29f798600847dc56e9e6a871fd))
+
+- Move to uv, hatchling, ruff, and python-semantic-release v10
+  ([#119](https://github.com/entelecheia/lexikanon/pull/119),
+  [`bd4e936`](https://github.com/entelecheia/lexikanon/commit/bd4e9368a3a44a29f798600847dc56e9e6a871fd))
+
+- Update uv.lock in the semantic-release build command
+  ([#119](https://github.com/entelecheia/lexikanon/pull/119),
+  [`bd4e936`](https://github.com/entelecheia/lexikanon/commit/bd4e9368a3a44a29f798600847dc56e9e6a871fd))
+
+### Chores
+
+- Update poetry lock
+  ([`b3d29b8`](https://github.com/entelecheia/lexikanon/commit/b3d29b837c06e8c966a7c050ea78b7f62cd840eb))
+
+- Update poetry lock
+  ([`66b5fde`](https://github.com/entelecheia/lexikanon/commit/66b5fde9c3b0498a5fa412bec82edf46cf675bc9))
+
+- Update poetry lock
+  ([`875e185`](https://github.com/entelecheia/lexikanon/commit/875e1852a86c21ccc829811a8db7a610a8cafc6a))
+
+- Update poetry lock
+  ([`05bd409`](https://github.com/entelecheia/lexikanon/commit/05bd409575d51e2f7efa101f01275bdadc86ad78))
+
+- Update poetry lock
+  ([`0b67b3f`](https://github.com/entelecheia/lexikanon/commit/0b67b3f57d38db7c5d13ee34e9bc5414fa0deeba))
+
+- Update poetry lock
+  ([`e8121c3`](https://github.com/entelecheia/lexikanon/commit/e8121c35cb1fdf6068a0ff63226ad1137ff3766d))
+
+- **deps**: Bump codecov/codecov-action from 4 to 5
+  ([`e3a10a0`](https://github.com/entelecheia/lexikanon/commit/e3a10a05d566da6f36daad7675e9c951db2eba64))
+
+- **deps**: Bump ekonlpy from 2.0.4 to 2.0.5
+  ([`628516e`](https://github.com/entelecheia/lexikanon/commit/628516eda9c05768fa9b7a05beecd2a4ec072083))
+
+- **deps**: Bump ekonlpy from 2.0.5 to 2.0.6
+  ([`c9b936f`](https://github.com/entelecheia/lexikanon/commit/c9b936fe4a9786ca7a876ef0b6c3805c5f5a4c9b))
+
+- **deps**: Bump ftfy from 6.2.0 to 6.2.3
+  ([`84f81d5`](https://github.com/entelecheia/lexikanon/commit/84f81d59048fb3130b425dce63e9fe3f5906045f))
+
+- **deps**: Bump ftfy from 6.2.3 to 6.3.0
+  ([`3e88ce0`](https://github.com/entelecheia/lexikanon/commit/3e88ce0d30ab6a74855a014e86442e3e7b86803d))
+
+- **deps**: Bump ftfy from 6.3.0 to 6.3.1
+  ([`2f82d8a`](https://github.com/entelecheia/lexikanon/commit/2f82d8a52aa49526d476e30053f251ae25b0b75c))
+
+- **deps**: Bump hyfi from 1.36.3 to 1.36.4
+  ([`8dd272c`](https://github.com/entelecheia/lexikanon/commit/8dd272c0a96fe7b54bb2811fd4f06cf4d2f8c640))
+
+- **deps**: Bump hyfi from 1.36.4 to 1.37.0
+  ([`bc6d048`](https://github.com/entelecheia/lexikanon/commit/bc6d04812a4c51d9e6b8a3b742659967853b0625))
+
+- **deps**: Bump jupyter-book from 1.0.0 to 1.0.2
+  ([`cb7ca32`](https://github.com/entelecheia/lexikanon/commit/cb7ca3250a70cc77e7d0cd20710554ef373a8222))
+
+- **deps**: Bump jupyter-book from 1.0.2 to 1.0.3
+  ([`ce1de2b`](https://github.com/entelecheia/lexikanon/commit/ce1de2b6225e40a937dc89d89c74c744a9550a6d))
+
+- **deps**: Bump jupyter-book from 1.0.3 to 1.0.4
+  ([`6cdfaf3`](https://github.com/entelecheia/lexikanon/commit/6cdfaf3adfe342c2e10457cc1ab70a624f4fe294))
+
+- **deps**: Bump jupyter-book from 1.0.4 to 1.0.4.post1
+  ([`c9090da`](https://github.com/entelecheia/lexikanon/commit/c9090da0473328bb5d42540f5c603f66d92dbe51))
+
+- **deps**: Bump nltk from 3.8.1 to 3.8.2
+  ([`e5013a1`](https://github.com/entelecheia/lexikanon/commit/e5013a121bd5975c353d5733ae1ab16776df7be9))
+
+- **deps**: Bump nltk from 3.8.2 to 3.9
+  ([`6415b54`](https://github.com/entelecheia/lexikanon/commit/6415b549bc696b267aa29d090f2a03be3e2103e4))
+
+- **deps**: Bump nltk from 3.9 to 3.9.1
+  ([`83500a2`](https://github.com/entelecheia/lexikanon/commit/83500a2f2db4d64dbdc084778fb771a9003f5fc6))
+
+- **deps**: Bump peaceiris/actions-gh-pages from 3 to 4
+  ([`f872ddd`](https://github.com/entelecheia/lexikanon/commit/f872dddcfafcc498634c8e65d4f655dc9caff20b))
+
+- **deps**: Bump scikit-learn from 1.4.1.post1 to 1.4.2
+  ([`c1ef0fb`](https://github.com/entelecheia/lexikanon/commit/c1ef0fb9280f49033f32ce5af34d3abf41decc7a))
+
+- **deps**: Bump scikit-learn from 1.5.0 to 1.5.1
+  ([`67b0722`](https://github.com/entelecheia/lexikanon/commit/67b072293ca3284a43672d4f3f121f35b0c866b9))
+
+- **deps**: Bump scikit-learn from 1.5.1 to 1.5.2
+  ([`0db67d2`](https://github.com/entelecheia/lexikanon/commit/0db67d22cd0c55d6bb1cae6c883ee71be94fb74c))
+
+- **deps**: Bump scikit-learn from 1.5.2 to 1.6.1
+  ([`0fbd08b`](https://github.com/entelecheia/lexikanon/commit/0fbd08b594854b4d4b07a6a2ab720a407744068b))
+
+### Continuous Integration
+
+- **workflows**: Upgrade Python version to 3.9
+  ([`d9100e2`](https://github.com/entelecheia/lexikanon/commit/d9100e266c62cc9f590f6117e98b8d8ae1c54ff4))
+
+### Documentation
+
+- Drop the Zenodo badge and DOI citation ([#119](https://github.com/entelecheia/lexikanon/pull/119),
+  [`bd4e936`](https://github.com/entelecheia/lexikanon/commit/bd4e9368a3a44a29f798600847dc56e9e6a871fd))
+
+- Mkdocs site, migration guide, AGENTS.md and REVIEW.md
+  ([#119](https://github.com/entelecheia/lexikanon/pull/119),
+  [`bd4e936`](https://github.com/entelecheia/lexikanon/commit/bd4e9368a3a44a29f798600847dc56e9e6a871fd))
+
+### Features
+
+- Migrate to HyFI 2.0 (plain library + config groups)
+  ([#119](https://github.com/entelecheia/lexikanon/pull/119),
+  [`bd4e936`](https://github.com/entelecheia/lexikanon/commit/bd4e9368a3a44a29f798600847dc56e9e6a871fd))
+
+- Run on HyFI 2.0 as a plain library with config groups
+  ([#119](https://github.com/entelecheia/lexikanon/pull/119),
+  [`bd4e936`](https://github.com/entelecheia/lexikanon/commit/bd4e9368a3a44a29f798600847dc56e9e6a871fd))
+
+
 ## v0.6.5 (2024-03-27)
 
 ### Fix
