@@ -19,15 +19,28 @@ NLTK_RESOURCES = [
 ]
 
 
-def _build(spec: Any) -> Any:
-    """Call the ``_target_`` of a ``{"_target_": "pkg.Class", **kwargs}`` dict.
+# Specs that reach the model without hyfi.instantiate are not allowlist-checked, so only
+# NLTK's own stemmers and lemmatizers are built here.
+BUILDABLE_PREFIX = "nltk.stem."
 
-    Anything else is returned as is: HyFI/Hydra configs arrive already instantiated.
+
+def _build(spec: Any) -> Any:
+    """Call the ``_target_`` of a ``{"_target_": "nltk.stem.Class", **kwargs}`` dict.
+
+    Anything else is returned as is: HyFI/Hydra configs arrive already instantiated. Targets
+    outside ``nltk.stem`` are refused; pass a built object or let ``hyfi.instantiate`` (with
+    its allowlist) build it.
     """
     if not (isinstance(spec, dict) and isinstance(spec.get("_target_"), str)):
         return spec
+    target = spec["_target_"]
+    if not target.startswith(BUILDABLE_PREFIX):
+        raise ValueError(
+            f"refusing to build {target!r}: only {BUILDABLE_PREFIX}* targets are built here; "
+            "pass the object itself or build it with hyfi.instantiate(..., allow=...)"
+        )
     kwargs = {k: v for k, v in spec.items() if k != "_target_"}
-    module, _, name = spec["_target_"].rpartition(".")
+    module, _, name = target.rpartition(".")
     logger.debug("instantiating %s...", spec["_target_"])
     return getattr(importlib.import_module(module), name)(**kwargs)
 
