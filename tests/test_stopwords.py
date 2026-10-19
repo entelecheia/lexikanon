@@ -57,3 +57,16 @@ def test_stopwords_fn_from_hyfi_target_respects_allowlist() -> None:
     assert stop.is_stopword("a") and not stop.is_stopword("bb")
     with pytest.raises(TargetNotAllowed, match=r"is_short"):
         instantiate(cfg, allow=["lexikanon.*"])
+
+
+def test_stopwords_operators_use_loaded_words() -> None:
+    # #123: the operators read a missing other._stopwords_list attribute.
+    ab, bc = Stopwords(stopwords_list=["a", "b"]), Stopwords(stopwords_list=["b", "c"])
+    assert ab == Stopwords(stopwords_list=["a", "b"]) and ab != bc
+    assert list(ab | bc) == ["a", "b", "c"]
+    assert list(ab & bc) == ["b"]
+    assert list(ab - bc) == ["a"]
+    assert list(ab ^ bc) == ["a", "c"]
+    assert list(ab + bc) == ["a", "b", "b", "c"]
+    assert ab <= bc and not ab < bc
+    assert ab != ["a", "b"]

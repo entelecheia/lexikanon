@@ -146,42 +146,43 @@ class Stopwords(Model):
         return bool(self.stopwords)
 
     def __eq__(self, other):
-        return self.stopwords == other._stopwords_list
+        if not isinstance(other, Stopwords):
+            return NotImplemented
+        return self.stopwords == other.stopwords
 
     def __ne__(self, other):
-        return self.stopwords != other._stopwords_list
+        if not isinstance(other, Stopwords):
+            return NotImplemented
+        return self.stopwords != other.stopwords
 
     def __lt__(self, other):
-        return len(self.stopwords) < len(other._stopwords_list)
+        return len(self.stopwords) < len(other.stopwords)
 
     def __le__(self, other):
-        return len(self.stopwords) <= len(other._stopwords_list)
+        return len(self.stopwords) <= len(other.stopwords)
 
     def __gt__(self, other):
-        return len(self.stopwords) > len(other._stopwords_list)
+        return len(self.stopwords) > len(other.stopwords)
 
     def __ge__(self, other):
-        return len(self.stopwords) >= len(other._stopwords_list)
+        return len(self.stopwords) >= len(other.stopwords)
 
     def __add__(self, other):
-        return Stopwords(stopwords_list=self.stopwords + other._stopwords_list)
+        return Stopwords(stopwords_list=self.stopwords + other.stopwords)
 
     def __sub__(self, other):
-        return Stopwords(
-            stopwords_list=[w for w in self.stopwords if w not in other._stopwords_list]
-        )
+        return Stopwords(stopwords_list=[w for w in self.stopwords if w not in other.stopwords])
 
     def __and__(self, other):
-        return Stopwords(stopwords_list=[w for w in self.stopwords if w in other._stopwords_list])
+        return Stopwords(stopwords_list=[w for w in self.stopwords if w in other.stopwords])
 
     def __or__(self, other):
         return Stopwords(
-            stopwords_list=self.stopwords
-            + [w for w in other._stopwords_list if w not in self.stopwords]
+            stopwords_list=self.stopwords + [w for w in other.stopwords if w not in self.stopwords]
         )
 
     def __xor__(self, other):
         return Stopwords(
-            stopwords_list=[w for w in self.stopwords if w not in other._stopwords_list]
-            + [w for w in other._stopwords_list if w not in self.stopwords]
+            stopwords_list=[w for w in self.stopwords if w not in other.stopwords]
+            + [w for w in other.stopwords if w not in self.stopwords]
         )
