@@ -143,7 +143,7 @@ def _process_batch(
     Processes a batch of data by calculating the cosine similarity between all pairs of documents in the batch.
     """
     batch_name, batch_data = data
-    batch_data.reset_index(inplace=True)
+    batch_data = batch_data.copy()
     if len(batch_data) < min_num_docs:
         logger.info(
             "Batch %s has %d documents, which is less than the minimum number of documents (%d). Skipping.",
@@ -182,25 +182,20 @@ def _process_batch(
     ac.fit(1 - similarity_matrix)  # AgglomerativeClustering expects distances, not similarities
     # plot_dendrogram(ac)
 
-    # Create DataFrame df with cluster labels and Unix timestamp createdDt
-    df = pd.DataFrame(
-        # .to_numpy(): a Series would be aligned on the id index and turn into NaN
-        {cluster_col: ac.labels_, timestamp_col: batch_data[timestamp_col].to_numpy()},
-        index=batch_data[id_col],
-    )
-    batch_data[cluster_col] = batch_data[id_col].map(df[cluster_col])
+    batch_data[cluster_col] = ac.labels_  # one label per row, in row order
 
-    # create a column with the concatenation of the timestamp and the id
-    concat_col = f"{timestamp_col}_{id_col}"
-    df[concat_col] = df[timestamp_col].astype(str) + "|" + df.index.astype(str)
-
-    # Find the minimum createdDt_newsId for each cluster
-    min_ids = df.groupby(cluster_col)[concat_col].min()
-
-    # Extract the index of the earliest document in each cluster
-    earliest_doc_indices = min_ids.str.split("|").str[-1]
-    similar_data = batch_data[~batch_data[id_col].astype(str).isin(earliest_doc_indices)]
-    batch_data.loc[similar_data.index, duplicate_col] = True
+    # Keep the earliest "timestamp|id" row of each cluster and mark the rest. Rows are matched
+    # by position: matching by str(id) would treat 1 and "1" as the same document.
+    # Plain arrays, so no temporary column can collide with a user-chosen column name.
+    order = (
+        batch_data[timestamp_col].astype(str) + "|" + batch_data[id_col].astype(str)
+    ).to_numpy()
+    by_order = np.argsort(order, kind="stable")
+    _, first = np.unique(ac.labels_[by_order], return_index=True)
+    earliest = by_order[first]
+    duplicate = np.ones(len(batch_data), dtype=bool)
+    duplicate[earliest] = False
+    batch_data.loc[duplicate, duplicate_col] = True
 
     return batch_data
 
@@ -228,17 +223,20 @@ def find_similar_docs_by_clustering(
     """
     Finds similar documents in the given data using cosine similarity and Agglomerative Clustering.
     """
-    # Convert timestamp_col to datetime and set it as the index
+    # Work on positional rows of a copy; the caller's index is restored at the end.
+    index = data.index
+    data = data.reset_index(drop=True)
     data[timestamp_col] = pd.to_datetime(data[timestamp_col])
-    data.set_index(timestamp_col, inplace=True)
     data[cluster_col] = None
     data[duplicate_col] = False
     data[dist_fig_col] = None
 
     # Group data by week
-    batchs = [grp for _, grp in data.groupby(pd.Grouper(freq=grouping_freq))]
+    batchs = [grp for _, grp in data.groupby(pd.Grouper(key=timestamp_col, freq=grouping_freq))]
     batchs = [
-        (f"{grouping_name} {min(week.index).date()}", week) for week in batchs if len(week) > 0
+        (f"{grouping_name} {week[timestamp_col].min().date()}", week)
+        for week in batchs
+        if len(week) > 0
     ]
 
     # Prepare partial function for process_batch
@@ -266,8 +264,8 @@ def find_similar_docs_by_clustering(
             batchs,
         )
 
-    data = pd.concat(batch_results)
-    # data.reset_index(inplace=True)
+    data = pd.concat(batch_results).sort_index()
+    data.index = index[data.index]
     logger.info("Number of documents: %d", len(data))
     if duplicate_col in data.columns:
         logger.info("Number of duplicate documents: %d", data[duplicate_col].sum())

@@ -26,6 +26,16 @@ def test_tokenize_and_extract_dataset() -> None:
     assert data["extracted_tokens"][0][:3] == ["금통위", "물가", "안정"]
 
 
+def test_unbatched_map_stores_one_token_list_per_row() -> None:
+    # #120: the map callbacks always returned a batch, so batched=False nested one level deeper.
+    data = Dataset.from_dict({"text": ["a b\nc", "d"]})
+    for batched in (True, False):
+        tokens = tokenize_dataset(data, batched=batched)
+        assert tokens["tokens"] == [["a", "b", "c"], ["d"]]
+        extracted = extract_tokens(tokens, batched=batched)
+        assert extracted["extracted_tokens"] == [["a", "b", "c"], ["d"]]
+
+
 DILL_HASHING = sys.version_info < (3, 15)
 
 
@@ -103,3 +113,63 @@ def test_duplicates_are_flagged(tmp_path: Any) -> None:
         assert result["id"].tolist() == ids
         assert result["duplicate"].tolist() == [False, True, False, False]
     assert list(tmp_path.glob("similarity_dist_*.png"))
+
+
+def test_duplicates_keep_typed_ids_apart(tmp_path: Any) -> None:
+    # #121: the earliest document was matched by str(id), so the later "1" counted as the
+    # earliest of its cluster because the int 1 was.
+    days = ["2022-01-03", "2022-01-04", "2022-01-05", "2022-01-06"]
+    tokens = [["rate", "steady"], ["rate", "steady"], ["apple", "banana"], ["apple", "banana"]]
+    result = find_similar_docs_by_clustering(
+        _docs([1, 2, 3, "1"], days, tokens),
+        num_workers=1,
+        min_num_docs=2,
+        output_dir=str(tmp_path),
+    )
+    assert result["id"].tolist() == [1, 2, 3, "1"]
+    assert result["duplicate"].tolist() == [False, True, False, True]
+
+
+def test_similar_docs_keep_input_columns_and_index(tmp_path: Any) -> None:
+    # #127: the timestamp became the index and then a leading column, the input index was
+    # replaced by per-batch positions, and the caller's frame was modified in place.
+    days = ["2022-01-03", "2022-01-04", "2022-01-05", "2022-01-06", "2022-01-12"]
+    tokens = [["rate", "steady"], ["rate", "steady"], ["apple"], ["rate", "hold"], ["x"]]
+    data = pd.DataFrame(
+        {"id": [10, 11, 12, 13, 14], "tokens": tokens, "timestamp": days},
+        index=pd.Index(list("vwxyz"), name="key"),
+    )
+    before = data.copy()
+    result = find_similar_docs_by_clustering(
+        data, num_workers=1, min_num_docs=2, output_dir=str(tmp_path)
+    )
+    pd.testing.assert_frame_equal(data, before)
+    assert result.columns.tolist() == [
+        "id",
+        "tokens",
+        "timestamp",
+        "cluster",
+        "duplicate",
+        "dist_fig",
+    ]
+    assert result.index.equals(before.index)
+    assert result["duplicate"].tolist() == [False, True, False, False, False]
+
+
+def test_similar_docs_column_names_do_not_collide(tmp_path: Any) -> None:
+    # Review of #125: an internal "order" key column overwrote cluster_col="order".
+    days = ["2022-01-03", "2022-01-04", "2022-01-05", "2022-01-06"]
+    tokens = [["rate", "steady"], ["rate", "steady"], ["apple", "banana"], ["rate", "hold"]]
+    data = pd.DataFrame({"index": days, "tokens": tokens, "level_0": [1, 2, 3, 4]})
+    result = find_similar_docs_by_clustering(
+        data,
+        num_workers=1,
+        min_num_docs=2,
+        timestamp_col="index",
+        id_col="level_0",
+        cluster_col="order",
+        duplicate_col="keys",
+        output_dir=str(tmp_path),
+    )
+    assert result["keys"].tolist() == [False, True, False, False]
+    assert result["order"].iloc[0] == result["order"].iloc[1]
