@@ -113,3 +113,18 @@ def test_duplicates_are_flagged(tmp_path: Any) -> None:
         assert result["id"].tolist() == ids
         assert result["duplicate"].tolist() == [False, True, False, False]
     assert list(tmp_path.glob("similarity_dist_*.png"))
+
+
+def test_duplicates_keep_typed_ids_apart(tmp_path: Any) -> None:
+    # #121: the earliest document was matched by str(id), so the later "1" counted as the
+    # earliest of its cluster because the int 1 was.
+    days = ["2022-01-03", "2022-01-04", "2022-01-05", "2022-01-06"]
+    tokens = [["rate", "steady"], ["rate", "steady"], ["apple", "banana"], ["apple", "banana"]]
+    result = find_similar_docs_by_clustering(
+        _docs([1, 2, 3, "1"], days, tokens),
+        num_workers=1,
+        min_num_docs=2,
+        output_dir=str(tmp_path),
+    )
+    assert result["id"].tolist() == [1, 2, 3, "1"]
+    assert result["duplicate"].tolist() == [False, True, False, True]

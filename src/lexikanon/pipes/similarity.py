@@ -182,25 +182,14 @@ def _process_batch(
     ac.fit(1 - similarity_matrix)  # AgglomerativeClustering expects distances, not similarities
     # plot_dendrogram(ac)
 
-    # Create DataFrame df with cluster labels and Unix timestamp createdDt
-    df = pd.DataFrame(
-        # .to_numpy(): a Series would be aligned on the id index and turn into NaN
-        {cluster_col: ac.labels_, timestamp_col: batch_data[timestamp_col].to_numpy()},
-        index=batch_data[id_col],
-    )
-    batch_data[cluster_col] = batch_data[id_col].map(df[cluster_col])
+    batch_data[cluster_col] = ac.labels_  # one label per row, in row order
 
-    # create a column with the concatenation of the timestamp and the id
-    concat_col = f"{timestamp_col}_{id_col}"
-    df[concat_col] = df[timestamp_col].astype(str) + "|" + df.index.astype(str)
-
-    # Find the minimum createdDt_newsId for each cluster
-    min_ids = df.groupby(cluster_col)[concat_col].min()
-
-    # Extract the index of the earliest document in each cluster
-    earliest_doc_indices = min_ids.str.split("|").str[-1]
-    similar_data = batch_data[~batch_data[id_col].astype(str).isin(earliest_doc_indices)]
-    batch_data.loc[similar_data.index, duplicate_col] = True
+    # Keep the earliest "timestamp|id" row of each cluster and mark the rest. Rows are matched
+    # by position: matching by str(id) would treat 1 and "1" as the same document.
+    order = batch_data[timestamp_col].astype(str) + "|" + batch_data[id_col].astype(str)
+    keys = pd.DataFrame({cluster_col: ac.labels_, "order": order.to_numpy()})
+    earliest = keys.sort_values("order", kind="stable").drop_duplicates(cluster_col).index
+    batch_data.loc[~batch_data.index.isin(earliest), duplicate_col] = True
 
     return batch_data
 
