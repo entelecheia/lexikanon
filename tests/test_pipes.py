@@ -34,6 +34,23 @@ def test_dataset_fingerprint_tracks_settings() -> None:
     assert b["tokens"][0][:2] == ["금통위", "는"]
 
 
+def test_fingerprint_sees_subclass_fields_of_nested_models() -> None:
+    # review of #119: a custom Normalizer's own fields must change the cache key
+    from lexikanon.normalizers import Normalizer
+    from lexikanon.pipes.tokenize import _fingerprint
+    from lexikanon.tokenizers import SimpleTokenizer
+
+    class CaseNormalizer(Normalizer):
+        upper: bool = False
+
+    data = Dataset.from_dict({"text": ["Hello"]})
+    lower = SimpleTokenizer(normalizer=CaseNormalizer(upper=False))
+    upper = SimpleTokenizer(normalizer=CaseNormalizer(upper=True))
+    base = SimpleTokenizer(normalizer=Normalizer())
+    keys = {_fingerprint(data, "t", tok) for tok in (lower, upper, base)}
+    assert len(keys) == 3
+
+
 def _docs(ids: list[Any], days: list[str], tokens: list[list[str]]) -> pd.DataFrame:
     return pd.DataFrame({"timestamp": pd.to_datetime(days), "tokens": tokens, "id": ids})
 

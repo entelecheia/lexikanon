@@ -11,6 +11,8 @@ import json
 import logging
 from typing import TYPE_CHECKING, Any
 
+from pydantic import BaseModel
+
 from lexikanon._version import __version__
 from lexikanon.tokenizers import SimpleTokenizer, Tokenizer
 
@@ -25,21 +27,31 @@ def _default_tokenizer() -> Tokenizer:
     return SimpleTokenizer(strip_pos=True)
 
 
+def _describe(value: Any) -> Any:
+    """Settings of a model tree with each node's actual type and fields.
+
+    ``model_dump()`` serializes a nested field by its declared type, so fields that a subclass
+    adds (for example a custom ``Normalizer``) would vanish from the cache key.
+    """
+    if isinstance(value, BaseModel):
+        cls = type(value)
+        fields = {name: _describe(getattr(value, name)) for name in cls.model_fields}
+        fields.update({str(k): _describe(v) for k, v in (value.model_extra or {}).items()})
+        return {"__type__": f"{cls.__module__}.{cls.__qualname__}", **fields}
+    if isinstance(value, dict):
+        return {str(k): _describe(v) for k, v in value.items()}
+    if isinstance(value, list | tuple | set | frozenset):
+        return [_describe(v) for v in value]
+    return value
+
+
 def _fingerprint(data: Any, step: str, tokenizer: Tokenizer, **params: Any) -> str:
     """Cache key for ``Dataset.map``: input fingerprint, step, tokenizer settings, parameters.
 
     Passed as ``new_fingerprint`` so datasets does not hash the map function with dill,
     which fails on Python 3.15 (dill 0.4.1). Unrepresentable values only cost a cache miss.
     """
-    tok = type(tokenizer)
-    key = [
-        getattr(data, "_fingerprint", None),
-        step,
-        __version__,
-        f"{tok.__module__}.{tok.__qualname__}",
-        tokenizer.model_dump(),
-        params,
-    ]
+    key = [getattr(data, "_fingerprint", None), step, __version__, _describe(tokenizer), params]
     return hashlib.sha256(json.dumps(key, sort_keys=True, default=repr).encode()).hexdigest()[:16]
 
 
