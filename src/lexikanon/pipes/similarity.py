@@ -143,7 +143,7 @@ def _process_batch(
     Processes a batch of data by calculating the cosine similarity between all pairs of documents in the batch.
     """
     batch_name, batch_data = data
-    batch_data.reset_index(inplace=True)
+    batch_data = batch_data.copy()
     if len(batch_data) < min_num_docs:
         logger.info(
             "Batch %s has %d documents, which is less than the minimum number of documents (%d). Skipping.",
@@ -189,7 +189,9 @@ def _process_batch(
     order = batch_data[timestamp_col].astype(str) + "|" + batch_data[id_col].astype(str)
     keys = pd.DataFrame({cluster_col: ac.labels_, "order": order.to_numpy()})
     earliest = keys.sort_values("order", kind="stable").drop_duplicates(cluster_col).index
-    batch_data.loc[~batch_data.index.isin(earliest), duplicate_col] = True
+    duplicate = np.ones(len(batch_data), dtype=bool)
+    duplicate[earliest] = False
+    batch_data.loc[duplicate, duplicate_col] = True
 
     return batch_data
 
@@ -217,17 +219,20 @@ def find_similar_docs_by_clustering(
     """
     Finds similar documents in the given data using cosine similarity and Agglomerative Clustering.
     """
-    # Convert timestamp_col to datetime and set it as the index
+    # Work on positional rows of a copy; the caller's index is restored at the end.
+    index = data.index
+    data = data.reset_index(drop=True)
     data[timestamp_col] = pd.to_datetime(data[timestamp_col])
-    data.set_index(timestamp_col, inplace=True)
     data[cluster_col] = None
     data[duplicate_col] = False
     data[dist_fig_col] = None
 
     # Group data by week
-    batchs = [grp for _, grp in data.groupby(pd.Grouper(freq=grouping_freq))]
+    batchs = [grp for _, grp in data.groupby(pd.Grouper(key=timestamp_col, freq=grouping_freq))]
     batchs = [
-        (f"{grouping_name} {min(week.index).date()}", week) for week in batchs if len(week) > 0
+        (f"{grouping_name} {week[timestamp_col].min().date()}", week)
+        for week in batchs
+        if len(week) > 0
     ]
 
     # Prepare partial function for process_batch
@@ -255,8 +260,8 @@ def find_similar_docs_by_clustering(
             batchs,
         )
 
-    data = pd.concat(batch_results)
-    # data.reset_index(inplace=True)
+    data = pd.concat(batch_results).sort_index()
+    data.index = index[data.index]
     logger.info("Number of documents: %d", len(data))
     if duplicate_col in data.columns:
         logger.info("Number of duplicate documents: %d", data[duplicate_col].sum())

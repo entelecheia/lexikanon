@@ -128,3 +128,29 @@ def test_duplicates_keep_typed_ids_apart(tmp_path: Any) -> None:
     )
     assert result["id"].tolist() == [1, 2, 3, "1"]
     assert result["duplicate"].tolist() == [False, True, False, True]
+
+
+def test_similar_docs_keep_input_columns_and_index(tmp_path: Any) -> None:
+    # #127: the timestamp became the index and then a leading column, the input index was
+    # replaced by per-batch positions, and the caller's frame was modified in place.
+    days = ["2022-01-03", "2022-01-04", "2022-01-05", "2022-01-06", "2022-01-12"]
+    tokens = [["rate", "steady"], ["rate", "steady"], ["apple"], ["rate", "hold"], ["x"]]
+    data = pd.DataFrame(
+        {"id": [10, 11, 12, 13, 14], "tokens": tokens, "timestamp": days},
+        index=pd.Index(list("vwxyz"), name="key"),
+    )
+    before = data.copy()
+    result = find_similar_docs_by_clustering(
+        data, num_workers=1, min_num_docs=2, output_dir=str(tmp_path)
+    )
+    pd.testing.assert_frame_equal(data, before)
+    assert result.columns.tolist() == [
+        "id",
+        "tokens",
+        "timestamp",
+        "cluster",
+        "duplicate",
+        "dist_fig",
+    ]
+    assert result.index.equals(before.index)
+    assert result["duplicate"].tolist() == [False, True, False, False, False]
