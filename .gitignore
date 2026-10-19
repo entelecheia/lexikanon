@@ -1,5 +1,16 @@
-# working directory
+# VSCode
+.vscode/
+
+# Working directory
+.hypothesis/
+tmp/
 workspace/
+testspace/
+tests/**/*.gif
+secrets/**/*
+
+#MKDOCS
+site/
 
 # Ignore node_modules directory
 node_modules/
@@ -28,3 +39,10 @@ coverage.xml
 htmlcov/
 pytest-coverage.*
 
+# uv / hyfi 2.0
+.venv/
+.ruff_cache/
+.hyfi/
+
+# NLTK resources downloaded by tests (NLTK_DATA)
+nltk_data/
