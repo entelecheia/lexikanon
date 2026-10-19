@@ -79,3 +79,23 @@ def test_function_only_stopwords_filter_tokens() -> None:
     tok = SimpleTokenizer(stopwords=Stopwords(stopwords_fn=lambda w: w == "a"))
     assert tok.filter_stopwords(["a", "b"]) == ["b"]
     assert not Stopwords()
+
+
+def test_stopwords_operators_keep_functions_and_case() -> None:
+    # #126: the operators returned a plain word list, dropping stopwords_fn and lowercase.
+    short = Stopwords(stopwords_fn=lambda w: len(w) == 1, stopwords_list=["the"], lowercase=True)
+    ab = Stopwords(stopwords_list=["A", "bb"], lowercase=True)
+    for result in (short | ab, short + ab, ab | short):
+        assert result.lowercase
+        assert all(result(w) for w in ("X", "THE", "bb")) and not result("cc")
+    assert list(short & ab) == ["a"] and (short & ab)("A") and not (short & ab)("bb")
+    diff = short - ab
+    assert diff("x") and diff("the") and not diff("a") and not diff("bb")
+    rev = ab - short
+    assert list(rev) == ["bb"] and not rev("a")
+    sym = short ^ ab
+    assert sym("x") and sym("bb") and not sym("a") and not sym("cc")
+    with pytest.raises(ValueError, match="lowercase"):
+        short | Stopwords(stopwords_list=["a"])
+    with pytest.raises(ValueError, match="stopwords_fn"):
+        short & Stopwords(stopwords_fn=str.isdigit, lowercase=True)

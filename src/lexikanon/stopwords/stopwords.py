@@ -26,6 +26,14 @@ def _load_wordlist(filepath: str, lowercase: bool = False) -> list[str]:
 
 class Stopwords(Model):
     """
+    A word is a stopword when ``stopwords_fn`` returns True for it or it is in the loaded list.
+
+    The set operators combine that rule, not just the lists: ``a | b`` and ``a + b`` match a
+    word either operand matches, ``a & b`` one both match, ``a - b`` one ``a`` matches and
+    ``b`` does not, and ``a ^ b`` one exactly one operand matches. The result keeps the
+    operands' ``lowercase``; operands that differ in ``lowercase`` raise ``ValueError``, and
+    so does ``&`` when both have a ``stopwords_fn`` (the result would have no finite list).
+
     name: stopwords
     lowercase: true
     stopwords_fn:
@@ -168,22 +176,36 @@ class Stopwords(Model):
     def __ge__(self, other):
         return len(self.stopwords) >= len(other.stopwords)
 
+    def _combine(self, other, words, fn=None):
+        if self.lowercase != other.lowercase:
+            raise ValueError("cannot combine Stopwords with different lowercase settings")
+        return Stopwords(lowercase=self.lowercase, stopwords_list=words, stopwords_fn=fn)
+
+    def _either_fn(self, other):
+        fa, fb = self.func, other.func
+        if fa and fb:
+            return lambda w: fa(w) or fb(w)
+        return fa or fb
+
     def __add__(self, other):
-        return Stopwords(stopwords_list=self.stopwords + other.stopwords)
+        return self._combine(other, self.stopwords + other.stopwords, self._either_fn(other))
 
     def __sub__(self, other):
-        return Stopwords(stopwords_list=[w for w in self.stopwords if w not in other.stopwords])
+        fa = self.func
+        fn = (lambda w: fa(w) and not other.is_stopword(w)) if fa else None
+        return self._combine(other, [w for w in self.stopwords if not other.is_stopword(w)], fn)
 
     def __and__(self, other):
-        return Stopwords(stopwords_list=[w for w in self.stopwords if w in other.stopwords])
+        if self.func and other.func:
+            raise ValueError("cannot intersect two Stopwords that both have a stopwords_fn")
+        # With at most one function, every common stopword is in one of the two lists.
+        candidates = self.stopwords + [w for w in other.stopwords if w not in self.stopwords]
+        words = [w for w in candidates if self.is_stopword(w) and other.is_stopword(w)]
+        return self._combine(other, words)
 
     def __or__(self, other):
-        return Stopwords(
-            stopwords_list=self.stopwords + [w for w in other.stopwords if w not in self.stopwords]
-        )
+        words = self.stopwords + [w for w in other.stopwords if w not in self.stopwords]
+        return self._combine(other, words, self._either_fn(other))
 
     def __xor__(self, other):
-        return Stopwords(
-            stopwords_list=[w for w in self.stopwords if w not in other.stopwords]
-            + [w for w in other.stopwords if w not in self.stopwords]
-        )
+        return (self - other) | (other - self)
