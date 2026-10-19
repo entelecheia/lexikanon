@@ -70,3 +70,12 @@ def test_stopwords_operators_use_loaded_words() -> None:
     assert list(ab + bc) == ["a", "b", "b", "c"]
     assert ab <= bc and not ab < bc
     assert ab != ["a", "b"]
+
+
+def test_function_only_stopwords_filter_tokens() -> None:
+    # #124: a Stopwords with only stopwords_fn was falsy, so filter_stopwords skipped it.
+    from lexikanon.tokenizers import SimpleTokenizer
+
+    tok = SimpleTokenizer(stopwords=Stopwords(stopwords_fn=lambda w: w == "a"))
+    assert tok.filter_stopwords(["a", "b"]) == ["b"]
+    assert not Stopwords()

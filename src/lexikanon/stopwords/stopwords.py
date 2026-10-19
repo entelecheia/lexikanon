@@ -143,7 +143,8 @@ class Stopwords(Model):
         return f"<Stopwords {len(self.stopwords)} stopwords>"
 
     def __bool__(self):
-        return bool(self.stopwords)
+        # A stopwords_fn alone still filters words.
+        return self.func is not None or bool(self.stopwords)
 
     def __eq__(self, other):
         if not isinstance(other, Stopwords):
