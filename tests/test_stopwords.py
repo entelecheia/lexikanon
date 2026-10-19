@@ -57,3 +57,45 @@ def test_stopwords_fn_from_hyfi_target_respects_allowlist() -> None:
     assert stop.is_stopword("a") and not stop.is_stopword("bb")
     with pytest.raises(TargetNotAllowed, match=r"is_short"):
         instantiate(cfg, allow=["lexikanon.*"])
+
+
+def test_stopwords_operators_use_loaded_words() -> None:
+    # #123: the operators read a missing other._stopwords_list attribute.
+    ab, bc = Stopwords(stopwords_list=["a", "b"]), Stopwords(stopwords_list=["b", "c"])
+    assert ab == Stopwords(stopwords_list=["a", "b"]) and ab != bc
+    assert list(ab | bc) == ["a", "b", "c"]
+    assert list(ab & bc) == ["b"]
+    assert list(ab - bc) == ["a"]
+    assert list(ab ^ bc) == ["a", "c"]
+    assert list(ab + bc) == ["a", "b", "b", "c"]
+    assert ab <= bc and not ab < bc
+    assert ab != ["a", "b"]
+
+
+def test_function_only_stopwords_filter_tokens() -> None:
+    # #124: a Stopwords with only stopwords_fn was falsy, so filter_stopwords skipped it.
+    from lexikanon.tokenizers import SimpleTokenizer
+
+    tok = SimpleTokenizer(stopwords=Stopwords(stopwords_fn=lambda w: w == "a"))
+    assert tok.filter_stopwords(["a", "b"]) == ["b"]
+    assert not Stopwords()
+
+
+def test_stopwords_operators_keep_functions_and_case() -> None:
+    # #126: the operators returned a plain word list, dropping stopwords_fn and lowercase.
+    short = Stopwords(stopwords_fn=lambda w: len(w) == 1, stopwords_list=["the"], lowercase=True)
+    ab = Stopwords(stopwords_list=["A", "bb"], lowercase=True)
+    for result in (short | ab, short + ab, ab | short):
+        assert result.lowercase
+        assert all(result(w) for w in ("X", "THE", "bb")) and not result("cc")
+    assert list(short & ab) == ["a"] and (short & ab)("A") and not (short & ab)("bb")
+    diff = short - ab
+    assert diff("x") and diff("the") and not diff("a") and not diff("bb")
+    rev = ab - short
+    assert list(rev) == ["bb"] and not rev("a")
+    sym = short ^ ab
+    assert sym("x") and sym("bb") and not sym("a") and not sym("cc")
+    with pytest.raises(ValueError, match="lowercase"):
+        short | Stopwords(stopwords_list=["a"])
+    with pytest.raises(ValueError, match="stopwords_fn"):
+        short & Stopwords(stopwords_fn=str.isdigit, lowercase=True)

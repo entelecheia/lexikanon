@@ -404,8 +404,9 @@ EMAIL_RE = re.compile(r"([\w\-\.\+%]+@(\w[\w\-]+\.)+[\w\-]+)", re.I | re.U)
 DOI_RE = re.compile(r"^10\.\d{4,9}/[-\._;()/:A-Z0-9]+$", re.U)
 #: Regular expression that matches ISSNs.
 ISSN_RE = re.compile(r"^\d{4}-\d{3}[\dX]$", re.U)
-#: Regular expression that matches control characters not allowed in XML.
-CONTROL_RE = re.compile("[^\u0020-\ud7ff\u0009\u000a\u000d\ue000-\ufffd\u10000-\u10ffFF]+")
+#: Regular expression that matches control characters not allowed in XML (BMP ranges only; the
+#: old ``\u10000-\u10ffFF`` tail never meant U+10000-U+10FFFF, so astral characters still match).
+CONTROL_RE = re.compile("[^\u0020-\ud7ff\u0009\u000a\u000d\ue000-\ufffd]+")
 
 
 def levenshtein(s1: str, s2: str, allow_substring: bool = False) -> int:
