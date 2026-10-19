@@ -1,6 +1,4 @@
 _target_: lexikanon.tokenizers.mecab.MecabTagger
-_config_name_: mecab
-_config_group_: /tokenizer/tagger
 userdic_path: null
 backend: ekonlpy
 verbose: false

@@ -1,6 +1,7 @@
 defaults:
   - nltk
   - override tagger: nltk_universal
+  - _self_
 
 noun_postags:
   - NOUN

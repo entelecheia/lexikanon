@@ -2,9 +2,6 @@ import itertools
 import logging
 import re
 import unicodedata
-from typing import Optional, Set
-
-from lexikanon import HyFI
 
 from .hangle import compose, decompose
 from .hanja import translate as hanja2hangle
@@ -22,13 +19,9 @@ alphabet_pattern = re.compile(r"[a-zA-Z]")
 
 hangle_filter = re.compile(r"[^ㄱ-ㅎㅏ-ㅣ가-힣]")
 hangle_number_filter = re.compile(r"[^ㄱ-ㅎㅏ-ㅣ가-힣0-9]")
-text_filter = re.compile(
-    r"[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9,\.\?\!&·\"'\(\)\[\]\{\}+\-\\\/\*×%]"
-)
+text_filter = re.compile(r"[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9,\.\?\!&·\"'\(\)\[\]\{\}+\-\\\/\*×%]")
 # text_filter = re.compile(r'[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9,\.\?\!&·\"\'-()\[\]\{\}]')
-text_filter_for_lrgraph = re.compile(
-    r"[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9,\.\?\!&\"'-()\[\]\{\}]"
-)
+text_filter_for_lrgraph = re.compile(r"[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9,\.\?\!&\"'-()\[\]\{\}]")
 
 
 #: Control characters.
@@ -412,9 +405,7 @@ DOI_RE = re.compile(r"^10\.\d{4,9}/[-\._;()/:A-Z0-9]+$", re.U)
 #: Regular expression that matches ISSNs.
 ISSN_RE = re.compile(r"^\d{4}-\d{3}[\dX]$", re.U)
 #: Regular expression that matches control characters not allowed in XML.
-CONTROL_RE = re.compile(
-    "[^\u0020-\uD7FF\u0009\u000A\u000D\uE000-\uFFFD\u10000-\u10FFFF]+"
-)
+CONTROL_RE = re.compile("[^\u0020-\ud7ff\u0009\u000a\u000d\ue000-\ufffd\u10000-\u10ffFF]+")
 
 
 def levenshtein(s1: str, s2: str, allow_substring: bool = False) -> int:
@@ -436,15 +427,11 @@ def levenshtein(s1: str, s2: str, allow_substring: bool = False) -> int:
     for j in range(len2 + 1):
         lev[0][j] = 0 if allow_substring else j
     for i, j in itertools.product(range(len1), range(len2)):
-        lev[i + 1][j + 1] = min(
-            lev[i][j + 1] + 1, lev[i + 1][j] + 1, lev[i][j] + (s1[i] != s2[j])
-        )
+        lev[i + 1][j + 1] = min(lev[i][j + 1] + 1, lev[i + 1][j] + 1, lev[i][j] + (s1[i] != s2[j]))
     return min(lev[len1]) if allow_substring else lev[len1][len2]
 
 
-def bracket_level(
-    text: str, _open: Optional[Set[str]] = None, _close: Optional[Set[str]] = None
-) -> int:
+def bracket_level(text: str, _open: set[str] | None = None, _close: set[str] | None = None) -> int:
     """Return 0 if string contains balanced brackets or no brackets."""
     if _open is None:
         _open = {"(", "[", "{"}
@@ -470,9 +457,7 @@ def is_ascii(text: str) -> bool:
 def like_url(text: str) -> bool:
     if not text:
         return False
-    if text.startswith("http://"):
-        return True
-    elif text.startswith("www.") and len(text) >= 5:
+    if text.startswith("http://") or (text.startswith("www.") and len(text) >= 5):
         return True
     if len(text) < 2 or text[0] == "." or text[-1] == "." or "." not in text:
         return False
@@ -562,10 +547,8 @@ def emoticon_normalize(sent: str, num_repeats: int = 2) -> str:
     idxs = [pattern(ord(c)) for c in sent]
     sent_ = []
     last_idx = len(idxs) - 1
-    for i, (idx, c) in enumerate(zip(idxs, sent)):
-        if (i > 0 and i < last_idx) and (
-            idxs[i - 1] == 0 and idx == 2 and idxs[i + 1] == 1
-        ):
+    for i, (idx, c) in enumerate(zip(idxs, sent, strict=False)):
+        if (i > 0 and i < last_idx) and (idxs[i - 1] == 0 and idx == 2 and idxs[i + 1] == 1):
             cho, jung, jong = decompose(c)
             if (cho == sent[i - 1]) and (jung == sent[i + 1]) and (jong == " "):
                 sent_.append(cho)

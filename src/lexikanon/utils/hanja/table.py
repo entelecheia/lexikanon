@@ -8,9 +8,9 @@ def load_table(filename):
     try:
         from yaml import CLoader as Loader
     except ImportError:
-        from yaml import BaseLoader as Loader
+        from yaml import BaseLoader as Loader  # type: ignore[assignment]
     with open(filename) as fin:
-        table = yaml.load(fin.read(), Loader=Loader)
+        table = yaml.load(fin.read(), Loader=Loader)  # noqa: S506 - package data only
 
     return table
 

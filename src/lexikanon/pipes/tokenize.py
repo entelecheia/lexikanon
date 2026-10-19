@@ -1,44 +1,56 @@
+"""Tokenize texts and ``datasets.Dataset`` columns; each function works as a HyFI workflow step.
+
+In a workflow, pass the tokenizer as a config with ``_target_`` (or ``${tokenizer}`` from the
+``tokenizer`` group); HyFI builds it before calling the step.
+"""
+
+from __future__ import annotations
+
 import logging
-from typing import Any, Dict, List, Optional, Union
+from typing import TYPE_CHECKING, Any
 
-from datasets import Dataset
+from lexikanon.tokenizers import SimpleTokenizer, Tokenizer
 
-from lexikanon import HyFI
+if TYPE_CHECKING:
+    from datasets import Dataset
 
 logger = logging.getLogger(__name__)
 
 
+def _default_tokenizer() -> Tokenizer:
+    # Same settings as the ``tokenizer=simple`` config, the 1.x default.
+    return SimpleTokenizer(strip_pos=True)
+
+
+def tokenize_texts(
+    texts: str | list[str],
+    tokenizer: Tokenizer | None = None,
+) -> list[list[str]]:
+    """Tokenize each text (a single string counts as one text), line by line."""
+    tokenizer = tokenizer or _default_tokenizer()
+    if isinstance(texts, str):
+        texts = [texts]
+    return [[tok for line in text.split("\n") for tok in tokenizer(line)] for text in texts]
+
+
 def tokenize_dataset(
     data: Dataset,
-    tokenizer: Union[str, Dict[str, Any]] = "simple",
+    tokenizer: Tokenizer | None = None,
     num_workers: int = 1,
     batched: bool = True,
     batch_size: int = 1000,
     text_col: str = "text",
     token_col: str = "tokens",
-    remove_columns: Optional[Union[List[str], str]] = None,
+    remove_columns: list[str] | str | None = None,
     load_from_cache_file: bool = True,
-    num_heads: Optional[int] = 1,
-    num_tails: Optional[int] = 1,
+    num_heads: int | None = 1,
+    num_tails: int | None = 1,
     verbose: bool = False,
 ) -> Dataset:
-    def pos_tagging(batch):
-        if isinstance(tokenizer, str):
-            _tokenizer_ = HyFI.instantiate_config(
-                f"tokenizer={tokenizer}",
-            )
-        else:
-            _tokenizer_ = HyFI.instantiate(
-                tokenizer,
-            )
-        batch_tokens = []
-        for text in batch[text_col]:
-            sentences = text.split("\n")
-            tokens = []
-            for sentence in sentences:
-                tokens.extend(_tokenizer_(sentence))
-            batch_tokens.append(tokens)
-        return {token_col: batch_tokens}
+    _tokenizer_ = tokenizer or _default_tokenizer()
+
+    def pos_tagging(batch: dict[str, Any]) -> dict[str, Any]:
+        return {token_col: tokenize_texts(batch[text_col], _tokenizer_)}
 
     data = data.map(
         pos_tagging,
@@ -61,33 +73,27 @@ def tokenize_dataset(
 
 def extract_tokens(
     data: Dataset,
-    tokenizer: Union[str, Dict[str, Any]] = "simple",
+    tokenizer: Tokenizer | None = None,
     num_workers: int = 1,
     batched: bool = True,
     batch_size: int = 1000,
     token_col: str = "tokens",
     extracted_col: str = "extracted_tokens",
     nouns_only: bool = False,
-    postags: Optional[List[str]] = None,
-    stop_postags: Optional[List[str]] = None,
-    strip_pos: Optional[bool] = None,
-    postag_delim: Optional[str] = None,
-    postag_length: Optional[int] = None,
-    remove_columns: Optional[Union[List[str], str]] = None,
+    postags: list[str] | None = None,
+    stop_postags: list[str] | None = None,
+    strip_pos: bool | None = None,
+    postag_delim: str | None = None,
+    postag_length: int | None = None,
+    remove_columns: list[str] | str | None = None,
     load_from_cache_file: bool = True,
-    num_heads: Optional[int] = 1,
-    num_tails: Optional[int] = 1,
+    num_heads: int | None = 1,
+    num_tails: int | None = 1,
     verbose: bool = False,
 ) -> Dataset:
-    def pos_tagging(batch):
-        if isinstance(tokenizer, str):
-            _tokenizer_ = HyFI.instantiate_config(
-                f"tokenizer={tokenizer}",
-            )
-        else:
-            _tokenizer_ = HyFI.instantiate(
-                tokenizer,
-            )
+    _tokenizer_ = tokenizer or _default_tokenizer()
+
+    def pos_tagging(batch: dict[str, Any]) -> dict[str, Any]:
         batch_tokens = []
         for tokens in batch[token_col]:
             batch_tokens.append(

@@ -1,11 +1,9 @@
 import logging
 import re
-from typing import Optional, Union
 
 from ftfy import TextFixerConfig, fix_text
-from hyfi.composer import BaseConfig, BaseModel
 
-from lexikanon import HyFI
+from lexikanon._base import Model
 from lexikanon.utils import (
     ACCENTS,
     APOSTROPHES,
@@ -26,7 +24,7 @@ from lexikanon.utils import (
 logger = logging.getLogger(__name__)
 
 
-class FyfyConfig(BaseModel):
+class FyfyConfig(Model):
     """
     unescape_html: true
     remove_terminal_escapes: true
@@ -45,10 +43,7 @@ class FyfyConfig(BaseModel):
     max_decode_length: 1000000
     """
 
-    _config_group_: str = "/normalizers/fyfy"
-    _config_name_: str = "__init__"
-
-    unescape_html: Union[bool, str] = True
+    unescape_html: bool | str = True
     remove_terminal_escapes: bool = True
     fix_encoding: bool = True
     restore_byte_a0: bool = True
@@ -65,7 +60,7 @@ class FyfyConfig(BaseModel):
     max_decode_length: int = 1000000
 
 
-class SpacesConfig(BaseModel):
+class SpacesConfig(Model):
     """
     strip: true
     fix_whitespaces: true
@@ -74,9 +69,6 @@ class SpacesConfig(BaseModel):
     num_spaces_for_tab: 4
     """
 
-    _config_group_: str = "/normalizers/spaces"
-    _config_name_: str = "__init__"
-
     strip: bool = True
     fix_whitespaces: bool = True
     collapse_whitespaces: bool = True
@@ -84,7 +76,7 @@ class SpacesConfig(BaseModel):
     num_spaces_for_tab: int = 4
 
 
-class SpecialCharactersConfig(BaseModel):
+class SpecialCharactersConfig(Model):
     """
     fix_hyphens: true
     fix_ellipsis: true
@@ -95,9 +87,6 @@ class SpecialCharactersConfig(BaseModel):
     regular_parentheses_only: false
     """
 
-    _config_group_: str = "/normalizers/special_characters"
-    _config_name_: str = "__init__"
-
     fix_hyphens: bool = True
     fix_ellipsis: bool = True
     fix_slashes: bool = True
@@ -107,7 +96,7 @@ class SpecialCharactersConfig(BaseModel):
     regular_parentheses_only: bool = False
 
 
-class Normalizer(BaseConfig):
+class Normalizer(Model):
     """Main Normalizer class for generic text.
     Normalize unicode, hyphens, quotes, whitespace.
     By default, the normal form NFKC is used for unicode normalization.
@@ -117,22 +106,21 @@ class Normalizer(BaseConfig):
     on normal forms: http://docs.python.org/2/library/unicodedata.html#unicodedata.normalize
     """
 
-    _config_group_: str = "/normalizer"
-    _config_name_: str = "__init__"
-
     ftfy: FyfyConfig = FyfyConfig()
     spaces: SpacesConfig = SpacesConfig()
     special_characters: SpecialCharactersConfig = SpecialCharactersConfig()
-    hanja2hangle: bool = True
+    # 1.x composed normalizer/__init__.yaml on construction, which sets this to False.
+    hanja2hangle: bool = False
     num_repeats: int = 2
+    verbose: bool = False
 
-    _ftfy_cfg: Optional[TextFixerConfig] = None
+    _ftfy_cfg: TextFixerConfig | None = None
 
-    def __call__(self, text: Optional[str]) -> str:
+    def __call__(self, text: str | None) -> str:
         """Calling a normalizer instance like a function just calls the normalize method."""
         return self.normalize(text)
 
-    def normalize(self, text: Optional[str]) -> str:
+    def normalize(self, text: str | None) -> str:
         """Run the Normalizer on a string.
         :param text: The string to normalize.
         """
@@ -192,18 +180,18 @@ class Normalizer(BaseConfig):
 
         return text or ""
 
-    def _fix_text(self, text: Optional[str]) -> Optional[str]:
+    def _fix_text(self, text: str | None) -> str | None:
         if self._ftfy_cfg is None:
             self._ftfy_cfg = TextFixerConfig(**self.ftfy.model_dump())
         return None if text is None else fix_text(str(text), self._ftfy_cfg)
 
-    def _remove_control_chars(self, text: Optional[str]) -> Optional[str]:
+    def _remove_control_chars(self, text: str | None) -> str | None:
         """
         Strip out any control characters (they occasionally creep in somehow)
         """
         return self._replace_special_characters(text, CONTROLS, "")
 
-    def _fix_hyphens(self, text: Optional[str]) -> Optional[str]:
+    def _fix_hyphens(self, text: str | None) -> str | None:
         """
         Normalize all hyphens, minuses and dashes to ascii hyphen-minus and remove soft hyphen entirely
         """
@@ -215,7 +203,7 @@ class Normalizer(BaseConfig):
         text = text.replace("\u00ad", "")
         return text
 
-    def _uncurl_quotes(self, text: Optional[str]) -> Optional[str]:
+    def _uncurl_quotes(self, text: str | None) -> str | None:
         """
         Normalize all quotes and primes to ascii apostrophe and quotation mark
         """
@@ -234,7 +222,7 @@ class Normalizer(BaseConfig):
         text = text.replace("⁗", "''''")  # \u2057 quadruple prime
         return text
 
-    def _fix_ellipsis(self, text: Optional[str]) -> Optional[str]:
+    def _fix_ellipsis(self, text: str | None) -> str | None:
         """
         Normalize ellipses to three full stops
         """
@@ -243,21 +231,19 @@ class Normalizer(BaseConfig):
         text = text.replace("…", "...").replace(" . . . ", " ... ")  # \u2026
         return text
 
-    def _fix_slashes(self, text: Optional[str]) -> Optional[str]:
+    def _fix_slashes(self, text: str | None) -> str | None:
         """
         Normalize slash characters to ascii slash
         """
         return self._replace_special_characters(text, SLASHES, "/")
 
-    def _fix_tildes(self, text: Optional[str]) -> Optional[str]:
+    def _fix_tildes(self, text: str | None) -> str | None:
         """
         Normalize tilde characters to ascii tilde
         """
         return self._replace_special_characters(text, TILDES, "~")
 
-    def _replace_tabs(
-        self, text: Optional[str], replacement_spaces=" " * 4
-    ) -> Optional[str]:
+    def _replace_tabs(self, text: str | None, replacement_spaces=" " * 4) -> str | None:
         """
         Replace tabs with spaces
         """
@@ -266,7 +252,7 @@ class Normalizer(BaseConfig):
         text = text.replace("\t", replacement_spaces)
         return text
 
-    def _fix_whitespaces(self, text: Optional[str]) -> Optional[str]:
+    def _fix_whitespaces(self, text: str | None) -> str | None:
         """
         Normalize unusual whitespace not caught by unicodedata
         """
@@ -275,7 +261,7 @@ class Normalizer(BaseConfig):
         text = text.replace("\u000b", " ").replace("\u000c", " ").replace("\u0085", " ")
         return text
 
-    def _collapse_whitespaces(self, text: Optional[str]) -> Optional[str]:
+    def _collapse_whitespaces(self, text: str | None) -> str | None:
         """
         Collapse all whitespace to a single space
         """
@@ -285,15 +271,15 @@ class Normalizer(BaseConfig):
         text = re.sub(r" +", " ", text)
         return text
 
-    def _single_quotes_only(self, text: Optional[str]) -> Optional[str]:
+    def _single_quotes_only(self, text: str | None) -> str | None:
         """
         Replace all double quotes with single quotes
         """
         return self._replace_special_characters(text, QUOTES, "'")
 
     def _replace_special_characters(
-        self, text: Optional[str], special_chars, replacement
-    ) -> Optional[str]:
+        self, text: str | None, special_chars, replacement
+    ) -> str | None:
         if text is None:
             return None
         for control in special_chars:
@@ -301,7 +287,7 @@ class Normalizer(BaseConfig):
         return text
 
     # Convert all brackets to regular parentheses
-    def _regular_parentheses_only(self, text: Optional[str]) -> Optional[str]:
+    def _regular_parentheses_only(self, text: str | None) -> str | None:
         """
         Replace all curly brackets with regular parentheses
         """
@@ -313,7 +299,7 @@ class Normalizer(BaseConfig):
             text = text.replace(cb, ")")
         return text
 
-    def _hanja_to_hangle(self, text: Optional[str]) -> Optional[str]:
+    def _hanja_to_hangle(self, text: str | None) -> str | None:
         """
         Convert all hanja to hangle
         """
@@ -322,7 +308,7 @@ class Normalizer(BaseConfig):
         text = hanja_to_hangle(text)
         return text
 
-    def _fix_emoticons(self, text: Optional[str], num_repeats=2) -> Optional[str]:
+    def _fix_emoticons(self, text: str | None, num_repeats=2) -> str | None:
         """
         Replace emoticons with their text equivalents
         """

@@ -1,15 +1,38 @@
+import importlib
 import logging
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
-from hyfi.composer import BaseModel, Field, model_validator
+from pydantic import Field, model_validator
 
-from lexikanon import HyFI
+from lexikanon._base import Model
 from lexikanon.tokenizers.base import Tokenizer
 
 logger = logging.getLogger(__name__)
 
+# word_tokenize and pos_tag need the *_tab / *_eng resources on nltk>=3.9.
+NLTK_RESOURCES = [
+    "punkt_tab",
+    "averaged_perceptron_tagger_eng",
+    "universal_tagset",
+    "wordnet",
+    "omw-1.4",
+]
 
-class NLTKTagger(BaseModel):
+
+def _build(spec: Any) -> Any:
+    """Call the ``_target_`` of a ``{"_target_": "pkg.Class", **kwargs}`` dict.
+
+    Anything else is returned as is: HyFI/Hydra configs arrive already instantiated.
+    """
+    if not (isinstance(spec, dict) and isinstance(spec.get("_target_"), str)):
+        return spec
+    kwargs = {k: v for k, v in spec.items() if k != "_target_"}
+    module, _, name = spec["_target_"].rpartition(".")
+    logger.debug("instantiating %s...", spec["_target_"])
+    return getattr(importlib.import_module(module), name)(**kwargs)
+
+
+class NLTKTagger(Model):
     """
     lemmatize: false
     stem: true
@@ -19,10 +42,7 @@ class NLTKTagger(BaseModel):
         _target_: nltk.stem.PorterStemmer
     """
 
-    _config_group_: str = "/tokenizer/tagger"
-    _config_name_: str = "nltk"
-
-    tagset: Optional[str] = Field(
+    tagset: str | None = Field(
         None, description="the tagset to be used, e.g. universal, wsj, brown"
     )
     language: str = Field(
@@ -31,8 +51,11 @@ class NLTKTagger(BaseModel):
     )
     lemmatize: bool = False
     stem: bool = True
-    lemmatizer: Optional[Dict] = {"_target_": "nltk.stem.WordNetLemmatizer"}
-    stemmer: Optional[Dict] = {"_target_": "nltk.stem.PorterStemmer"}
+    # A {"_target_": ...} spec or an already built object (HyFI instantiates nested targets).
+    lemmatizer: Any | None = Field(
+        default_factory=lambda: {"_target_": "nltk.stem.WordNetLemmatizer"}
+    )
+    stemmer: Any | None = Field(default_factory=lambda: {"_target_": "nltk.stem.PorterStemmer"})
     verbose: bool = False
 
     _lemmatizer: Any = None
@@ -42,34 +65,29 @@ class NLTKTagger(BaseModel):
     def validate_nltk(self) -> "NLTKTagger":
         import nltk as NLTK
 
-        NLTK.download("punkt", quiet=True)
-        NLTK.download("averaged_perceptron_tagger", quiet=True)
-        NLTK.download("universal_tagset", quiet=True)
-        NLTK.download("wordnet", quiet=True)
-        NLTK.download("omw-1.4", quiet=True)
+        for resource in NLTK_RESOURCES:
+            NLTK.download(resource, quiet=True)
 
-        if self.lemmatizer and HyFI.is_instantiatable(self.lemmatizer):
-            logger.debug("instantiating %s...", self.lemmatizer["_target_"])
-            self._lemmatizer = HyFI.instantiate(self.lemmatizer)
-        if self.stemmer and HyFI.is_instantiatable(self.stemmer):
-            logger.debug("instantiating %s...", self.stemmer["_target_"])
-            self._stemmer = HyFI.instantiate(self.stemmer)
+        if self.lemmatizer:
+            self._lemmatizer = _build(self.lemmatizer)
+        if self.stemmer:
+            self._stemmer = _build(self.stemmer)
         self.lemmatize = self.lemmatize and self._lemmatizer is not None
         self.stem = self.stem and self._stemmer is not None
 
         return self
 
-    def _parse(self, text: str) -> List[Tuple[str, str]]:
+    def _parse(self, text: str) -> list[tuple[str, str]]:
         import nltk
 
-        tokens: List[tuple] = nltk.pos_tag(
+        tokens: list[tuple] = nltk.pos_tag(
             nltk.word_tokenize(text, language=self.language),
             tagset=self.tagset,
             lang=self.language[:3],
         )
         return tokens
 
-    def _lemmatize(self, token_pos: Tuple[str, str]) -> Tuple[str, str]:
+    def _lemmatize(self, token_pos: tuple[str, str]) -> tuple[str, str]:
         if self._lemmatizer is None:
             return token_pos
         return (
@@ -79,7 +97,7 @@ class NLTKTagger(BaseModel):
             token_pos[1],
         )
 
-    def _stem(self, token_pos: Tuple[str, str]) -> Tuple[str, str]:
+    def _stem(self, token_pos: tuple[str, str]) -> tuple[str, str]:
         if self.stemmer is None:
             return token_pos
         return (self._stemmer.stem(token_pos[0]), token_pos[1])
@@ -87,7 +105,7 @@ class NLTKTagger(BaseModel):
     @staticmethod
     def _get_wordnet_pos(
         tag: str,
-        tagset: Optional[str] = None,
+        tagset: str | None = None,
     ) -> str:
         from nltk.corpus import wordnet
 
@@ -114,7 +132,7 @@ class NLTKTagger(BaseModel):
 class NLTKTokenizer(Tokenizer):
     tagger: NLTKTagger = NLTKTagger()
 
-    def parse(self, text: str) -> List[Tuple[str, str]]:
+    def parse(self, text: str) -> list[tuple[str, str]]:
         token_tuples = self.tagger._parse(text)
         tokens = []
         for token_tuple in token_tuples:
@@ -123,4 +141,5 @@ class NLTKTokenizer(Tokenizer):
             if self.tagger.stem:
                 token_tuple = self.tagger._stem(token_tuple)
             tokens.append(self.to_token(token_tuple))
-        return tokens
+        # "term/POS" strings, not tuples; Tokenizer.to_token passes strings through.
+        return tokens  # type: ignore[return-value]

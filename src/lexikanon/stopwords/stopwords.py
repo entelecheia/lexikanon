@@ -1,14 +1,30 @@
 import logging
-from typing import Callable, List, Optional, Union
+from collections.abc import Callable
+from pathlib import Path
 
-from hyfi.composer import BaseModel
+from pydantic import PrivateAttr
 
-from lexikanon import HyFI
+from lexikanon._base import Model
 
 logger = logging.getLogger(__name__)
 
 
-class Stopwords(BaseModel):
+def _load_wordlist(filepath: str, lowercase: bool = False) -> list[str]:
+    """First word of each non-empty line, without ``#`` comments, deduplicated and sorted.
+
+    Same result as ``HyFI.load_wordlist`` in 1.x with its default arguments.
+    """
+    path = Path(filepath)
+    if not path.is_file():
+        logger.warning("File not found: %s", path)
+        return []
+    with path.open(encoding="utf-8") as f:
+        words = [line.split()[0] for line in f if line.strip()]
+    words = [w.lower() if lowercase else w for w in words if not w.startswith("#")]
+    return sorted(set(words))
+
+
+class Stopwords(Model):
     """
     name: stopwords
     lowercase: true
@@ -19,29 +35,28 @@ class Stopwords(BaseModel):
     verbose: False
     """
 
-    _config_group_: str = "/stopwords"
-    _config_name_: str = "__init__"
-
     name: str = "stopwords"
     lowercase: bool = False
-    stopwords_fn: Optional[Union[str, Callable[[str], bool]]] = None
-    stopwords_list: Optional[List[str]] = None
-    stopwords_path: Optional[str] = None
-    nltk_stopwords_lang: Optional[str] = None
+    stopwords_fn: str | Callable[[str], bool] | None = None
+    stopwords_list: list[str] | None = None
+    stopwords_path: str | None = None
+    nltk_stopwords_lang: str | None = None
     verbose: bool = False
 
     _loaded_: bool = False
-    _stopwords_: List[str] = []
+    _stopwords_: list[str] = PrivateAttr(default_factory=list)
 
     @property
-    def func(self) -> Optional[Callable]:
+    def func(self) -> Callable | None:
         if callable(self.stopwords_fn):
             return self.stopwords_fn
         elif isinstance(self.stopwords_fn, str):
-            return eval(self.stopwords_fn)
+            # 1.x behavior: the string is Python source, e.g. "lambda w: len(w) < 2".
+            return eval(self.stopwords_fn)  # noqa: S307
+        return None
 
     @property
-    def stopwords(self) -> List[str]:
+    def stopwords(self) -> list[str]:
         if self._loaded_:
             return self._stopwords_
         self.load_stopwords()
@@ -50,9 +65,7 @@ class Stopwords(BaseModel):
     def load_stopwords(self):
         """Load stopwords from file or function"""
         if self.stopwords_path:
-            self._stopwords_ = HyFI.load_wordlist(
-                self.stopwords_path, lowercase=self.lowercase, verbose=self.verbose
-            )
+            self._stopwords_ = _load_wordlist(self.stopwords_path, lowercase=self.lowercase)
             if self.verbose:
                 logger.info(
                     "Loaded %d stopwords from %s",
@@ -88,7 +101,7 @@ class Stopwords(BaseModel):
         else:
             return _word in self.stopwords
 
-    def _load_nltk_stopwords(self, language: str = "english") -> List[str]:
+    def _load_nltk_stopwords(self, language: str = "english") -> list[str]:
         """
         :type language: str
         :returns: list
@@ -153,9 +166,7 @@ class Stopwords(BaseModel):
         )
 
     def __and__(self, other):
-        return Stopwords(
-            stopwords_list=[w for w in self.stopwords if w in other._stopwords_list]
-        )
+        return Stopwords(stopwords_list=[w for w in self.stopwords if w in other._stopwords_list])
 
     def __or__(self, other):
         return Stopwords(

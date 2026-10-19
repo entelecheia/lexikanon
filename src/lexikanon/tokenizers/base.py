@@ -1,55 +1,41 @@
 import codecs
 import logging
-from typing import Callable, List, Optional, Tuple, Union
+from collections.abc import Callable
 
-from hyfi.composer import BaseModel, model_validator
-
+from lexikanon._base import Model
 from lexikanon.normalizers import Normalizer
 from lexikanon.stopwords import Stopwords
 
 logger = logging.getLogger(__name__)
 
 
-class Tokenizer(BaseModel):
-    _config_group_: str = "/tokenizer"
-    _config_name_: str = "__init__"
-
+class Tokenizer(Model):
     stopwords: Stopwords = Stopwords()
     normalizer: Normalizer = Normalizer()
 
     lowercase: bool = False
     strip_pos: bool = False
     postag_delim: str = "/"
-    postag_length: Optional[int] = None
+    postag_length: int | None = None
     include_whitespace_token: bool = True
     tokenize_each_word: bool = False
     sentence_separator: str = "\\n"
-    wordpieces_prefix: Optional[str] = "##"
-    postags: Optional[List[str]] = None
-    noun_postags: Optional[List[str]] = None
-    punct_postags: Optional[List[str]] = None
-    stop_postags: Optional[List[str]] = None
+    wordpieces_prefix: str | None = "##"
+    postags: list[str] | None = None
+    noun_postags: list[str] | None = None
+    punct_postags: list[str] | None = None
+    stop_postags: list[str] | None = None
     verbose: bool = False
-
-    @model_validator(mode="after")
-    def _validate_model_after(self):
-        if self.normalizer:
-            if callable(self.normalizer):
-                logger.debug("Callable normalizer found.")
-            else:
-                logger.debug("Normalizer found, but is not callable.")
-        else:
-            logger.debug("No normalizer found.")
 
     @property
     def sentence_separator_unicode(self) -> str:
         return codecs.decode(self.sentence_separator, "unicode_escape")
 
-    def __call__(self, text: str) -> List[str]:
+    def __call__(self, text: str) -> list[str]:
         """Calling a tokenize config instance like a function just calls the tokenize method."""
         return self.tokenize(text)
 
-    def tokenize(self, text: str) -> List[str]:
+    def tokenize(self, text: str) -> list[str]:
         if self.lowercase:
             text = text.lower()
         if self.normalizer and callable(self.normalizer):
@@ -66,10 +52,10 @@ class Tokenizer(BaseModel):
             term_pos = []
         return term_pos
 
-    def parse(self, text: str) -> List[Tuple[str, str]]:
+    def parse(self, text: str) -> list[tuple[str, str]]:
         return [(token, "") for token in text.split()]
 
-    def to_token(self, term_pos: Union[str, tuple]) -> str:
+    def to_token(self, term_pos: str | tuple) -> str:
         if isinstance(term_pos, tuple):
             return _tuple_to_token(
                 term_pos,
@@ -79,7 +65,7 @@ class Tokenizer(BaseModel):
             )
         return term_pos
 
-    def tokenize_word(self, word: str) -> List[str]:
+    def tokenize_word(self, word: str) -> list[str]:
         self.punct_postags = self.punct_postags or []
         tokens = self.parse(word)
         tokenized = []
@@ -99,13 +85,13 @@ class Tokenizer(BaseModel):
             tokenized.append(term)
         return tokenized
 
-    def pos(self, text: str) -> List[Tuple[str, str]]:
+    def pos(self, text: str) -> list[tuple[str, str]]:
         return self.parse(text)
 
     def tokenize_article(
         self,
-        article: Optional[str],
-    ) -> List[List[str]]:
+        article: str | None,
+    ) -> list[list[str]]:
         if article is None:
             return []
 
@@ -116,27 +102,27 @@ class Tokenizer(BaseModel):
             tokenized_article.append(tokens)
         return tokenized_article
 
-    def nouns(self, text: str) -> List[str]:
+    def nouns(self, text: str) -> list[str]:
         tokens = self.tokenize(text)
         return self.extract(tokens, nouns_only=True)
 
-    def tokens(self, text: str) -> List[str]:
+    def tokens(self, text: str) -> list[str]:
         tokens = self.tokenize(text)
         return self.extract(tokens, nouns_only=False)
 
-    def morphs(self, text: str) -> List[str]:
+    def morphs(self, text: str) -> list[str]:
         return self.tokens(text)
 
     def extract(
         self,
-        text: Union[str, List[str]],
+        text: str | list[str],
         nouns_only: bool = False,
-        postags: Optional[List[str]] = None,
-        stop_postags: Optional[List[str]] = None,
-        strip_pos: Optional[bool] = None,
-        postag_delim: Optional[str] = None,
-        postag_length: Optional[int] = None,
-    ) -> List[str]:
+        postags: list[str] | None = None,
+        stop_postags: list[str] | None = None,
+        strip_pos: bool | None = None,
+        postag_delim: str | None = None,
+        postag_length: int | None = None,
+    ) -> list[str]:
         if strip_pos is None:
             strip_pos = self.strip_pos
         if stop_postags is None:
@@ -160,9 +146,9 @@ class Tokenizer(BaseModel):
 
     def extract_article(
         self,
-        article: Optional[str],
+        article: str | None,
         nouns_only: bool = False,
-    ) -> List[List[str]]:
+    ) -> list[list[str]]:
         if article is None:
             return []
 
@@ -173,16 +159,16 @@ class Tokenizer(BaseModel):
             tokens_article.append(tokens)
         return tokens_article
 
-    def extract_tokens(self, article: Optional[str]) -> List[List[str]]:
+    def extract_tokens(self, article: str | None) -> list[list[str]]:
         return self.extract_article(article, nouns_only=False)
 
-    def extract_nouns(self, article: Optional[str]) -> List[List[str]]:
+    def extract_nouns(self, article: str | None) -> list[list[str]]:
         return self.extract_article(article, nouns_only=True)
 
     def filter_stopwords(
         self,
-        text_or_tokens: Union[str, List[str], None],
-    ) -> List[str]:
+        text_or_tokens: str | list[str] | None,
+    ) -> list[str]:
         if text_or_tokens is None:
             return []
 
@@ -196,46 +182,42 @@ class Tokenizer(BaseModel):
 
         return tokens
 
-    def filter_article_stopwords(self, article: Optional[str]) -> List[List[str]]:
+    def filter_article_stopwords(self, article: str | None) -> list[list[str]]:
         if article is None:
             return []
 
         return [
-            self.filter_stopwords(sent)
-            for sent in article.split(self.sentence_separator_unicode)
+            self.filter_stopwords(sent) for sent in article.split(self.sentence_separator_unicode)
         ]
 
 
 class SimpleTokenizer(Tokenizer):
-    def parse(self, text: str) -> List[Tuple[str, str]]:
+    def parse(self, text: str) -> list[tuple[str, str]]:
         return [(token, "") for token in text.split()]
 
 
 def _match_tags(
     token: tuple,
-    tags: List[str],
+    tags: list[str],
 ) -> bool:
     return any(token[1].startswith(tag) for tag in tags)
 
 
 def _extract_tokens(
-    tokenized_text: Union[str, List[str]],
-    postags: Optional[List[str]] = None,
-    stop_postags: Optional[List[str]] = None,
-    stopwords: Optional[Callable[[str], bool]] = None,
+    tokenized_text: str | list[str],
+    postags: list[str] | None = None,
+    stop_postags: list[str] | None = None,
+    stopwords: Callable[[str], bool] | None = None,
     strip_pos: bool = True,
     postag_delim: str = "/",
-    postag_length: Optional[int] = None,
+    postag_length: int | None = None,
     **kwargs,
-) -> List[str]:
+) -> list[str]:
     if postags is None:
         postags = []
     if stop_postags is None:
         stop_postags = ["SP"]
-    if isinstance(tokenized_text, str):
-        tokens = tokenized_text.split()
-    else:
-        tokens = tokenized_text
+    tokens = tokenized_text.split() if isinstance(tokenized_text, str) else tokenized_text
     _token_pos_tuples = [
         _token_to_tuple(token, postag_delim=postag_delim, postag_length=postag_length)
         for token in tokens
@@ -245,19 +227,14 @@ def _extract_tokens(
         for postag in postags
         if postag not in stop_postags
     ]
-    stop_postags = [
-        postag[:postag_length] if postag_length else postag for postag in stop_postags
-    ]
+    stop_postags = [postag[:postag_length] if postag_length else postag for postag in stop_postags]
     _tokens = []
     if postags:
         _tokens = [
             token_pos
             for token_pos in _token_pos_tuples
             if len(token_pos) == 1
-            or (
-                not _match_tags(token_pos, stop_postags)
-                and _match_tags(token_pos, postags)
-            )
+            or (not _match_tags(token_pos, stop_postags) and _match_tags(token_pos, postags))
         ]
     else:
         _tokens = [
@@ -268,7 +245,7 @@ def _extract_tokens(
     if stopwords is not None:
         _tokens = [token_pos for token_pos in _tokens if not stopwords(token_pos[0])]
 
-    _tokens = [
+    return [
         _tuple_to_token(
             token_pos,
             strip_pos=strip_pos,
@@ -277,14 +254,13 @@ def _extract_tokens(
         )
         for token_pos in _tokens
     ]
-    return _tokens
 
 
 def _tuple_to_token(
     token_pos: tuple,
     strip_pos: bool = True,
     postag_delim: str = "/",
-    postag_length: Optional[int] = None,
+    postag_length: int | None = None,
 ) -> str:
     if strip_pos or len(token_pos) == 1:
         return token_pos[0]
@@ -296,10 +272,10 @@ def _tuple_to_token(
 
 
 def _token_to_tuple(
-    _token: Union[str, tuple],
+    _token: str | tuple,
     postag_delim: str = "/",
-    postag_length: Optional[int] = None,
-) -> Union[Tuple[str, str], Tuple[str]]:
+    postag_length: int | None = None,
+) -> tuple[str, str] | tuple[str]:
     if isinstance(_token, str):
         token_pos = _token.split(postag_delim)
         if len(token_pos) == 2:

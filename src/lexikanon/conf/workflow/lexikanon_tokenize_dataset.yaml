@@ -1,0 +1,26 @@
+# Replaces the 1.x tokenize_dataset, extract_tokens, and extract_nouns pipes.
+# Needs the `datasets` extra: pip install 'lexikanon[datasets]'
+# hyfi run workflow=lexikanon_tokenize_dataset [tokenizer=mecab]
+defaults:
+  - /tokenizer@_global_.tokenizer: simple
+
+name: lexikanon_tokenize_dataset
+steps:
+  - run: datasets.Dataset.from_dict
+    with:
+      mapping:
+        text:
+          - 금통위는 따라서 물가안정과 병행, 경기상황에 유의하는 금리정책을 펼쳐나가기로 했다고 밝혔다.
+          - 한국은행은 기준금리를 동결했다.
+  - run: lexikanon.pipes.tokenize.tokenize_dataset
+    with:
+      tokenizer: ${tokenizer}
+      text_col: text
+      token_col: tokens
+  - run: lexikanon.pipes.tokenize.extract_tokens
+    with:
+      tokenizer: ${tokenizer}
+      token_col: tokens
+      extracted_col: nouns
+      nouns_only: true
+  - run: builtins.print

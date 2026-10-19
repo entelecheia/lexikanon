@@ -3,10 +3,10 @@ from .mecab import MecabTagger, MecabTokenizer
 from .nltk import NLTKTagger, NLTKTokenizer
 
 __all__ = [
-    "SimpleTokenizer",
-    "MecabTokenizer",
     "MecabTagger",
-    "NLTKTokenizer",
+    "MecabTokenizer",
     "NLTKTagger",
+    "NLTKTokenizer",
+    "SimpleTokenizer",
     "Tokenizer",
 ]

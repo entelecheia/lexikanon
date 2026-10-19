@@ -1,9 +1,9 @@
 defaults:
-- /stopwords@stopwords: __init__
-- /normalizer@normalizer: __init__
-_target_: lexikanon.tokenizers.base.Tokenizer
-_config_name_: __init__
-_config_group_: /tokenizer
+  - /stopwords@stopwords: default
+  - /normalizer@normalizer: default
+  - _self_
+
+_target_: lexikanon.tokenizers.Tokenizer
 lowercase: false
 strip_pos: false
 postag_delim: /
@@ -11,7 +11,7 @@ postag_length: null
 include_whitespace_token: true
 tokenize_each_word: false
 sentence_separator: \n
-wordpieces_prefix: '##'
+wordpieces_prefix: "##"
 postags: null
 noun_postags: null
 punct_postags: null

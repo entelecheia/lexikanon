@@ -1,0 +1,21 @@
+# Replaces the 1.x find_similar_docs_by_clustering pipe.
+# Needs the `similarity` extra: pip install 'lexikanon[similarity]'
+# Swap the first step for your own loader, e.g. `run: pandas.read_parquet` with `{path: ...}`.
+name: lexikanon_find_similar_docs
+steps:
+  - run: pandas.DataFrame
+    with:
+      data:
+        id: [a, b, c, d]
+        timestamp: ["2022-01-03", "2022-01-04", "2022-01-05", "2022-01-06"]
+        tokens:
+          - [interest, rate, steady]
+          - [interest, rate, steady]
+          - [apple, banana, cherry]
+          - [interest, rate, hold]
+  - run: lexikanon.pipes.similarity.find_similar_docs_by_clustering
+    with:
+      num_workers: 1
+      min_num_docs: 2
+      distance_threshold: 0.5
+  - run: builtins.print

@@ -1,3 +1,4 @@
 defaults:
   - nltk
+  - _self_
 tagset: universal
