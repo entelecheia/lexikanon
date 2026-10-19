@@ -14,6 +14,7 @@ Run these passes and tag every finding with its pass:
 ## Repo focus
 
 - Tokenizer and normalizer output is the product. Any change to `tests/data/*_1x.json`, or to code that alters tokens for those inputs without a new pinned test and a stated reason, is Important.
+- `ekonlpy>=2.2` (was `==2.0.6`): a change to that floor, a new upper cap, or a lock bump of ekonlpy, fugashi, mecab-ko-dic, or nltk must keep `tests/test_outputs.py` passing unchanged; flag any change that edits that test instead.
 - No `hyfi`, `hydra`, or `omegaconf` import under `src/lexikanon/` (`tests/test_no_hyfi.py`).
 - Every config node that builds an object has a `_target_` under `lexikanon.*` or `nltk.stem.*`; a new target outside those needs a line in the docs' allowlist note (`docs/usage.md`).
 - Known exception: `Stopwords.stopwords_fn` evaluates a string as Python (0.x behavior). A change that widens where that string can come from is Important.
