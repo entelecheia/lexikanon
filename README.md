@@ -2,7 +2,6 @@
 
 [![pypi-image]][pypi-url]
 [![license-image]][license-url]
-[![DOI][zenodo-image]][zenodo-url]
 
 Korean and English tokenizers, text normalizers, and stopword lists. Lexikanon is a plain Python library; it also ships [HyFI 2.0](https://hyfi.entelecheia.ai) config groups, so the same tokenizers can be selected and run from HyFI workflows.
 
@@ -65,15 +64,12 @@ See [Usage](https://lexikanon.entelecheia.ai/usage/) for workflow steps and pres
 ## Citation
 
 ```tex
-@software{lee_2023_8248118,
+@software{lee_2023_lexikanon,
   author       = {Young Joon Lee},
   title        = {Lexikanon: A HyFI-based library for Tokenizers},
-  month        = aug,
   year         = 2023,
-  publisher    = {Zenodo},
-  version      = {v0.6.2},
-  doi          = {10.5281/zenodo.8248117},
-  url          = {https://doi.org/10.5281/zenodo.8248117}
+  publisher    = {GitHub},
+  url          = {https://github.com/entelecheia/lexikanon}
 }
 ```
 
@@ -81,8 +77,6 @@ See [Usage](https://lexikanon.entelecheia.ai/usage/) for workflow steps and pres
 
 [MIT][license-url]
 
-[zenodo-image]: https://zenodo.org/badge/DOI/10.5281/zenodo.8248117.svg
-[zenodo-url]: https://doi.org/10.5281/zenodo.8248117
 [pypi-image]: https://img.shields.io/pypi/v/lexikanon
 [pypi-url]: https://pypi.org/project/lexikanon
 [license-image]: https://img.shields.io/github/license/entelecheia/lexikanon
