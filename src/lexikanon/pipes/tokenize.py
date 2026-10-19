@@ -6,9 +6,12 @@ In a workflow, pass the tokenizer as a config with ``_target_`` (or ``${tokenize
 
 from __future__ import annotations
 
+import hashlib
+import json
 import logging
 from typing import TYPE_CHECKING, Any
 
+from lexikanon._version import __version__
 from lexikanon.tokenizers import SimpleTokenizer, Tokenizer
 
 if TYPE_CHECKING:
@@ -20,6 +23,29 @@ logger = logging.getLogger(__name__)
 def _default_tokenizer() -> Tokenizer:
     # Same settings as the ``tokenizer=simple`` config, the 1.x default.
     return SimpleTokenizer(strip_pos=True)
+
+
+def _fingerprint(data: Any, step: str, tokenizer: Tokenizer, **params: Any) -> str:
+    """Cache key for ``Dataset.map``: input fingerprint, step, tokenizer settings, parameters.
+
+    Passed as ``new_fingerprint`` so datasets does not hash the map function with dill,
+    which fails on Python 3.15 (dill 0.4.1). Unrepresentable values only cost a cache miss.
+    """
+    tok = type(tokenizer)
+    key = [
+        getattr(data, "_fingerprint", None),
+        step,
+        __version__,
+        f"{tok.__module__}.{tok.__qualname__}",
+        tokenizer.model_dump(),
+        params,
+    ]
+    return hashlib.sha256(json.dumps(key, sort_keys=True, default=repr).encode()).hexdigest()[:16]
+
+
+def _num_proc(num_workers: int) -> int | None:
+    # datasets 5 starts a worker pool even for num_proc=1; None keeps one worker in-process.
+    return num_workers if num_workers > 1 else None
 
 
 def tokenize_texts(
@@ -54,11 +80,19 @@ def tokenize_dataset(
 
     data = data.map(
         pos_tagging,
-        num_proc=num_workers,
+        num_proc=_num_proc(num_workers),
         batched=batched,
         batch_size=batch_size,
         remove_columns=remove_columns,
         load_from_cache_file=load_from_cache_file,
+        new_fingerprint=_fingerprint(
+            data,
+            "tokenize_dataset",
+            _tokenizer_,
+            text_col=text_col,
+            token_col=token_col,
+            remove_columns=remove_columns,
+        ),
     )
     logger.info("POS tagging done. See column '%s'.", token_col)
     if verbose:
@@ -111,11 +145,25 @@ def extract_tokens(
 
     data = data.map(
         pos_tagging,
-        num_proc=num_workers,
+        num_proc=_num_proc(num_workers),
         batched=batched,
         batch_size=batch_size,
         remove_columns=remove_columns,
         load_from_cache_file=load_from_cache_file,
+        new_fingerprint=_fingerprint(
+            data,
+            "extract_tokens",
+            _tokenizer_,
+            token_col=token_col,
+            extracted_col=extracted_col,
+            nouns_only=nouns_only,
+            postags=postags,
+            stop_postags=stop_postags,
+            strip_pos=strip_pos,
+            postag_delim=postag_delim,
+            postag_length=postag_length,
+            remove_columns=remove_columns,
+        ),
     )
     logger.info("Extracting tokens done, see column '%s'.", extracted_col)
     if verbose:

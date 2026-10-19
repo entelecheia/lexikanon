@@ -23,6 +23,17 @@ def test_tokenize_and_extract_dataset() -> None:
     assert data["extracted_tokens"][0][:3] == ["금통위", "물가", "안정"]
 
 
+def test_dataset_fingerprint_tracks_settings() -> None:
+    # tokenize_dataset passes its own fingerprint so datasets never dill-hashes the map
+    # function (fails on Python 3.15); different settings must not share a cache entry.
+    data = Dataset.from_dict({"text": [KO]})
+    a = tokenize_dataset(data, tokenizer=MecabTokenizer())
+    b = tokenize_dataset(data, tokenizer=MecabTokenizer(strip_pos=True))
+    c = tokenize_dataset(data, tokenizer=MecabTokenizer())
+    assert a._fingerprint == c._fingerprint != b._fingerprint
+    assert b["tokens"][0][:2] == ["금통위", "는"]
+
+
 def _docs(ids: list[Any], days: list[str], tokens: list[list[str]]) -> pd.DataFrame:
     return pd.DataFrame({"timestamp": pd.to_datetime(days), "tokens": tokens, "id": ids})
 
