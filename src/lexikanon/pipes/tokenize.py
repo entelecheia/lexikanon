@@ -101,6 +101,7 @@ def tokenize_dataset(
             data,
             "tokenize_dataset",
             _tokenizer_,
+            batched=batched,  # changes the result shape, so it must change the key
             text_col=text_col,
             token_col=token_col,
             remove_columns=remove_columns,
@@ -166,6 +167,7 @@ def extract_tokens(
             data,
             "extract_tokens",
             _tokenizer_,
+            batched=batched,  # changes the result shape, so it must change the key
             token_col=token_col,
             extracted_col=extracted_col,
             nouns_only=nouns_only,

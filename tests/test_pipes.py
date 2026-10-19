@@ -34,6 +34,17 @@ def test_dataset_fingerprint_tracks_settings() -> None:
     assert b["tokens"][0][:2] == ["금통위", "는"]
 
 
+def test_dataset_fingerprint_tracks_batched() -> None:
+    # review of #119: batched=True/False produce different shapes, so keys must differ
+    data = Dataset.from_dict({"text": ["a b"]})
+    a = tokenize_dataset(data, batched=True)
+    b = tokenize_dataset(data, batched=False)
+    assert a._fingerprint != b._fingerprint
+    c = extract_tokens(a, batched=True)
+    d = extract_tokens(a, batched=False)
+    assert c._fingerprint != d._fingerprint
+
+
 def test_fingerprint_sees_subclass_fields_of_nested_models() -> None:
     # review of #119: a custom Normalizer's own fields must change the cache key
     from lexikanon.normalizers import Normalizer
