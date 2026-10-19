@@ -45,6 +45,23 @@ def test_dataset_fingerprint_tracks_batched() -> None:
     assert c._fingerprint != d._fingerprint
 
 
+def test_fingerprint_never_reuses_settings_it_cannot_describe() -> None:
+    # review of #119: two stemmer modes have the same repr; such settings must not share a key
+    from nltk.stem import PorterStemmer
+
+    from lexikanon.pipes.tokenize import _fingerprint
+    from lexikanon.tokenizers import NLTKTagger, NLTKTokenizer
+
+    data = Dataset.from_dict({"text": ["skies"]})
+
+    def tok(mode: str) -> NLTKTokenizer:
+        return NLTKTokenizer(tagger=NLTKTagger(stemmer=PorterStemmer(mode=mode)))
+
+    original, extended = tok("ORIGINAL_ALGORITHM"), tok("NLTK_EXTENSIONS")
+    assert _fingerprint(data, "t", original) != _fingerprint(data, "t", extended)
+    assert _fingerprint(data, "t", original) != _fingerprint(data, "t", original)  # no reuse
+
+
 def test_fingerprint_sees_subclass_fields_of_nested_models() -> None:
     # review of #119: a custom Normalizer's own fields must change the cache key
     from lexikanon.normalizers import Normalizer

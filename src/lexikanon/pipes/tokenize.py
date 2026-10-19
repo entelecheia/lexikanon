@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+import uuid
 from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel
@@ -27,11 +28,19 @@ def _default_tokenizer() -> Tokenizer:
     return SimpleTokenizer(strip_pos=True)
 
 
-def _describe(value: Any) -> Any:
-    """Settings of a model tree with each node's actual type and fields.
+class _Unrepresentable(Exception):
+    """A setting the cache key cannot capture exactly."""
 
-    ``model_dump()`` serializes a nested field by its declared type, so fields that a subclass
-    adds (for example a custom ``Normalizer``) would vanish from the cache key.
+
+_SCALARS = (str, int, float, bool, type(None))
+
+
+def _describe(value: Any) -> Any:
+    """Exact JSON description of a settings tree: pydantic models (by actual type and fields),
+    containers, and JSON scalars. Anything else raises ``_Unrepresentable``.
+
+    ``model_dump()`` would serialize a nested field by its declared type (dropping subclass
+    fields), and ``repr()`` cannot tell apart objects such as two configured stemmers.
     """
     if isinstance(value, BaseModel):
         cls = type(value)
@@ -39,20 +48,33 @@ def _describe(value: Any) -> Any:
         fields.update({str(k): _describe(v) for k, v in (value.model_extra or {}).items()})
         return {"__type__": f"{cls.__module__}.{cls.__qualname__}", **fields}
     if isinstance(value, dict):
+        if not all(isinstance(k, _SCALARS) for k in value):
+            raise _Unrepresentable("dict key")
         return {str(k): _describe(v) for k, v in value.items()}
-    if isinstance(value, list | tuple | set | frozenset):
+    if isinstance(value, list | tuple):
         return [_describe(v) for v in value]
-    return value
+    if isinstance(value, set | frozenset):
+        return sorted((_describe(v) for v in value), key=lambda v: json.dumps(v, sort_keys=True))
+    if isinstance(value, _SCALARS):
+        return value
+    raise _Unrepresentable(f"{type(value).__module__}.{type(value).__qualname__}")
 
 
 def _fingerprint(data: Any, step: str, tokenizer: Tokenizer, **params: Any) -> str:
     """Cache key for ``Dataset.map``: input fingerprint, step, tokenizer settings, parameters.
 
     Passed as ``new_fingerprint`` so datasets does not hash the map function with dill,
-    which fails on Python 3.15 (dill 0.4.1). Unrepresentable values only cost a cache miss.
+    which fails on Python 3.15 (dill 0.4.1). The cache is reused only when every setting is
+    captured exactly; otherwise a random key forces recomputation instead of a wrong reuse.
     """
-    key = [getattr(data, "_fingerprint", None), step, __version__, _describe(tokenizer), params]
-    return hashlib.sha256(json.dumps(key, sort_keys=True, default=repr).encode()).hexdigest()[:16]
+    try:
+        key = [getattr(data, "_fingerprint", None), step, __version__, _describe(tokenizer)]
+        key.append(_describe(params))
+        payload = json.dumps(key, sort_keys=True)
+    except _Unrepresentable as e:
+        logger.debug("dataset cache disabled for %s: cannot describe %s", step, e)
+        return uuid.uuid4().hex[:16]
+    return hashlib.sha256(payload.encode()).hexdigest()[:16]
 
 
 def _num_proc(num_workers: int) -> int | None:

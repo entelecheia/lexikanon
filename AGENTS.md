@@ -30,6 +30,7 @@ Healthy output ends with `Required test coverage of 55.0% reached` and `N passed
 
 ## Things the agent gets wrong
 
+- 2026-10-19, dataset cache keys (three review findings on #119): `pipes/tokenize._fingerprint` must capture every setting that changes output, or force a miss. Describe settings only through `_describe` (exact JSON or pydantic fields); never key on `model_dump()` or `repr()`, and add any new `Dataset.map` argument that changes output to the key. Revisit when datasets can hash map functions on Python 3.15.
 - 2026-10-19, config defaults vs class defaults: 0.x `Normalizer` composed `normalizer/default.yaml` on construction, so its class defaults must equal that file. Change both together. Revisit if `Normalizer` gets a second preset source.
 - 2026-10-19, fugashi has no cp315 wheel: Python 3.15 builds it from source and needs `libmecab-dev` (CI installs it). Do not drop 3.15 from the matrix because a local build fails. Revisit when fugashi ships cp315 wheels.
 
