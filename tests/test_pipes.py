@@ -154,3 +154,22 @@ def test_similar_docs_keep_input_columns_and_index(tmp_path: Any) -> None:
     ]
     assert result.index.equals(before.index)
     assert result["duplicate"].tolist() == [False, True, False, False, False]
+
+
+def test_similar_docs_column_names_do_not_collide(tmp_path: Any) -> None:
+    # Review of #125: an internal "order" key column overwrote cluster_col="order".
+    days = ["2022-01-03", "2022-01-04", "2022-01-05", "2022-01-06"]
+    tokens = [["rate", "steady"], ["rate", "steady"], ["apple", "banana"], ["rate", "hold"]]
+    data = pd.DataFrame({"index": days, "tokens": tokens, "level_0": [1, 2, 3, 4]})
+    result = find_similar_docs_by_clustering(
+        data,
+        num_workers=1,
+        min_num_docs=2,
+        timestamp_col="index",
+        id_col="level_0",
+        cluster_col="order",
+        duplicate_col="keys",
+        output_dir=str(tmp_path),
+    )
+    assert result["keys"].tolist() == [False, True, False, False]
+    assert result["order"].iloc[0] == result["order"].iloc[1]

@@ -186,9 +186,13 @@ def _process_batch(
 
     # Keep the earliest "timestamp|id" row of each cluster and mark the rest. Rows are matched
     # by position: matching by str(id) would treat 1 and "1" as the same document.
-    order = batch_data[timestamp_col].astype(str) + "|" + batch_data[id_col].astype(str)
-    keys = pd.DataFrame({cluster_col: ac.labels_, "order": order.to_numpy()})
-    earliest = keys.sort_values("order", kind="stable").drop_duplicates(cluster_col).index
+    # Plain arrays, so no temporary column can collide with a user-chosen column name.
+    order = (
+        batch_data[timestamp_col].astype(str) + "|" + batch_data[id_col].astype(str)
+    ).to_numpy()
+    by_order = np.argsort(order, kind="stable")
+    _, first = np.unique(ac.labels_[by_order], return_index=True)
+    earliest = by_order[first]
     duplicate = np.ones(len(batch_data), dtype=bool)
     duplicate[earliest] = False
     batch_data.loc[duplicate, duplicate_col] = True
