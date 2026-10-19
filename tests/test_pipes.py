@@ -26,6 +26,16 @@ def test_tokenize_and_extract_dataset() -> None:
     assert data["extracted_tokens"][0][:3] == ["금통위", "물가", "안정"]
 
 
+def test_unbatched_map_stores_one_token_list_per_row() -> None:
+    # #120: the map callbacks always returned a batch, so batched=False nested one level deeper.
+    data = Dataset.from_dict({"text": ["a b\nc", "d"]})
+    for batched in (True, False):
+        tokens = tokenize_dataset(data, batched=batched)
+        assert tokens["tokens"] == [["a", "b", "c"], ["d"]]
+        extracted = extract_tokens(tokens, batched=batched)
+        assert extracted["extracted_tokens"] == [["a", "b", "c"], ["d"]]
+
+
 DILL_HASHING = sys.version_info < (3, 15)
 
 

@@ -69,7 +69,9 @@ def tokenize_dataset(
     _tokenizer_ = tokenizer or _default_tokenizer()
 
     def pos_tagging(batch: dict[str, Any]) -> dict[str, Any]:
-        return {token_col: tokenize_texts(batch[text_col], _tokenizer_)}
+        tokens = tokenize_texts(batch[text_col], _tokenizer_)
+        # Unbatched, the row is one text and must keep one token list, not a batch of one.
+        return {token_col: tokens if batched else tokens[0]}
 
     data = data.map(
         pos_tagging,
@@ -114,8 +116,9 @@ def extract_tokens(
     _tokenizer_ = tokenizer or _default_tokenizer()
 
     def pos_tagging(batch: dict[str, Any]) -> dict[str, Any]:
+        rows = batch[token_col] if batched else [batch[token_col]]
         batch_tokens = []
-        for tokens in batch[token_col]:
+        for tokens in rows:
             batch_tokens.append(
                 _tokenizer_.extract(
                     tokens,
@@ -127,7 +130,7 @@ def extract_tokens(
                     postag_length=postag_length,
                 )
             )
-        return {extracted_col: batch_tokens}
+        return {extracted_col: batch_tokens if batched else batch_tokens[0]}
 
     data = data.map(
         pos_tagging,
